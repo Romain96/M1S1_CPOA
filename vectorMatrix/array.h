@@ -8,6 +8,9 @@
 #define __ARRAY_H__
 
 #include <iostream>
+
+using std::cout;
+using std::endl;
  
 template <int N, typename T> class Array
 {
@@ -17,46 +20,34 @@ protected:
 
 public:
     // constructeur
-    Array()
+    Array() : data_ {0,0}, size(N)
     {
-        this->size = N;
-        for (int i=0; i<N; i++)
-        {
-            data_[i] = T(0);
-        }
     }
 
     /*
      * Retourne la taille du de l'array
     */
-    int getSize()
+    int getSize() const
     {
         return this->size;
     }
 
-    void add(const int position, T value)
+    const T* data_pos() const
     {
-        if (position >= 0 && position < this->size)
-        {
-            this->data_[position] = value;
-        }
-        else
-        {
-            std::cout << "add : erreur sur position !" << std::endl;
-        }
+        return data_;
     }
 
     /*
      * DEBUG : affiche le contenu de l'array
      */
-    void print()
+    void print() const
     {
-        std::cout << "printing array : " << std::endl;
+        cout << "printing array : " << endl;
         for (int i=0; i<this->size; i++)
         {
-            std::cout << this->data_[i] << " ";
+            cout << this->data_[i] << " ";
         }
-        std::cout << " " << std::endl;
+        cout << " " << endl;
     }
 
     /*
@@ -71,6 +62,25 @@ public:
             this->data_[i] = a.data_[i];
             a.data_[i] = tmp;
         }
+    }
+
+    /*
+     * Opérateur d'accès : retourne le ième élément de l'array courant
+     */
+    T operator [](const int i) const
+    {
+        if (i>=0 && i<this->size)
+        {
+            return this->data_[i];
+        }
+    }
+
+    /*
+     * Idem mais en version non const
+     */
+    T& operator [](const int i)
+    {
+        return this->data_[i];
     }
 
     /*
@@ -99,25 +109,6 @@ public:
             }
         }
         return true;
-    }
-
-    /*
-     * Opérateur d'accès : retourne le ième élément de l'array courant
-     */
-    T operator [](const int i) const
-    {
-        if (i>=0 && i<this->size)
-        {
-            return this->tab[i];
-        }
-    }
-
-    /*
-     * Idem mais en version non const
-     */
-    T& operator [](const int i)
-    {
-        return this->data_[i];
     }
 };
 
