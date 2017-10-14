@@ -18,4 +18,8 @@ using Vec2f = Vector<2,float>;
 using Vec3f = Vector<3,float>;
 using Vec4f = Vector<4,float>;
 
+using Vec2d = Vector<2,double>;
+using Vec3d = Vector<3,double>;
+using Vec4d = Vector<4,double>;
+
 #endif

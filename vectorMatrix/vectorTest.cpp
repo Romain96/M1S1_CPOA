@@ -1,13 +1,14 @@
 // programme de test de la classe template vector définit dans vector.h
 
 #include "vector.h"
+#include "utils.h"
 
 // test de la somme +
 bool testSomme()
 {
     // instanciation et affectation
-    Vector<3,int> v1;
-    Vector<3,int> v2;
+    Vec3i v1;
+    Vec3i v2;
 
     for (int i=0; i<3; i++)
     {
@@ -16,7 +17,7 @@ bool testSomme()
     }
 
     // somme
-    Vector<3,int> res = v1+v2;
+    Vec3i res = v1+v2;
 
     // test de la somme
     for (int i=0; i<3; i++)
@@ -31,8 +32,8 @@ bool testSomme()
 bool testDifference()
 {
     // instanciation et affectation
-    Vector<3,int> v1;
-    Vector<3,int> v2;
+    Vec3i v1;
+    Vec3i v2;
     for (int i=0; i<3; i++)
     {
         v1[i] = i;
@@ -40,7 +41,7 @@ bool testDifference()
     }
 
     // différence
-    Vector<3,int> res = v1-v2;
+    Vec3i res = v1-v2;
 
     // test de la différence
     for (int i=0; i<3; i++)
@@ -55,8 +56,8 @@ bool testDifference()
 bool testSommeAffectation()
 {
     // instanciation et affectation
-    Vector<3,int> v1;
-    Vector<3,int> v2;
+    Vec3i v1;
+    Vec3i v2;
     for (int i=0; i<3; i++)
     {
         v1[i] = i;
@@ -79,8 +80,8 @@ bool testSommeAffectation()
 bool testDifferenceAffectation()
 {
     // instanciation et affectation
-    Vector<3,int> v1;
-    Vector<3,int> v2;
+    Vec3i v1;
+    Vec3i v2;
     for (int i=0; i<3; i++)
     {
         v1[i] = i;
@@ -103,14 +104,14 @@ bool testDifferenceAffectation()
 bool testProduitParScalaire()
 {
     // instanciation et affectation
-    Vector<3,double> v1;
+    Vec3d v1;
     for (int i=0; i<3; i++)
     {
         v1[i] = (double)i;
     }
 
     // multiplication par un scalaire
-    Vector<3,double> v2 = v1*1.5;
+    Vec3d v2 = v1*1.5;
 
     // test de la multiplication
     for (int i=0; i<3; i++)
@@ -125,14 +126,14 @@ bool testProduitParScalaire()
 bool testDivisionParScalaire()
 {
     // instanciation et affectation
-    Vector<3,double> v1;
+    Vec3d v1;
     for (int i=0; i<3; i++)
     {
         v1[i] = (double)i;
     }
 
     // division par un scalaire
-    Vector<3,double> v2 = v1 / 2.0;
+    Vec3d v2 = v1 / 2.0;
 
     // test de la division
     for (int i=0; i<3; i++)
@@ -147,7 +148,7 @@ bool testDivisionParScalaire()
 bool testProduitAffectationParScalaire()
 {
     // instanciation et affectation
-    Vector<3,double> v1;
+    Vec3d v1;
     for (int i=0; i<3; i++)
     {
         v1[i] = (double)i;
@@ -169,7 +170,7 @@ bool testProduitAffectationParScalaire()
 bool testDivisionAffectationParScalaire()
 {
     // instanciation et affectation
-    Vector<3,double> v1;
+    Vec3d v1;
     for (int i=0; i<3; i++)
     {
         v1[i] = (double)i;
@@ -191,8 +192,8 @@ bool testDivisionAffectationParScalaire()
 bool testProduitScalaire()
 {
     // instanciation et affectation
-    Vector<3,int> v1;
-    Vector<3,int> v2;
+    Vec3i v1;
+    Vec3i v2;
     // vecteur (5,0,0)
     v1[0] = 5;
     v1[1] = 0;
@@ -212,16 +213,12 @@ bool testProduitScalaire()
         return false;
 }
 
-#include <iostream>
-using std::cout;
-using std::endl;
-
 // test du produit vectoriel
 bool testProduitVectoriel()
 {
     // instanciation et affectation
-    Vector<3,int> v1;
-    Vector<3,int> v2;
+    Vec3i v1;
+    Vec3i v2;
     // vecteur (2,3,4)
     v1[0] = 2;
     v1[1] = 3;
@@ -232,9 +229,7 @@ bool testProduitVectoriel()
     v2[2] = 7;
 
     // produit vectoriel
-    Vector<3,int> v3 = v1.cross(v2);
-
-    cout << "v3[0] = " << v3[0] << ", v3[1] = " << v3[1] << ", v3[2] = " << v3[2] <<endl;
+    Vec3i v3 = v1.cross(v2);
 
     // test du produit vectoriel (-3,6,-3)
     if (v3[0] == -3 && v3[1] == 6 && v3[2] == -3)
