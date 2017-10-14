@@ -37,7 +37,7 @@ int main()
 	cout << "=============================================" << endl;
 	cout << "Programme de test des classes Array et Vector" << endl;
 	cout << "=============================================" << endl;
-	cout << "Array : remplissage (add) = " << tRemplissage << endl;
+        cout << "Array : remplissage ([]) = " << tRemplissage << endl;
 	cout << "Array : affectation (=) = " << tAffectation << endl;
 	cout << "Array : test d'égalité (==) = " << tEgalite << endl;
 	cout << "Array : test de non égalité (== et !=) = " << tNonEgalite << endl;

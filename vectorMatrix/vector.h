@@ -14,26 +14,38 @@ template <int N, typename T> class Vector : public Array<N,T>
 public:
     // constructeur
     Vector() : Array<N,T>()
-    {}
+    {
+        this->size = N;
+    }
 
     T operator [](const int i) const
     {
-        return Array<N,T>::operator[](i);
+        return this->data_[i];
     }
 
     T& operator [](const int i)
     {
-        return Array<N,T>::operator [](i);
+        return this->data_[i];
     }
 
     bool operator ==(const Vector<N,T>& v)
     {
-        return Array<N,T>::operator[](v);
+        for (int i=0; i<this->size; i++)
+        {
+            if (this->data_[i] != v.data_[i])
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     void operator =(const Vector<N,T>& v)
     {
-        Array<N,T>::operator=(v);
+        for (int i=0; i<this->size; i++)
+        {
+            this->data_[i] = v.data_[i];
+        }
     }
 
     void print()
@@ -47,7 +59,7 @@ public:
         Vector<N,T> res;
         for (int i=0; i<this->getSize(); i++)
         {
-            res.add(i,this->data_[i] + v.data_[i]);
+            res[i] = this->data_[i] + v[i];
         }
         return res;
     }
@@ -58,7 +70,7 @@ public:
         Vector<N,T> res;
         for (int i=0; i<this->getSize(); i++)
         {
-            res.add(i,this->data_[i] - v.data_[i]);
+            res[i] = this->data_[i] - v[i];
         }
         return res;
     }
@@ -68,7 +80,7 @@ public:
     {
         for (int i=0; i<this->getSize(); i++)
         {
-            this->add(i, this->data_[i] + v.data_[i]);
+            this->data_[i] = this->data_[i] + v[i];
         }
     }
 
@@ -77,7 +89,7 @@ public:
     {
         for (int i=0; i<this->getSize(); i++)
         {
-            this->add(i, this->data_[i] - v.data_[i]);
+            this->data_[i] = this->data_[i] - v[i];
         }
     }
 
@@ -105,7 +117,7 @@ public:
         int res = 0;
         for (int i=0; i<this->getSize(); i++)
         {
-            res += (int)this->data_[i] * (int)v.data_[i];
+            res += (int)this->data_[i] * (int)v[i];
         }
         return res;
     }
@@ -113,10 +125,10 @@ public:
     // produit vectoriel lorsqu'il est défini
     Vector<N,T> cross(const Vector<N,T>& v)
     {
-        Vector<3,T> res;
-        res.add(0, this->data_[1] * v.data_[2] - v.data_[1] * this->data_[2]);
-        res.add(1, this->data_[2] * v.data_[0] - v.data_[2] * this->data_[0]);
-        res.add(2, this->data_[0] * v.data_[1] - v.data_[0] * this->data_[1]);
+        Vector<N,T> res;
+        res[0] = this->data_[1] * v[2] - this->data_[2] * v[1];
+        res[1] = this->data_[2] * v[0] - this->data_[0] * v[2];
+        res[2] = this->data_[0] * v[1] - this->data_[1] * v[0];
         return res;
     }
 };
@@ -127,7 +139,7 @@ template <int N, typename T> Vector<N,T> operator*(Vector<N,T>& v, const double 
     Vector<N,T> res;
     for (int i=0; i<v.getSize(); i++)
     {
-        res.add(i, v[i] * f);
+        res[i] = v[i] * f;
     }
     return res;
 }
@@ -137,7 +149,7 @@ template <int N, typename T> Vector<N,T> operator*(const double f, Vector<N,T>& 
     Vector<N,T> res;
     for (int i=0; i<v.getSize(); i++)
     {
-        res.add(i, v[i] * f);
+        res[i] = v[i] * f;
     }
     return res;
 }
@@ -148,7 +160,7 @@ template <int N, typename T> Vector<N,T> operator/(const double f, Vector<N,T>& 
     Vector<N,T> res;
     for (int i=0; i<v.getSize(); i++)
     {
-        res.add(i, v[i] / f);
+        res[i] = v[i] / f;
     }
 	return res;
 }
@@ -158,7 +170,7 @@ template <int N, typename T> Vector<N,T> operator/(Vector<N,T>& v, const double 
     Vector<N,T> res;
     for (int i=0; i<v.getSize(); i++)
     {
-        res.add(i, v[i] / f);
+        res[i] = v[i] / f;
     }
     return res;
 }
