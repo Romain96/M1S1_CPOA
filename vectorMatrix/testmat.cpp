@@ -8,7 +8,7 @@ using std::endl;
 
 int main()
 {
-        // tests sur la classe Matrix33d
+	// tests sur la classe Matrix33d
         bool tInverse = testInverse();
         bool tTranslationStatique = testTranslationStatique();
         bool tRotationStatique = testRotationStatique();
