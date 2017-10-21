@@ -3,7 +3,7 @@
 
 /*
  * Ce fichier contient quelques définitions de types
- * notamment pour les classes templates Array/Vector
+ * notamment pour les classes templates Array/Vector/Matrix33d
  */
 
 #include "vector.h"
