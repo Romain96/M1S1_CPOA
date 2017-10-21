@@ -1,4 +1,6 @@
 #include "matrix33d.h"
+#include "vector.h"
+#include "utils.h"
 #include <cmath>
 
 Matrix33d::Matrix33d() : data_()
@@ -104,4 +106,54 @@ Matrix33d Matrix33d::staticShrink(const double hx, const double hy)
     	homo.data_[4] = hy;	// M[1][2]
 
     	return homo;
+}
+
+// effectue la multiplication d'un vecteur de float 3D par une matrice 33 double
+Vec3f operator *(const Vec3f& v, const Matrix33d& m)
+{
+	Vec3f res;
+
+	res[0] = v[0] * m(0,0) + v[1] * m(1,0) + v[2] * m(2,0);
+	res[1] = v[0] * m(0,1) + v[1] * m(1,1) + v[2] * m(2,1); 
+	res[2] = v[0] * m(0,2) + v[1] * m(1,2) + v[2] * m(2,2);
+
+	return res;
+}
+
+// idem dans l'autre sens
+Vec3f operator *(const Matrix33d& m, const Vec3f& v)
+{
+	Vec3f res;
+
+	res[0] = v[0] * m(0,0) + v[1] * m(1,0) + v[2] * m(2,0);
+	res[1] = v[0] * m(0,1) + v[1] * m(1,1) + v[2] * m(2,1);
+	res[2] = v[0] * m(0,2) + v[1] * m(1,2) + v[2] * m(2,2);
+
+	return res;
+}
+
+// application d'une matrice de transformation à un vecteur 2D float
+Vec3f operator *(const Vec2f& v, const Matrix33d& m)
+{
+	Vec3f res;
+
+	// remplacement de v[2] par 1.0 (coordonnée homogène)
+	res[0] = v[0] * m(0,0) + v[1] * m(1,0) + 1.0 * m(2,0);
+	res[1] = v[1] * m(0,1) + v[1] * m(1,1) + 1.0 * m(2,1);
+	res[2] = v[2] * m(0,2) + v[1] * m(1,2) + 1.0 * m(2,2);	
+
+	return res;
+}
+
+// idem dans l'autre sens
+Vec3f operator *(const Matrix33d& m, const Vec2f& v)
+{
+	Vec3f res;
+
+	// replacement de v[2] par 1.0 (coordonnée homogène)
+	res[0] = v[0] * m(0,0) + v[1] * m(1,0) + 1.0 * m(2,0);
+	res[1] = v[0] * m(0,1) + v[1] * m(1,1) + 1.0 * m(2,1);
+	res[2] = v[0] * m(0,2) + v[1] * m(1,2) + 1.0 * m(2,2);
+
+	return res;
 }
