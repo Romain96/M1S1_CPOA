@@ -11,13 +11,14 @@
 template <typename T> class Image2D
 {
 protected:
-	T* pixels_;	// tableau de pixels de type T
-	int w_;		// largeur de l'image
-	int h_;		// longueur de l'image
+	T* pixels_;			// tableau de pixels de type T
+	int w_;				// largeur de l'image
+	int h_;				// longueur de l'image
+	int max_intensity;	// intensité maximale dans le fichier
 
 public:
 	// constructeur d'une image paramétrée par la longueur et la largeur
-	Image2D(int w, int h) : w_(w), h_(h)
+	Image2D(int w, int h) : w_(w), h_(h), max_intensity(0)
 	{
 		pixels_ = new T[w*h];	// allocation dynamique de l'image
 	}
