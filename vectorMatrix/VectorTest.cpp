@@ -1,7 +1,7 @@
 // programme de test de la classe template vector définit dans vector.h
 
-#include "vector.h"
-#include "utils.h"
+#include "Vector.h"
+#include "Utils.h"
 
 // test de la somme +
 bool testSomme()

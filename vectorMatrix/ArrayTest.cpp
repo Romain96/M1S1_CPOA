@@ -1,7 +1,7 @@
 // classe de test de array.h
 
-#include "array.h"
-#include "arrayTest.h"
+#include "Array.h"
+#include "ArrayTest.h"
 
 // test de remplissage
 bool testRemplissage()

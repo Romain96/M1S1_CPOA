@@ -1,7 +1,7 @@
 #ifndef __ARRAYTEST_H__
 #define __ARRAYTEST_H__
 
-#include "array.h"
+#include "Array.h"
 
 bool testRemplissage();
 bool testAffectation();

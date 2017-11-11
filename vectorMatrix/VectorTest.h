@@ -1,7 +1,7 @@
 #ifndef __VECTORTEST_H__
 #define __VECTORTEST_H__
 
-#include "vector.h"
+#include "Vector.h"
 
 bool testSomme();
 bool testDifference();
