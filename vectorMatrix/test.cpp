@@ -1,10 +1,10 @@
 // programme de test des classes array et vector
 
 #include <iostream>
-#include "array.h"
-#include "vector.h"
-#include "arrayTest.h"
-#include "vectorTest.h"
+#include "Array.h"
+#include "Vector.h"
+#include "ArrayTest.h"
+#include "VectorTest.h"
 
 using std::cout;
 using std::endl;
