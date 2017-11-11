@@ -1,7 +1,7 @@
-#include "vector.h"
-#include "matrix33dTest.h"
-#include "matrix33d.h"
-#include "utils.h"
+#include "Vector.h"
+#include "Matrix33dTest.h"
+#include "Matrix33d.h"
+#include "Utils.h"
 #include <cmath>
 #include <iostream>
 

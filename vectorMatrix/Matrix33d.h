@@ -6,9 +6,9 @@
  * homogènes (matrices 3x3)
  */
 
-#include "array.h"
-#include "vector.h"
-#include "utils.h"
+#include "Array.h"
+#include "Vector.h"
+#include "Utils.h"
 
 class Matrix33d
 {

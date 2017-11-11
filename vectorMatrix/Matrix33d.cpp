@@ -1,6 +1,6 @@
-#include "matrix33d.h"
-#include "vector.h"
-#include "utils.h"
+#include "Matrix33d.h"
+#include "Vector.h"
+#include "Utils.h"
 #include <cmath>
 
 Matrix33d::Matrix33d() : data_()
