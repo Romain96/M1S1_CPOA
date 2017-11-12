@@ -41,6 +41,15 @@ public:
 	// constructeur
 	Image2Grey(int width, int height);
 
+	// sous-échantillonnage
+	static Image2Grey *subsampling(Image2Grey& img);
+
+	// lissage
+	static Image2Grey *smoothing(Image2Grey& img, int n);
+
+	// seuillage par une valeur
+	static Image2Grey *thresholding(Image2Grey& img, unsigned char n);
+
 	// charge l'image depuis le fichier
 	void read(std::string filename);
 

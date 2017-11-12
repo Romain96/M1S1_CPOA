@@ -17,6 +17,152 @@
 Image2Grey::Image2Grey(int width, int height) : Image2D(width, height), _max_intensity(0)
 {}
 
+// Fonction		: subsampling (sous-échanillonage) 
+// Argument(s)		: - img : référence sur l'image à traiter
+// Valeur de retour	: une nouvelle image de dimensions/2
+// Pré-condition(s)	: l'image doit avoir une largeur/hauteur paire (sinon la dernière ligne/colonne est ignorée)
+// Post-condition(s)	: /
+// Commentaire(s)	: réalise un sous-échantillonage c'est-à-dire diminue la taille de l'image par 2
+Image2Grey *Image2Grey::subsampling(Image2Grey& img)
+{
+	int w = img.getWidth()/2;
+	int h = img.getHeight()/2;
+	unsigned int pixel_val = 0;	
+
+	// nouvelle image
+	Image2Grey *new_img = new Image2Grey(w, h);
+
+	// parcours de l'image
+	for (int i = 0; i < w; i++)
+	{
+		for (int j = 0; j < h; j++)
+		{
+			// somme des 4 pixels (en unsigned int ) cause du débordement possible des unsigned char)
+			pixel_val = img(2*i, 2*j) + img(2*i + 1, 2*j) + img(2*i, 2*j + 1) + img(2*i + 1, 2*j + 1);
+			pixel_val = pixel_val / 4;
+			// remplissage avec la valeur en unsigned char
+			new_img->data_[i*w + j] = (unsigned char)pixel_val;
+		}
+	}
+	
+	// retourner l'image
+	return new_img;
+}
+
+// Fonction		: smoothing (lissage)
+// Argument(s)		: - img : une référence sur l'image à lisser
+//			  - n : l'épaisseur du lissage (ie le nombre de voisins est (2n+1)² c-à-d une bordure de 1 pixel autour du pixel à traiter)
+// Valeur de retour	: une nouvelle image lissée
+// Pré-condition(s)	: n doit être positif et "pas trop grand"
+// Post-condition(s)	: les bords ne sont pas traités (ie les n lignes/colonnes extérieures)
+// Commentaire(s)	: lisse l'image en faisant la noyenne pour chaque pixel avec les (2n+1)² autour
+Image2Grey *Image2Grey::smoothing(Image2Grey& img, int n)
+{
+	// vérification du seuil
+	if (n < 0)
+	{
+		fprintf(stderr, "smoothing ERROR : n (%d) is negative\n", n);
+		exit(1);	
+	}
+	// pas de vérification pour la taille max...
+
+	// allocation de la nouvelle image
+	Image2Grey *new_img = new Image2Grey(img.getWidth(), img.getHeight());
+	unsigned int voisins = 0;
+	unsigned int nb_voisins = (unsigned int)(2*n + 1);
+	int w = img.getWidth();
+
+	// copie des valeurs de la bordure extérieure
+	
+	// les n premières colonnes de haut en bas
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < img.getHeight(); j++)
+		{
+			new_img->data_[i*w + j] = img(i,j);
+		}
+	}		
+
+	// les n dernières colonnes de haut en bas
+	for (int i = img.getWidth() - n; i < img.getWidth(); i++)
+	{
+		for (int j = 0; j < img.getHeight(); j++)
+		{
+			new_img->data_[i*w + j] = img(i,j);
+		}
+	}
+
+	// les n premières lignes sans les coins et les n dernières lignes sans les coins
+	for (int i = n; i < img.getWidth() - n; i++)
+	{
+		for (int j = 0; j < n; j++)
+		{
+			new_img->data_[i*w + j] = img(i,j);
+		}
+		for (int k = img.getHeight() - n; k < img.getHeight(); k++)
+		{
+			new_img->data_[i*w + k] = img(i,k);
+		}
+	}
+
+	// parcours de la nouvelle image (sauf la bordure extérieure)
+	for (int i = n; i < img.getWidth() - n; i++)
+	{
+		for (int j = n; j < img.getHeight() - n; j++)
+		{
+			// somme des (2n+1)² voisins en passant par des unsigned int pour éviter le dépassement de capacité des unsigned char)
+			voisins = 0;
+			for (int k = i - n; k < i + n + 1; k++)
+			{
+				for (int l = j - n; l < j + n + 1; l++)
+				{
+					voisins += (unsigned int)img(k,l);
+				}
+			}
+			// remplissage du pixel en unsigned char
+			voisins = voisins / nb_voisins;
+			new_img->data_[i*w + j] = (unsigned char)voisins;
+		}
+	}
+
+	// retourner l'image
+	return new_img;
+}
+
+// Fonction		: thresholding (seuillage par une valeur)
+// Argument(s)		: - img : une référence sur l'image à lisser 
+//			  - n : un entier contenant la valeur du seuil
+// Valeur de retour	: une nouvelle image seuillée
+// Pré-condition(s)	: aucune puisque l'argument est de type unsigned char il ne peut excéder 255 ni être négatif
+// Post-condition(s)	: /
+// Commentaire(s)	: retourne une image seuillée par n
+Image2Grey *Image2Grey::thresholding(Image2Grey& img, unsigned char n)
+{
+	// allocation de la nouvelle image
+	Image2Grey *new_img = new Image2Grey(img.getWidth(), img.getHeight());
+	int w = img.getWidth();
+
+	// parcours de l'image
+	for (int i = 0; i < img.getWidth(); i++)
+	{
+		for (int j = 0; j < img.getHeight(); j++)
+		{
+			// seuillage : pixel < seuil = 0, pixel >= seuil = 255
+			if (img(i,j) < n)
+			{
+				new_img->data_[i*w + j] = 0;
+			}
+			else
+			{
+				new_img->data_[i*w + j] = 255;
+			}
+		}
+	}
+
+	// retourner l'image
+	return new_img;
+}
+
 // Fonction		: read
 // Argument(s)		: - filename : une chaine de caractères contenant le nom du fichier à lire
 // Valeur de retour	: /
