@@ -49,10 +49,10 @@ public:
 	Image2RGB(int width, int height);
 
 	// charger une image PPM
-	void read(std::string filename);
+	void load(std::string filename);
 
 	// écrire une image au format PPM
-	void write(std::string filename);
+	void save(std::string filename);
 };
 
 #endif

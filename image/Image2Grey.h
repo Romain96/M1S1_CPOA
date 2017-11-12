@@ -7,6 +7,8 @@
 #include <fstream>
 #include <cmath>
 #include "Image2D.h"
+#include "Utils.h"
+#include "gradient_sobel.h"
 
 class Image2Grey : public Image2D<unsigned char>
 {
@@ -50,11 +52,14 @@ public:
 	// seuillage par une valeur
 	static Image2Grey *thresholding(Image2Grey& img, unsigned char n);
 
+	// gradient de sobel
+	static Image2D<Vec2f> *gradient_sobel(Image2Grey& img);
+
 	// charge l'image depuis le fichier
-	void read(std::string filename);
+	void load(std::string filename);
 
 	// sauvegarde l'image dans le fichier
-	void write(std::string filename);
+	void save(std::string filename);
 };
 
 #endif

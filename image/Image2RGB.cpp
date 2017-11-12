@@ -16,13 +16,13 @@
 Image2RGB::Image2RGB(int width, int height) : Image2D(width, height), _max_rgb(0)
 {}
 
-// Fonction		: read
+// Fonction		: load
 // Argument(s)		: - filename : le nom du fichier dans lequel lire l'image
 // Valeur de retour	: /
 // Pré-condition(s)	: /
 // Post-condition(s)	: / 
 // Commentaire(s)	: lit le fichier filename et charge l'image
-void Image2RGB::read(std::string filename)
+void Image2RGB::load(std::string filename)
 {
 	int w = 0;
 	int h = 0;
@@ -58,13 +58,13 @@ void Image2RGB::read(std::string filename)
 	delete[] b_array;
 }
 
-// Fonction		: write
+// Fonction		: save
 // Argument(s)		: - filename : nom du fichier dans lequel sauvegarder l'image
 // Valeur de retour	: /
 // Pré-condition(s)	: /
 // Post-condition(s)	: /
 // Commentaire(s)	: sauvegarde l'image au formar PPM dans le fichier filename
-void Image2RGB::write(std::string filename)
+void Image2RGB::save(std::string filename)
 {
 	// création de 3 buffer temporaires pour RGB
 	int *r_array = new int[this->h_ * this->w_];

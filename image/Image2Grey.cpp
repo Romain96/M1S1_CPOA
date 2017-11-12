@@ -6,6 +6,10 @@
 #include <string>
 #include "Image2D.h"
 #include "Image2Grey.h"
+#include "Matrix33d.h"
+#include "Vector.h"
+#include "Utils.h"
+#include "gradient_sobel.h"
 
 // Fonction		: Image2Grey()
 // Argument(s)		: - width : un entier contenant la largeur de l'image
@@ -28,7 +32,6 @@ Image2Grey *Image2Grey::subsampling(Image2Grey& img)
 	int w = img.getWidth()/2;
 	int h = img.getHeight()/2;
 	unsigned int pixel_val = 0;
-	fprintf(stdout, "w=%d, h=%d\n", w, h);	
 
 	// nouvelle image
 	Image2Grey *new_img = new Image2Grey(w, h);
@@ -164,13 +167,57 @@ Image2Grey *Image2Grey::thresholding(Image2Grey& img, unsigned char n)
 	return new_img;
 }
 
-// Fonction		: read
+// Fonction		: gradient_sobel
+// Argument(s)		: - img : une référence sur une image de type Image2Grey (image de niveaux de gris)
+// Valeur de retour	: une image de type Image2D<Vec2f> ou Vec2f est un vecteur de 2 float
+// Pré-condition(s)	: /
+// Post-condition(s)	: les bords ne sont pas traités
+// Commentaire(s)	: calcule une convolution avec le gradient de Sobel
+Image2D<Vec2f> *Image2Grey::gradient_sobel(Image2Grey &img)
+{
+	int vertical_conv = 0;
+	int horizontal_conv = 0;
+
+	// allocation de l'image
+	Image2D<Vec2f> *new_img = new Image2D<Vec2f>(img.getWidth(), img.getHeight());
+	Vec2f gradient;
+
+	// remplissage des bords
+
+	// parcours de l'image sans les bords
+	for (int i = 2; i < img.getWidth() - 2; i++)
+	{
+		for (int j = 2; j < img.getHeight() - 2; j++)
+		{
+			// convolution verticale et horizontale
+			vertical_conv = 0;
+			horizontal_conv = 0;
+			for (int k = i - 2; k < i + 3; k++)
+			{
+				for (int l = j - 2; l < j + 3; l++)
+				{
+					vertical_conv += img(k,l);
+					horizontal_conv += img(k,l);
+				}
+			}
+			// remplissage du vec2f
+			gradient[0] = sqrt((float)(vertical_conv*vertical_conv) + (float)(horizontal_conv*horizontal_conv));
+			gradient[1] = atan((float)horizontal_conv / (float)vertical_conv);
+			(*new_img)(i,j) = gradient;
+		}
+	}
+
+	// retourner l'image
+	return new_img;
+}
+
+// Fonction		: load
 // Argument(s)		: - filename : une chaine de caractères contenant le nom du fichier à lire
 // Valeur de retour	: /
 // Pré-condition(s)	: /
 // Post-condition(s)	: /
 // Commentaire(s)	: lit le fichier et remplit l'image avec les données du fichier
-void Image2Grey::read(std::string filename)
+void Image2Grey::load(std::string filename)
 {
 	int w = 0;
 	int h = 0;
@@ -198,13 +245,13 @@ void Image2Grey::read(std::string filename)
 	delete[] tmp_data;
 }
 
-// Fonction		: write
+// Fonction		: save
 // Argument(s)		: - filename : une chaine de caractères contenant le nom du fichier où sauvegarder l'image
 // Valeur de retour	: /
 // Pré-condition(s)	: /
 // Post-condition(s)	: /
 // Commentaire(s)	: sauvegarde l'image actuelle dans un fichier nommé filename
-void Image2Grey::write(std::string filename)
+void Image2Grey::save(std::string filename)
 {
 	// création d'un buffer temporaire contenant les données converties de unsigned char vers int
 	int *tmp_data = NULL;

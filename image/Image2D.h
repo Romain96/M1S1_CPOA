@@ -93,7 +93,7 @@ public:
 	// Pré-condition(s)	: x et y dans l'image, width et height respectivement <= img.width - x et img.height - y
 	// Post-condition(s)	: /
 	// Commentaire(s)	: retourne une nouvelle image partant du pixel (x,y) et de dimensions width*height
-	Image2D *cropping(Image2D& img, int x, int y, int width, int height)
+	static Image2D *cropping(Image2D& img, int x, int y, int width, int height)
 	{
 		// vérification des paramètres
 		if (x < 0)
@@ -141,17 +141,13 @@ public:
 
 		printf("Cropping image with x=%d y=%d width=%d height=%d\n", x, y, width, height);
 		// parcours de l'image
-		int indicex = 0;
-		int indicey = 0;
-		for (int i = x; i < x + width; i++)
+		for (int i = 0; i < width; i++)
 		{
-			for (int j = y; j < height + y; j++)
+			for (int j = 0; j < height; j++)
 			{
-				T pixel = this->data_[i*this->getWidth() + j];
-				crop->data_[indicex*width + indicey] = pixel;
-				indicey++;
+				T pixel = img.data_[(i+x)*img.getWidth() + (j+y)];
+				crop->data_[i*width + j] = pixel;
 			}
-			indicex++;
 		}
 
 		// retourner l'image
