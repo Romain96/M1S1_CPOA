@@ -27,7 +27,8 @@ Image2Grey *Image2Grey::subsampling(Image2Grey& img)
 {
 	int w = img.getWidth()/2;
 	int h = img.getHeight()/2;
-	unsigned int pixel_val = 0;	
+	unsigned int pixel_val = 0;
+	fprintf(stdout, "w=%d, h=%d\n", w, h);	
 
 	// nouvelle image
 	Image2Grey *new_img = new Image2Grey(w, h);
@@ -273,7 +274,7 @@ void Image2Grey::__check_data(int width, int height, int max_intensity, int *dat
 				fprintf(stderr, "data(%d,%d) = %d\n", i, j, *index);
 				exit(1);
 			}
-			// ou si une valur de pixel est plus élevée que l'intensité maximale
+			// ou si une valeur de pixel est plus élevée que l'intensité maximale
 			else if (*index > max_intensity)
 			{
 				fprintf(stderr, "__check_data ERROR : value is superior to max_intensity\n");
