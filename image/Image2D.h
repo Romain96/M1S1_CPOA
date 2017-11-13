@@ -139,7 +139,6 @@ public:
 		// allocation de la nouvelle image
 		Image2D *crop = new Image2D(width, height);
 
-		printf("Cropping image with x=%d y=%d width=%d height=%d\n", x, y, width, height);
 		// parcours de l'image
 		for (int i = 0; i < width; i++)
 		{

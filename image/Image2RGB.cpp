@@ -35,7 +35,6 @@ void Image2RGB::load(std::string filename)
 	__read(filename, w, h, max_rgb, &r_array, &g_array, &b_array);
 
 	// remplissage des données
-	printf("reading PGM image with height %d and width %d and max RGB of %d\n", h, w, max_rgb);
 	this->h_ = h;
 	this->w_ = w;
 	this->_max_rgb = max_rgb;
@@ -148,7 +147,7 @@ void Image2RGB::__check_data(int width, int height, int max_rgb, int *r_array, i
 		if (k == 0)
 		{
 			index = r_array;
-			char c = 'R';
+			c = 'R';
 		}
 		else if (k == 1)
 		{
@@ -512,7 +511,7 @@ char Image2RGB::__capitalize(char c)
 	char cc = c;
 	if (97 <= c && c <= 122)
 	{
-		char cc = c - 32;
+		cc = c - 32;
 	}
 	return cc;
 }

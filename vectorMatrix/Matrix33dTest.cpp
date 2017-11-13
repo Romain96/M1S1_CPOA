@@ -81,9 +81,9 @@ bool testHomothetieStatique()
     	Matrix33d homo = m.staticShrink(1.0,2.0);
 
     	// vérification donne normalement la matrice (0, 0, 1.0, 0, 0, 2.0, 0, 0, 1.0)
-    	if( (m(0,0)-1.0)<1e-9 && m(0,1)<1e-9 && m(0,2)<1e-9 &&
-            	m(1,0)<1e-9 && (m(1,1)-2.0)<1e-9 && m(1,2)<1e-9 &&
-            	m(2,0)<1e-9 && m(2,1)<1e-9 && (m(2,2)-1.0)<1e-9 )
+    	if( (homo(0,0)-1.0)<1e-9 && homo(0,1)<1e-9 && homo(0,2)<1e-9 &&
+            	homo(1,0)<1e-9 && (homo(1,1)-2.0)<1e-9 && homo(1,2)<1e-9 &&
+            	homo(2,0)<1e-9 && homo(2,1)<1e-9 && (homo(2,2)-1.0)<1e-9 )
     	{
         	return true;
     	}

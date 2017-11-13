@@ -1,8 +1,6 @@
 #ifndef __VECTORTEST_H__
 #define __VECTORTEST_H__
 
-#include "Vector.h"
-
 bool testSomme();
 bool testDifference();
 bool testSommeAffectation();

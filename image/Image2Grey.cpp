@@ -228,7 +228,6 @@ void Image2Grey::load(std::string filename)
 	__read(filename, w, h, max, &tmp_data);
 
 	// conversion des données de int en unsigned char
-	printf("reading height %d and width %d\n", h, w);
 	this->h_ = h;
 	this->w_ = w;
 	this->_max_intensity = max;

@@ -69,10 +69,7 @@ public:
 	*/
 	T operator [](const int i) const
 	{
-		if (i >= 0 && i<this->size)
-		{
-			return this->data_[i];
-		}
+		return this->data_[i];
 	}
 
 	/*
