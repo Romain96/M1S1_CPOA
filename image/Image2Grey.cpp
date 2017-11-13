@@ -231,6 +231,7 @@ void Image2Grey::load(std::string filename)
 	this->h_ = h;
 	this->w_ = w;
 	this->_max_intensity = max;
+	delete[] this->data_;
 	this->data_ = new unsigned char[h*w];
 	for (int i = 0; i < h; i++)
 	{

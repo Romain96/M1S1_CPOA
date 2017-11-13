@@ -38,6 +38,7 @@ void Image2RGB::load(std::string filename)
 	this->h_ = h;
 	this->w_ = w;
 	this->_max_rgb = max_rgb;
+	delete[] this->data_;
 	this->data_ = new Vec3uc[h * w];
 	for (int i = 0; i < w; i++)
 	{
