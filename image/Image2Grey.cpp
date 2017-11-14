@@ -201,8 +201,10 @@ Image2D<Vec2f> *Image2Grey::gradient_sobel(Image2Grey &img)
 				}
 			}
 			// remplissage du vec2f
-			gradient[0] = sqrt((float)(vertical_conv*vertical_conv) + (float)(horizontal_conv*horizontal_conv));
-			gradient[1] = atan((float)horizontal_conv / (float)vertical_conv);
+			//gradient[0] = sqrt((float)(vertical_conv*vertical_conv) + (float)(horizontal_conv*horizontal_conv));
+			//gradient[1] = atan((float)horizontal_conv / (float)vertical_conv);
+			gradient[0] = (float)vertical_conv;
+			gradient[1] = (float)horizontal_conv;
 			(*new_img)(i,j) = gradient;
 		}
 	}
