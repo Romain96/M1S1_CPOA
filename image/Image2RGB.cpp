@@ -106,35 +106,35 @@ void Image2RGB::__check_data(int width, int height, int max_rgb, int *r_array, i
 	// largeur incorrecte
 	if (width <= 0)
 	{
-		fprintf(stderr, "__check_data ERROR : width (%d) is lesser or equal to 0\n", width);
+		fprintf(stderr, "Image2RGB::__check_data ERROR : la largeur est inférieure ou égale à 0 (%d)\n", width);
 		exit(1);
 	}
 
 	// hauteur incorrecte
 	if (height <= 0)
 	{
-		fprintf(stderr, "__check_data ERROR : height (%d) is lesser or equal to 0\n", height);
+		fprintf(stderr, "Image2RGB::__check_data ERROR : la hauteur est inférieure ou égale à 0 (%d)\n", height);
 		exit(1);
 	}
 
 	// pointer null en r
 	if (r_array == NULL)
 	{
-		fprintf(stderr, "__check_data ERROR : red data array is a NULL pointer\n");
+		fprintf(stderr, "Image2RGB::__check_data ERROR : le tableau des valeurs R est NULL\n");
 		exit(1);;
 	}
 
 	// pointer null en g
 	if (g_array == NULL)
 	{
-		fprintf(stderr, "__check_data ERROR : green data array is a NULL pointer\n");
+		fprintf(stderr, "Image2RGB::__check_data ERROR : le tableau des valeurs G est NULL\n");
 		exit(1);;
 	}
 
 	// pointeur null en b
 	if (b_array == NULL)
 	{
-		fprintf(stderr, "__check_data ERROR : blue data array is a NULL pointer\n");
+		fprintf(stderr, "Image2RGB::__check_data ERROR : le tableau des valeurs B est NULL\n");
 		exit(1);
 	}
 
@@ -168,12 +168,12 @@ void Image2RGB::__check_data(int width, int height, int max_rgb, int *r_array, i
 			{
 				if (*index < 0)
 				{
-					fprintf(stderr, "__check_data ERROR : negative data in buffer %c(%d,%d) = %d", c, i, j, *index);
+					fprintf(stderr, "Image2RGB::__check_data ERROR : valeur de pixel négative %c(%d,%d) = %d", c, i, j, *index);
 					exit(1);
 				}
 				else if (max_rgb < *index)
 				{
-					fprintf(stderr, "__check_data ERROR : data in buffer %c(%d,%d) = %d exceeds max_rgb = %d", c, i, j, *index, max_rgb);
+					fprintf(stderr, "Image2RGB::__check_data ERROR : valeur de pixel supérieure à max_rgb %c(%d,%d) = %d > %d", c, i, j, *index, max_rgb);
 					exit(1);
 				}
 				index = index + 1;
@@ -207,7 +207,7 @@ void Image2RGB::__read_header(std::ifstream &infile, int &width, int &height, in
 		// EOF
 		if (infile.eof())
 		{
-			fprintf(stderr, "__read_header ERROR : end of file\n");
+			fprintf(stderr, "Image2RGB::__read_header ERROR : EOF\n");
 			exit(1);
 		}
 
@@ -232,7 +232,7 @@ void Image2RGB::__read_header(std::ifstream &infile, int &width, int &height, in
 			// numéro magique différent de P3
 			if (!__s_eq(word, "P3"))
 			{
-				fprintf(stderr, "__read_header ERROR : magic number read is %s but expected one is P3\n", word.c_str());
+				fprintf(stderr, "Image2RGB::__read_header ERROR : mauvais numéro magique %s au lieu de P3\n", word.c_str());
 				exit(1);
 			}
 			line = rest;
@@ -310,7 +310,7 @@ void Image2RGB::__read_data(std::ifstream &infile, int width, int height, int *r
 			infile >> *r_array;
 			if (infile.eof())
 			{
-				fprintf(stderr, "__read_data ERROR : end of file (red)\n");
+				fprintf(stderr, "Image2RGB::__read_data ERROR : EOF (pixels R)\n");
 				exit(1);
 			}
 			r_array = r_array + 1;
@@ -318,7 +318,7 @@ void Image2RGB::__read_data(std::ifstream &infile, int width, int height, int *r
 			infile >> *g_array;
 			if (infile.eof())
 			{
-				fprintf(stderr, "__read_data ERROR : end of file (green)\n");
+				fprintf(stderr, "Image2RGB::__read_data ERROR : EOF (pixels G)\n");
 				exit(1);
 			}
 			g_array = g_array + 1;
@@ -326,7 +326,7 @@ void Image2RGB::__read_data(std::ifstream &infile, int width, int height, int *r
 			infile >> *b_array;
 			if (infile.eof())
 			{
-				fprintf(stderr, "__read_data ERROR : end of file (blue)\n");
+				fprintf(stderr, "Image2RGB::__read_data ERROR : EOF (pixels B)\n");
 				exit(1);
 			}
 			b_array = b_array + 1;
@@ -355,7 +355,7 @@ void Image2RGB::__read(std::string filename, int &width, int &height, int &max_r
 	input.open(filename.c_str());
 	if (!input)
 	{
-		fprintf(stderr, "__read ERROR : cannot open file %s\n", filename.c_str());
+		fprintf(stderr, "Image2RGB::__read ERROR : impossible d'ouvrir le fichier %s\n", filename.c_str());
 		exit(1);
 	}
 
@@ -457,7 +457,7 @@ void Image2RGB::__write(std::string filename, int width, int height, int *r_arra
 
 	if (!output)
 	{
-		fprintf(stderr, "__write ERROR : cannot open file %s\n", filename.c_str());
+		fprintf(stderr, "Image2RGB::__write ERROR : impossible d'ouvrir le fichier %s\n", filename.c_str());
 		exit(1);
 	}
 	

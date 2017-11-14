@@ -72,14 +72,37 @@ public:
 	// Valeur de retour	: une variable de type T contenant la valeur du pixel en (i,j)
 	// Pré-condition(s)	: i et j doivent être valides (ie 0 <= i < largeur et 0 <= j < hauteur)
 	// Post-condition(s)	: /
-	// Commentaire(s)	: /
+	// Commentaire(s)	: version const
 	T operator ()(int i, int j) const
 	{
+		// i et/ou j hors limite
+		if (i < 0 || i >= w_ || j < 0 || j >= h_)
+		{
+			fprintf(stderr, "Image2D::operator () ERROR : i et/ou j hors limite (i=%d, j=%d)\n", i, j);
+			exit(1);
+		}
+
+		// sinon ok
 		return data_[i*w_ + j];
 	}
 
+	// Fonction		: operator ()
+	// Argument(s)		: - i : entier contenant le numéro de ligne du pixel
+	// 			  - j : entier contenant le numéro de colonne du pixel
+	// Valeur de retout	: une variable de type T contenant la valeur du pixel en (i,j)
+	// Pré-condition(s)	: i et j doivent être valides
+	// Post-condition(s)	: /
+	// Commentaire(s)	: version non const de la précédente
 	T& operator ()(int i, int j)
 	{
+		// i et/ou j hors limite
+		if (i < 0 || i >= w_ || j < 0 || j >= h_)
+		{
+			fprintf(stderr, "Image2D::operator () ERROR : i et/ou j hors limite (i=%d, j=%d)\n", i, j);
+			exit(1);
+		}
+
+		// sinon ok
 		return data_[i*w_ + j];
 	}
 
@@ -98,41 +121,41 @@ public:
 		// vérification des paramètres
 		if (x < 0)
 		{
-			fprintf(stderr, "cropping ERROR : x (%d) is negative\n", x);
+			fprintf(stderr, "Image2D::cropping ERROR : x est négatif (%d)\n", x);
 			exit(1);
 		}
 		if (x > img.getWidth())
 		{
-			fprintf(stderr, "cropping ERROR : x (%d) is greater than image width (%d)\n", x, img.getWidth());
+			fprintf(stderr, "Image2D::cropping ERROR : x est supérieur à la largeur de l'image (%d >=%d)\n", x, img.getWidth());
 			exit(1);
 		}
 		if (y < 0)
 		{
-			fprintf(stderr, "cropping ERROR : y (%d) is negative\n", y);
+			fprintf(stderr, "Image2D::cropping ERROR : y est négative (%d)\n", y);
 			exit(1);
 		}
 		if (y > img.getHeight())
 		{
-			fprintf(stderr, "cropping ERROR : y (%d) is greater than image height (%d)\n", y, img.getHeight());
+			fprintf(stderr, "Image2D::cropping ERROR : y est supérieur à la hauteur de l'image (%d >= %d)\n", y, img.getHeight());
 			exit(1);
 		}
 		if (width < 0)
 		{
-			fprintf(stderr, "cropping ERROR : width (%d) is negative\n", width);
+			fprintf(stderr, "Image2D::cropping ERROR : la largeur est négative (%d)\n", width);
 			exit(1);
 		}
 		if (height < 0)
 		{
-			fprintf(stderr, "cropping ERROR : height (%d) is negative\n", height);
+			fprintf(stderr, "Image2D::cropping ERROR : la hauteur est négative (%d)\n", height);
 		}
 		if (width > img.getWidth() - x)
 		{
-			fprintf(stderr, "cropping ERROR : width (%d) is greater than image width - x (%d)\n", width, img.getWidth() - x);
+			fprintf(stderr, "Image2D::cropping ERROR : la largeur est supérieure à la largeur de l'image - x (%d >%d)\n", width, img.getWidth() - x);
 			exit(1);
 		}
 		if (height > img.getHeight() - y)
 		{
-			fprintf(stderr, "cropping ERROR : height (%d) is greater than image height - y (%d)\n", height, img.getHeight() - y);
+			fprintf(stderr, "Image2D::cropping ERROR : la hauteur est supérieure à la hauteur de l'image - y (%d >= %d)\n", height, img.getHeight() - y);
 			exit(1);
 		}
 
@@ -165,12 +188,12 @@ public:
 		// vérification des dimensions
 		if (img1.getWidth() != img2.getWidth())
 		{
-			fprintf(stderr, "swap ERROR : images have different widths\n");
+			fprintf(stderr, "Image2D::swap ERROR : les images ont des largeurs différentes\n");
 			exit(1);	
 		}
 		if (img1.getHeight() != img2.getHeight())
 		{
-			fprintf(stderr, "swap ERROR : images have different heights\n");
+			fprintf(stderr, "Image2D::swap ERROR : les images ont des hauteurs différentes\n");
 			exit(1);
 		}
 

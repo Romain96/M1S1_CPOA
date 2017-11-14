@@ -65,7 +65,7 @@ Image2Grey *Image2Grey::smoothing(Image2Grey& img, int n)
 	// vérification du seuil
 	if (n < 0)
 	{
-		fprintf(stderr, "smoothing ERROR : n (%d) is negative\n", n);
+		fprintf(stderr, "Image2Grey::smoothing ERROR : n est ngatif (%d)\n", n);
 		exit(1);	
 	}
 	// pas de vérification pour la taille max...
@@ -201,8 +201,6 @@ Image2D<Vec2f> *Image2Grey::gradient_sobel(Image2Grey &img)
 				}
 			}
 			// remplissage du vec2f
-			//gradient[0] = sqrt((float)(vertical_conv*vertical_conv) + (float)(horizontal_conv*horizontal_conv));
-			//gradient[1] = atan((float)horizontal_conv / (float)vertical_conv);
 			gradient[0] = (float)vertical_conv;
 			gradient[1] = (float)horizontal_conv;
 			(*new_img)(i,j) = gradient;
@@ -291,21 +289,21 @@ void Image2Grey::__check_data(int width, int height, int max_intensity, int *dat
 	// largeur négative
 	if (width <= 0)
 	{
-		fprintf(stderr, "__check_data ERROR : width is lesser or equal to zero\n");
+		fprintf(stderr, "Image2Grey::__check_data ERROR : la largeur est inférieure ou égale à 0 (%d)\n", width);
 		exit(1);
 	}
 
 	// hauteur négative
 	if (height <= 0)
 	{
-		fprintf(stderr, "__check_data ERROR : height is lesser or equal to zero\n");
+		fprintf(stderr, "Image2Grey::__check_data ERROR : la hauteur est inférieure ou égale à 0 (%d)\n", height);
 		exit(1);
 	}
 
 	// pointeur sur les données NULL
 	if (data_array == NULL)
 	{
-		fprintf(stderr, "__check_data ERROR : data_array is a NULL pointer");
+		fprintf(stderr, "Image2Grey::__check_data ERROR : data_array est NULL (tableau des pixels)\n");
 		exit(1);
 	}
 
@@ -319,15 +317,13 @@ void Image2Grey::__check_data(int width, int height, int max_intensity, int *dat
 			// erreur si une valeur de pixel est négtive
 			if (*index < 0)
 			{
-				fprintf(stderr, "__check_data ERROR : negative data\n");
-				fprintf(stderr, "data(%d,%d) = %d\n", i, j, *index);
+				fprintf(stderr, "Image2Grey::__check_data ERROR : pixel avec valeur négative pixel(%d,%d)=%d\n", i, j, *index);
 				exit(1);
 			}
 			// ou si une valeur de pixel est plus élevée que l'intensité maximale
 			else if (*index > max_intensity)
 			{
-				fprintf(stderr, "__check_data ERROR : value is superior to max_intensity\n");
-				fprintf(stderr, "data(%d,%d) = %d and max_intensity is %d\n", i, j, *index, max_intensity);
+				fprintf(stderr, "Image2Grey::__check_data ERROR : pixel avec valeur supérieure à max_intensity pixel(%d,%d)=%d > %d\n", i, j, *index, max_intensity);
 				exit(1);
 			}
 			index = index + 1;
@@ -360,7 +356,7 @@ void Image2Grey::__read_header(std::ifstream& input, int& width, int& height, in
 		// EOF
 		if (input.eof())
 		{
-			fprintf(stderr, "__read_header ERROR : end of file\n");
+			fprintf(stderr, "Image2Grey::__read_header ERROR : EOF\n");
 			exit(1);
 		}
 
@@ -387,8 +383,7 @@ void Image2Grey::__read_header(std::ifstream& input, int& width, int& height, in
 			if ((word[0] != 'P' && word[0] != 'p') ||
 				word[1] != '2')
 			{
-				fprintf(stderr, "__read_header ERROR : bad magic number\n");
-				fprintf(stderr, "privided magic number is %s but P2 was expected\n", word.c_str());
+				fprintf(stderr, "Image2Grey::__read_header ERROR : numéro magique incorrect %s au lieu de P2\n", word.c_str());
 				exit(1);
 			}
 			step = 1;
@@ -498,7 +493,7 @@ void Image2Grey::__read(std::string filename, int& width, int& height, int& max_
 
 	if (!input)
 	{
-		fprintf(stderr, "read ERROR : cannot open input file\n");
+		fprintf(stderr, "Image2Grey::__read ERROR : impossible d'ouvrir le fichier %s\n", filename.c_str());
 		exit(1);
 	}
 	// lecture du header avec __read_header
@@ -588,7 +583,7 @@ void Image2Grey::__write(std::string filename, int width, int height, int *data_
 	output.open(filename.c_str());
 	if (!output)
 	{
-		fprintf(stderr, "write ERROR : cannot open the file\n");
+		fprintf(stderr, "Image2Grey::__write ERROR : impossible d'ouvrir le fichier %s\n", filename.c_str());
 		exit(1);
 	}
 
