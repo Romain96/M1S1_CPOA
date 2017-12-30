@@ -10,14 +10,26 @@
 // Post-condition(s): /
 // Commentaire(s)	: constructeur paramétré
 CsgDisk::CsgDisk(Vec2f &center) :
-    _center(center),
-    _diameter(1.f)
+    _diameter(1.f),
+    _center(center)
 {
-    Vec2f ulp(center[0] - _diameter/2.f, center[1] - _diameter/2.f);
-    Vec2f urp(center[0] + _diameter/2.f, center[1] - _diameter/2.f);
-    Vec2f llp(center[0] - _diameter/2.f, center[1] + _diameter/2.f);
-    Vec2f lrp(center[0] + _diameter/2.f, center[1] + _diameter/2.f);
-    setBoundingBox(BoundingBox(ulp, urp, llp, lrp));
+    Vec2f ulp;
+    ulp[0] = center[0] - _diameter/2.f;
+    ulp[1] = center[1] - _diameter/2.f;
+
+    Vec2f urp;
+    urp[0] = center[0] + _diameter/2.f;
+    urp[1] = center[1] - _diameter/2.f;
+
+    Vec2f llp;
+    llp[0] = center[0] - _diameter/2.f;
+    llp[1] = center[1] + _diameter/2.f;
+
+    Vec2f lrp;
+    lrp[0] = center[0] + _diameter/2.f;
+    lrp[1] = center[1] + _diameter/2.f;
+
+    _boundingBox = BoundingBox(ulp, urp, llp, lrp);
 }
 
 // Fonction         : getDiameter
@@ -62,11 +74,25 @@ BoundingBox& CsgDisk::getBoundingBox()
 void CsgDisk::setDiameter(float diameter)
 {
     _diameter = diameter;
-    Vec2f ulp(center[0] - _diameter/2.f, center[1] - _diameter/2.f);
-    Vec2f urp(center[0] + _diameter/2.f, center[1] - _diameter/2.f);
-    Vec2f llp(center[0] - _diameter/2.f, center[1] + _diameter/2.f);
-    Vec2f lrp(center[0] + _diameter/2.f, center[1] + _diameter/2.f);
-    setBoundingBox(BoundingBox(ulp, urp, llp, lrp));
+
+    Vec2f ulp;
+    ulp[0] = _center[0] - _diameter/2.f;
+    ulp[1] = _center[1] - _diameter/2.f;
+
+    Vec2f urp;
+    urp[0] = _center[0] + _diameter/2.f;
+    urp[1] = _center[1] - _diameter/2.f;
+
+    Vec2f llp;
+    llp[0] = _center[0] - _diameter/2.f;
+    llp[1] = _center[1] + _diameter/2.f;
+
+    Vec2f lrp;
+    lrp[0] = _center[0] + _diameter/2.f;
+    lrp[1] = _center[1] + _diameter/2.f;
+
+    BoundingBox bb = BoundingBox(ulp, urp, llp, lrp);
+    setBoundingBox(bb);
 }
 
 // Fonction         : setCenter
@@ -78,11 +104,25 @@ void CsgDisk::setDiameter(float diameter)
 void CsgDisk::setCenter(Vec2f &center)
 {
     _center = center;
-    Vec2f ulp(center[0] - _diameter/2.f, center[1] - _diameter/2.f);
-    Vec2f urp(center[0] + _diameter/2.f, center[1] - _diameter/2.f);
-    Vec2f llp(center[0] - _diameter/2.f, center[1] + _diameter/2.f);
-    Vec2f lrp(center[0] + _diameter/2.f, center[1] + _diameter/2.f);
-    setBoundingBox(BoundingBox(ulp, urp, llp, lrp));
+
+    Vec2f ulp;
+    ulp[0] = center[0] - _diameter/2.f;
+    ulp[1] = center[1] - _diameter/2.f;
+
+    Vec2f urp;
+    urp[0] = center[0] + _diameter/2.f;
+    urp[1] = center[1] - _diameter/2.f;
+
+    Vec2f llp;
+    llp[0] = center[0] - _diameter/2.f;
+    llp[1] = center[1] + _diameter/2.f;
+
+    Vec2f lrp;
+    lrp[0] = center[0] + _diameter/2.f;
+    lrp[1] = center[1] + _diameter/2.f;
+
+    BoundingBox bb = BoundingBox(ulp, urp, llp, lrp);
+    setBoundingBox(bb);
 }
 
 // Fonction         : setBoundingBox

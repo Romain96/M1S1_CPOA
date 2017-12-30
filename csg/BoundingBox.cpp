@@ -1,4 +1,19 @@
-#include "BoundingBox.h".h"
+#include "BoundingBox.h"
+
+// Fonction         : BoundingBox
+// Argument(s)		: /
+// Valeur de retour	: /
+// Pré-condition(s)	: /
+// Post-condition(s): /
+// Commentaire(s)	: constructeur non paramétré
+BoundingBox::BoundingBox() :
+    _upper_left_point(Vec2f()),
+    _upper_right_point(Vec2f()),
+    _lower_left_point(Vec2f()),
+    _lower_right_point(Vec2f())
+{
+    // rien
+}
 
 // Fonction         : BoundingBox
 // Argument(s)		: - ulp : vecteur contenant les coordonnées du point supérieur gauche
@@ -72,10 +87,10 @@ Vec2f& BoundingBox::getLowerRightPoint()
 BoundingBox& operator +(BoundingBox& bb1, BoundingBox& bb2)
 {
     // nouveaux points délimitant la bounding box union
-    Vec2f ulp(0.f, 0.f);
-    Vec2f urp(0.f, 0.f);
-    Vec2f llp(0.f, 0.f);
-    Vec2f lrp(0.f, 0.f);
+    Vec2f ulp;
+    Vec2f urp;
+    Vec2f llp;
+    Vec2f lrp;
 
     // le point supérieur gauche est (x plus petit, y plus petit)
     if (bb1.getUpperLeftPoint()[0] < bb2.getUpperLeftPoint()[0])
@@ -122,13 +137,14 @@ BoundingBox& operator +(BoundingBox& bb1, BoundingBox& bb2)
         lrp[1] = bb2.getLowerRightPoint()[1];
 
     // DEBUG
-    std::cout << "upper left point : " << ulp << std::endl;
-    std::cout << "upper right point : " << urp << std::endl;
-    std::cout << "lower left point : " << llp << std::endl;
-    std::cout << "lower right point : " << lrp << std::endl;
+    std::cout << "upper left point : " << ulp[0] << "," << ulp[1] << std::endl;
+    std::cout << "upper right point : " << urp[0] << "," << urp[1] << std::endl;
+    std::cout << "lower left point : " << llp[0] << "," << llp[1] << std::endl;
+    std::cout << "lower right point : " << lrp[0] << "," << lrp[1] << std::endl;
 
     // on retourne la nouvelle bounding box
-    return BoundingBox(ulp, lrp, llp, lrp);
+    static BoundingBox bb = BoundingBox(ulp, lrp, llp, lrp);
+    return bb;
 }
 
 // Fonction         : operator ^
@@ -141,10 +157,10 @@ BoundingBox& operator +(BoundingBox& bb1, BoundingBox& bb2)
 BoundingBox& operator ^(BoundingBox& bb1, BoundingBox& bb2)
 {
     // nouveaux points délimitant la bounding box union
-    Vec2f ulp(0.f, 0.f);
-    Vec2f urp(0.f, 0.f);
-    Vec2f llp(0.f, 0.f);
-    Vec2f lrp(0.f, 0.f);
+    Vec2f ulp;
+    Vec2f urp;
+    Vec2f llp;
+    Vec2f lrp;
 
     // le point supérieur gauche est (x plus grand, y plus grand)
     if (bb1.getUpperLeftPoint()[0] > bb2.getUpperLeftPoint()[0])
@@ -191,13 +207,14 @@ BoundingBox& operator ^(BoundingBox& bb1, BoundingBox& bb2)
         lrp[1] = bb2.getLowerRightPoint()[1];
 
     // DEBUG
-    std::cout << "upper left point : " << ulp << std::endl;
-    std::cout << "upper right point : " << urp << std::endl;
-    std::cout << "lower left point : " << llp << std::endl;
-    std::cout << "lower right point : " << lrp << std::endl;
+    std::cout << "upper left point : " << ulp[0] << "," << ulp[1] << std::endl;
+    std::cout << "upper right point : " << urp[0] << "," << urp[1] << std::endl;
+    std::cout << "lower left point : " << llp[0] << "," << llp[1] << std::endl;
+    std::cout << "lower right point : " << lrp[0] << "," << lrp[1] << std::endl;
 
     // on retourne la nouvelle bounding box
-    return BoundingBox(ulp, lrp, llp, lrp);
+    static BoundingBox bb = BoundingBox(ulp, lrp, llp, lrp);
+    return bb;
 }
 
 // Fonction         : operator -
@@ -218,11 +235,12 @@ BoundingBox& operator -(BoundingBox& bb1, BoundingBox& bb2)
     // TODO
 
     // DEBUG
-    std::cout << "upper left point : " << ulp << std::endl;
-    std::cout << "upper right point : " << urp << std::endl;
-    std::cout << "lower left point : " << llp << std::endl;
-    std::cout << "lower right point : " << lrp << std::endl;
+    std::cout << "upper left point : " << ulp[0] << "," << ulp[1] << std::endl;
+    std::cout << "upper right point : " << urp[0] << "," << urp[1] << std::endl;
+    std::cout << "lower left point : " << llp[0] << "," << llp[1] << std::endl;
+    std::cout << "lower right point : " << lrp[0] << "," << lrp[1] << std::endl;
 
     // on retourne la nouvelle bounding box
-    return BoundingBox(ulp, lrp, llp, lrp);
+    static BoundingBox bb = BoundingBox(ulp, lrp, llp, lrp);
+    return bb;
 }

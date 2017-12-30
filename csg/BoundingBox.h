@@ -14,7 +14,8 @@ protected:
     Vec2f _lower_left_point;
     Vec2f _lower_right_point;
 public:
-    // constructeur
+    // constructeurs
+    BoundingBox();
     BoundingBox(Vec2f& ulp, Vec2f& urp, Vec2f& llp, Vec2f& lrp);
 
     // getters
