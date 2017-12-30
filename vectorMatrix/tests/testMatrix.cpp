@@ -1,5 +1,5 @@
 #include <iostream>
-#include "matrix33d.h"
+#include "Matrix33d.h"
 
 int main()
 {

@@ -11,21 +11,21 @@
 #include "Utils.h"
 #include "gradient_sobel.h"
 
-// Fonction		: Image2Grey()
+// Fonction         : Image2Grey()
 // Argument(s)		: - width : un entier contenant la largeur de l'image
-//			  - height : un entier contenant la hauteur de l'image
+//                    - height : un entier contenant la hauteur de l'image
 // Valeur de retour	: /
 // Pré-condition(s)	: /
-// Post-condition(s)	: /
+// Post-condition(s): /
 // Commentaire(s)	: positione l'imatensité maximale à 0
 Image2Grey::Image2Grey(int width, int height) : Image2D(width, height), _max_intensity(0)
 {}
 
-// Fonction		: subsampling (sous-échanillonage) 
+// Fonction         : subsampling (sous-échanillonage)
 // Argument(s)		: - img : référence sur l'image à traiter
 // Valeur de retour	: une nouvelle image de dimensions/2
 // Pré-condition(s)	: l'image doit avoir une largeur/hauteur paire (sinon la dernière ligne/colonne est ignorée)
-// Post-condition(s)	: /
+// Post-condition(s): /
 // Commentaire(s)	: réalise un sous-échantillonage c'est-à-dire diminue la taille de l'image par 2
 Image2Grey *Image2Grey::subsampling(Image2Grey& img)
 {
@@ -53,12 +53,12 @@ Image2Grey *Image2Grey::subsampling(Image2Grey& img)
 	return new_img;
 }
 
-// Fonction		: smoothing (lissage)
+// Fonction         : smoothing (lissage)
 // Argument(s)		: - img : une référence sur l'image à lisser
-//			  - n : l'épaisseur du lissage (ie le nombre de voisins est (2n+1)² c-à-d une bordure de 1 pixel autour du pixel à traiter)
+//                    - n : l'épaisseur du lissage (ie le nombre de voisins est (2n+1)² c-à-d une bordure de 1 pixel autour du pixel à traiter)
 // Valeur de retour	: une nouvelle image lissée
 // Pré-condition(s)	: n doit être positif et "pas trop grand"
-// Post-condition(s)	: les bords ne sont pas traités (ie les n lignes/colonnes extérieures)
+// Post-condition(s): les bords ne sont pas traités (ie les n lignes/colonnes extérieures)
 // Commentaire(s)	: lisse l'image en faisant la noyenne pour chaque pixel avec les (2n+1)² autour
 Image2Grey *Image2Grey::smoothing(Image2Grey& img, int n)
 {
@@ -133,12 +133,12 @@ Image2Grey *Image2Grey::smoothing(Image2Grey& img, int n)
 	return new_img;
 }
 
-// Fonction		: thresholding (seuillage par une valeur)
+// Fonction         : thresholding (seuillage par une valeur)
 // Argument(s)		: - img : une référence sur l'image à lisser 
-//			  - n : un entier contenant la valeur du seuil
+//                    - n : un entier contenant la valeur du seuil
 // Valeur de retour	: une nouvelle image seuillée
 // Pré-condition(s)	: aucune puisque l'argument est de type unsigned char il ne peut excéder 255 ni être négatif
-// Post-condition(s)	: /
+// Post-condition(s): /
 // Commentaire(s)	: retourne une image seuillée par n
 Image2Grey *Image2Grey::thresholding(Image2Grey& img, unsigned char n)
 {
@@ -167,11 +167,11 @@ Image2Grey *Image2Grey::thresholding(Image2Grey& img, unsigned char n)
 	return new_img;
 }
 
-// Fonction		: gradient_sobel
+// Fonction         : gradient_sobel
 // Argument(s)		: - img : une référence sur une image de type Image2Grey (image de niveaux de gris)
 // Valeur de retour	: une image de type Image2D<Vec2f> ou Vec2f est un vecteur de 2 float
 // Pré-condition(s)	: /
-// Post-condition(s)	: les bords ne sont pas traités
+// Post-condition(s): les bords ne sont pas traités
 // Commentaire(s)	: calcule une convolution avec le gradient de Sobel
 Image2D<Vec2f> *Image2Grey::gradient_sobel(Image2Grey &img)
 {
@@ -211,11 +211,11 @@ Image2D<Vec2f> *Image2Grey::gradient_sobel(Image2Grey &img)
 	return new_img;
 }
 
-// Fonction		: load
+// Fonction         : load
 // Argument(s)		: - filename : une chaine de caractères contenant le nom du fichier à lire
 // Valeur de retour	: /
 // Pré-condition(s)	: /
-// Post-condition(s)	: /
+// Post-condition(s): /
 // Commentaire(s)	: lit le fichier et remplit l'image avec les données du fichier
 void Image2Grey::load(std::string filename)
 {
@@ -245,11 +245,11 @@ void Image2Grey::load(std::string filename)
 	delete[] tmp_data;
 }
 
-// Fonction		: save
+// Fonction         : save
 // Argument(s)		: - filename : une chaine de caractères contenant le nom du fichier où sauvegarder l'image
 // Valeur de retour	: /
 // Pré-condition(s)	: /
-// Post-condition(s)	: /
+// Post-condition(s): /
 // Commentaire(s)	: sauvegarde l'image actuelle dans un fichier nommé filename
 void Image2Grey::save(std::string filename)
 {
@@ -272,11 +272,11 @@ void Image2Grey::save(std::string filename)
 	delete[] tmp_data;
 }
 
-// Fonction		: __check_data
+// Fonction         : __check_data
 // Argument(s)		: - width : entier contenant la largeur de l'image
-//			  - height : entier contenant la hauteur de l'image
-//			  - max_intensity : entier contenant la valeur de l'intensité maximale de gris
-//			  - data_array : un pointeur sur un tableau contenant les données à vérifier
+//                    - height : entier contenant la hauteur de l'image
+//                    - max_intensity : entier contenant la valeur de l'intensité maximale de gris
+//                    - data_array : un pointeur sur un tableau contenant les données à vérifier
 // Valeur de retour	: /
 // Pré-condition(s)	: /
 // Post-condition(s)	: /
@@ -331,14 +331,14 @@ void Image2Grey::__check_data(int width, int height, int max_intensity, int *dat
 	}
 }
 
-// Fonction		: __read_header
+// Fonction         : __read_header
 // Argument(s)		: - input : le flux d'entrée dans lequel lire le fichier
-//			  - width :  une référence sur la variable contenant la largeur de l'image
-//			  - height : une référence sur la variable contenant la hauteur de l'image
-//			  - max_intensity : une référence sur la variable contenant l'intensité maximale de gris
+//                    - width :  une référence sur la variable contenant la largeur de l'image
+//                    - height : une référence sur la variable contenant la hauteur de l'image
+//                    - max_intensity : une référence sur la variable contenant l'intensité maximale de gris
 // Valeur de retour	: /
 // Pré-condition(s)	: /
-// Post-condition(s)	: /
+// Post-condition(s): /
 // Commentaire(s)	: lit le header et remplit les les variables width, height et max_intensity
 void Image2Grey::__read_header(std::ifstream& input, int& width, int& height, int& max_intensity)
 {
@@ -446,14 +446,14 @@ void Image2Grey::__read_header(std::ifstream& input, int& width, int& height, in
 	}
 }
 
-// Fonction		: __read_data
+// Fonction         : __read_data
 // Argument(s)		: - infile : flux d'entrée dans lequel lire le fichier
-//			  - width : référence sur la variable contenant la largeur de l'image
-//			  - height : référence sur la variable contenant la hauteur de l'image
-//			  - data_array : tableau contenant les données
+//                    - width : référence sur la variable contenant la largeur de l'image
+//                    - height : référence sur la variable contenant la hauteur de l'image
+//                    - data_array : tableau contenant les données
 // Valeur de retour	: /
 // Pré-condition(s)	: /
-// Post-condition(s)	: /
+// Post-condition(s): /
 // Commentaire(s)	: lit les données du fichier et les place dans le tableau
 void Image2Grey::__read_data(std::ifstream& infile, int& width, int& height, int *data_array)
 {
@@ -476,13 +476,13 @@ void Image2Grey::__read_data(std::ifstream& infile, int& width, int& height, int
 
 // Fonction		: __read
 // Argument(s)		: - filename : flux d'entrée dans lequel lire l'image
-//			  - width : référence sur la variable contenant la largeur de l'image
-//			  - height : référence sur la variable contenant la hauteur de l'image
-//			  - max_intensity : référence sur la variable contenant l'intensité maximale de gris
-//			  - data_array : pointeur sur le tableau contenant les données
+//                    - width : référence sur la variable contenant la largeur de l'image
+//                    - height : référence sur la variable contenant la hauteur de l'image
+//                    - max_intensity : référence sur la variable contenant l'intensité maximale de gris
+//                    - data_array : pointeur sur le tableau contenant les données
 // Valeur de retour	: /
 // Pré-condition(s)	: /
-// Post-condition(s)	: /
+// Post-condition(s): /
 // Commentaire(s)	: lit le fichier et remplit width, height, max_intensity et data_array
 void Image2Grey::__read(std::string filename, int& width, int& height, int& max_intensity, int **data_array)
 {
@@ -510,13 +510,13 @@ void Image2Grey::__read(std::string filename, int& width, int& height, int& max_
 
 // Fonction 		: __write_header
 // Argument(s)		: - outfile : flux de sortie das lequel écrire le header
-//			  - filename : non du fichier dans lequel écrire
-//			  - width : entier contenant la largeur actuelle de l'image
-//			  - height : entier contenant la hauteur actuelle de l'image
-//			  - max_intensity : entier contenant l'intensité maximale de l'image
+//                    - filename : non du fichier dans lequel écrire
+//                    - width : entier contenant la largeur actuelle de l'image
+//                    - height : entier contenant la hauteur actuelle de l'image
+//                    - max_intensity : entier contenant l'intensité maximale de l'image
 // Valeur de retour	: /
 // Pré-condition(s)	: / 
-// Post-condition(s)	: /
+// Post-condition(s): /
 // Commentaire(s)	: écrit les informations du header dans le fichier
 void Image2Grey::__write_header(std::ofstream& outfile, std::string filename, int width, int height, int max_intensity)
 {
@@ -526,14 +526,14 @@ void Image2Grey::__write_header(std::ofstream& outfile, std::string filename, in
 	outfile << max_intensity << "\n";
 }
 
-// Fonction		: __write_data
+// Fonction         : __write_data
 // Argument(s)		: - outfile : flux de sortie dans lequel écrire les données
-// 			  - width : entier contenant la largeur actuelle de l'image
-//			  - height : entier contenant la hauteur actuelle de l'image
-//			  - data_array : tableau contenant les données à écrire
+//                    - width : entier contenant la largeur actuelle de l'image
+//                    - height : entier contenant la hauteur actuelle de l'image
+//                    - data_array : tableau contenant les données à écrire
 // Valeur de retour	: /
 // Pré-condition(s)	: /
-// Post-condition(s)	: /
+// Post-condition(s): /
 // Commentaire(s)	: écrit les données dans le fichier
 void Image2Grey::__write_data(std::ofstream& outfile, int width, int height, int *data_array)
 {
@@ -566,14 +566,14 @@ void Image2Grey::__write_data(std::ofstream& outfile, int width, int height, int
 	}
 }
 
-// Fonction		: __write
+// Fonction         : __write
 // Argument(s)		: - filename : nom du fichier dans lequel sauvegarder l'image 
-//			  - width : entier contenant la largeur de l'image
-//			  - height : entier contenant la hauteur de l'image
-//			  - data_array : tableau contenant les données
+//                    - width : entier contenant la largeur de l'image
+//                    - height : entier contenant la hauteur de l'image
+//                    - data_array : tableau contenant les données
 // Valeur de retour	: /
 // Pré-condition(s)	: /
-// Post-condition(s)	: /
+// Post-condition(s): /
 // Commentaire(s)	: écrit le header et les données dans le fichier nommé filename
 void Image2Grey::__write(std::string filename, int width, int height, int *data_array)
 {
@@ -612,11 +612,11 @@ void Image2Grey::__write(std::string filename, int width, int height, int *data_
 	output.close();
 }
 
-// Fonction		: __s_len
+// Fonction         : __s_len
 // Argument(s)		: - s : chaine de caractères à traiter 
 // Valeur de retour	: un entier contenant la longueur de la chaine jusq'au dernier blanc (0 = mot vide)
 // Pré-condition(s)	: /
-// Post-condition(s)	: /
+// Post-condition(s): /
 // Commentaire(s)	: différent de strlen puisque l'on compte jusqu'au dernier blanc non jusqu'a \0
 int Image2Grey::__s_len(std::string s)
 {
@@ -636,11 +636,11 @@ int Image2Grey::__s_len(std::string s)
 
 // Fonction		: __s_extract_first_word
 // Argument(s)		: - s : chaine de caractères à traiter
-//			  - s1 : référence sur une chaine de caractères qui contiendra le permier mot de s
-//			  - s2 : référence sur une chaine de caractères qui contiendra le reste de s
+//                    - s1 : référence sur une chaine de caractères qui contiendra le permier mot de s
+//                    - s2 : référence sur une chaine de caractères qui contiendra le reste de s
 // Valeur de retour	: /
 // Pré-condition(s)	: /
-// Post-condition(s)	: /
+// Post-condition(s): /
 // Commentaire(s)	: extrait le permier mot de s dans s1 et place le reste dans s2
 void Image2Grey::__s_extract_first_word(std::string s, std::string &s1, std::string &s2)
 {

@@ -20,42 +20,42 @@ protected:
 	int size;   // la taille du tableau des gardé en mémoire
 
 public:
-	// Fonction		: Array (constructeur vide)
+    // Fonction         : Array (constructeur vide)
 	// Argument(s)		: /
 	// Valeur de retour	: /
 	// Pré-condition(s)	: /
-	// Post-condition(s)	: /
+    // Post-condition(s): /
 	// Commentaire(s)	: initialise la taille et l'array à 0
 	Array() : data_{ 0,0 }, size(N)
 	{}
 
-	// Fonction		: getSize
+    // Fonction         : getSize
 	// Argument(s)		: /
 	// Valeur de retour	: un entier contenant la taille actuelle de l'array
 	// Pré-condition(s)	: /
-	// Post-condition(s)	: /
+    // Post-condition(s): /
 	// Commentaire(s)	: /
 	int getSize() const
 	{
 		return this->size;
 	}
 
-	// Fonction		: data_pos
+    // Fonction         : data_pos
 	// Argument(s)		: /
 	// Valeur de retour	: un pointeur sur le tableau de données
 	// Pré-condition(s)	: /
-	// Post-condition(s)	: /
+    // Post-condition(s): /
 	// Commentaire(s)	: /
 	const T* data_pos() const
 	{
 		return data_;
 	}
 
-	// Fonction		: print
+    // Fonction         : print
 	// Argument(s)		: /
 	// Valeur de retour	: /
 	// Pré-condition(s)	: /
-	// Post-condition(s)	: /
+    // Post-condition(s): /
 	// Commentaire(s)	: affiche le contenu de l'array (DEBUG)
 	void print() const
 	{
@@ -67,11 +67,11 @@ public:
 		cout << " " << endl;
 	}
 
-	// Fonction		: swap
+    // Fonction         : swap
 	// Argument(s)		: - a : une référence sur un array
 	// Valeur de retour	: /
 	// Pré-condition(s)	: les arrays doivent avoir la même taille
-	// Post-condition(s)	: /
+    // Post-condition(s): /
 	// Commentaire(s)	: échange le contenu de l'array courant avec
 	void swap(Array<N, T>& a)
 	{
@@ -91,11 +91,11 @@ public:
 		}
 	}
 
-	// Fonction		: operator []
+    // Fonction         : operator []
 	// Argument(s)		: - i : un entier contenant l'indice de l'élément à retourner
 	// Valeur de retour	: un valeur de type T contenant le ième élément de l'array
 	// Pré-condition(s)	: i doit être positif et inférieur à la taile de l'array
-	// Post-condition(s)	: /
+    // Post-condition(s): /
 	// Commentaire(s)	: version const
 	T operator [](const int i) const
 	{
@@ -114,11 +114,11 @@ public:
 		return this->data_[i];
 	}
 
-	// Fonction		: operator []
+    // Fonction         : operator []
 	// Argument(s)		: - i : un entier contenant l'indice de l'élément à retourner
 	// Valeur de retour	: une valeur de type T contenant le ième élément de l'array
 	// Pré-condition(s)	: i doit être positif et inférieur à la taille de l'array
-	// Post-condition(s)	: /
+    // Post-condition(s): /
 	// Commentaire(s)	: version non const de la précédente
 	T& operator [](const int i)
 	{
@@ -136,11 +136,11 @@ public:
 		return this->data_[i];
 	}
 
-	// Fonction		: operator =
+    // Fonction         : operator =
 	// Argument(s)		: - a : une référence sur un array
 	// Valeur de retour	: /
 	// Pré-condition(s)	: les deux arrays doivent avoir la même taille
-	// Post-condition(s)	: /
+    // Post-condition(s): /
 	// Commentaire(s)	: /
 	void operator =(const Array<N, T>& a)
 	{
@@ -158,11 +158,11 @@ public:
 		}
 	}
 
-	// Fonction		: operator ==
+    // Fonction         : operator ==
 	// Argument(s)		: - a : une référence sur un array
 	// Valeur de retour	: vrai si le contenu des deux arrays est identique
 	// Pré-condition(s)	: les arrays doivent avoir la même taille
-	// Post-condition(s)	: /
+    // Post-condition(s): /
 	// Commentaire(s)	: /
 	bool operator ==(const Array<N, T>& a)
 	{

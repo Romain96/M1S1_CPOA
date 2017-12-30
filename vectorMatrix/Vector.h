@@ -14,22 +14,22 @@
 template <int N, typename T> class Vector : public Array<N, T>
 {
 public:
-	// Fonction		: Vector (constructeur vide)
+    // Fonction         : Vector (constructeur vide)
 	// Argument(s)		: /
 	// Valeur de retour	: /
 	// Pré-condition(s)	: /
-	// Post-condition(s)	: /
+    // Post-condition(s): /
 	// Commentaire(s)	: initialise un vector en appelant le constructeur de array
 	Vector() : Array<N, T>()
 	{
 		this->size = N;
 	}
 
-	// Fonction		: operator []
+    // Fonction         : operator []
 	// Argument(s)		: - i : un entier contenant l'indice de l'élément à retourner
 	// Valeur de retour	: une valeur de type T contenant le ième élément du vecteur
 	// Pré-condition(s)	: i doit être positif et inférieur à la taille du vector
-	// Post-condition(s)	: /
+    // Post-condition(s): /
 	// Commentaire(s)	: version const
 	T operator [](const int i) const
 	{
@@ -49,22 +49,22 @@ public:
 		return this->data_[i];
 	}
 
-	// Fonction		: operator []
+    // Fonction         : operator []
 	// Argument(s)		: - i : un entier contenant l'indice de l'élément à retourner
 	// Valeur de retour	: une valeur de type T contenant le ième élément du vector
 	// Pré-condition(s)	: i doit être positif et inférieur à la taille du vector
-	// Post-condition(s)	: /
+    // Post-condition(s): /
 	// Commentaire(s)	: version non const de la précédente
 	T& operator [](const int i)
 	{
 		return this->data_[i];
 	}
 
-	// Fonction		: operator == (opérateur de comparaison)
+    // Fonction         : operator == (opérateur de comparaison)
 	// Argument(s)		: - v : une référence sur un vector
 	// Valeur de retour	: vrai si le contenu des vecteurs est identique, faux sinon
 	// Pré-condition(s)	: les deux vectors doivent avoir la même taille
-	// Post-condition(s)	: /
+    // Post-condition(s): /
 	// Commentaire(s)	: /
 	bool operator ==(const Vector<N, T>& v)
 	{
@@ -86,11 +86,11 @@ public:
 		return true;
 	}
 
-	// Fonction		: operator = (opérateur d'affectation)
+    // Fonction         : operator = (opérateur d'affectation)
 	// Argument(s)		: - v : une référence sur un vector
 	// Valeur de retour	: /
 	// Pré-condition(s)	: les vectors doivent avoir la même taille
-	// Post-condition(s)	: /
+    // Post-condition(s): /
 	// Commentaire(s)	: affecte le vector courant des valeurs de v
 	void operator =(const Vector<N, T>& v)
 	{
@@ -108,22 +108,22 @@ public:
 		}
 	}
 
-	// Fonction		: print
+    // Fonction         : print
 	// Argument(s)		: /
 	// Valeur de retour	: /
 	// Pré-condition(s)	: /
-	// Post-condition(s)	: /
+    // Post-condition(s): /
 	// Commentaire(s)	: affiche les valeurs du vector (DEBUG)
 	void print()
 	{
 		Array<N, T>::print();
 	}
 
-	// Fonction		: operator + (opérateur de somme)
+    // Fonction         : operator + (opérateur de somme)
 	// Argument(s)		: - v : une référence sur un vector
 	// Valeur de retour	: un nouveau vector résultat de la somme du vector courant et de v
 	// Pré-condition(s)	: les vectors doivent avoir la même taille
-	// Post-condition(s)	: /
+    // Post-condition(s): /
 	// Commentaire(s)	: /
 	Vector<N, T> operator+(const Vector<N, T>& v)
 	{
@@ -143,11 +143,11 @@ public:
 		return res;
 	}
 
-	// Fonction		: operator - (opérateur de différence)
+    // Fonction         : operator - (opérateur de différence)
 	// Argument(s)		: - v : une référence sur un vector
 	// Valeur de retour	: un nouveau vector résultat de la différence du vector courant et de v
 	// Pré-condition(s)	: les vectors doivent avoir la même taille
-	// Post-condition(s)	: /
+    // Post-condition(s): /
 	// Commentaire(s)	: /
 	Vector<N, T> operator-(const Vector<N, T>& v)
 	{
@@ -167,11 +167,11 @@ public:
 		return res;
 	}
 
-	// Fonction		: operator += (opérateur de somme et d'affectation)
+    // Fonction         : operator += (opérateur de somme et d'affectation)
 	// Argument(s)		: - v : une référence sur un vector
 	// Valeur de retour	: /
 	// Pré-condition(s)	: les vectors doivent avoir la même taille
-	// Post-condition(s)	: /
+    // Post-condition(s): /
 	// Commentaire(s)	: /
 	void operator+=(const Vector<N, T>& v)
 	{
@@ -189,11 +189,11 @@ public:
 		}
 	}
 
-	// Fonction		: operator -= (opérateur de différence et d'affectation)
+    // Fonction         : operator -= (opérateur de différence et d'affectation)
 	// Argument(s)		: - v : une référence sur un vector
 	// Valeur de retour	: /
 	// Pré-condition(s)	: les vectors doivent avoir la même taille
-	// Post-condition(s)	: /
+    // Post-condition(s): /
 	// Commentaire(s)	: /
 	void operator-=(const Vector<N, T>& v)
 	{
@@ -203,11 +203,11 @@ public:
 		}
 	}
 
-	// Fonction		: operator *= (opérateur de produit et d'affectation)
+    // Fonction         : operator *= (opérateur de produit et d'affectation)
 	// Argument(s)		: - f : un flottant
 	// Valeur de retour	: /
 	// Pré-condition(s)	: /
-	// Post-condition(s)	: /
+    // Post-condition(s): /
 	// Commentaire(s)	: multiplie les valeurs du vector courant par f
 	void operator*=(const float f)
 	{
@@ -217,11 +217,11 @@ public:
 		}
 	}
 
-	// Fonction		: operator /= (opérateur de division et affectation)
+    // Fonction         : operator /= (opérateur de division et affectation)
 	// Argument(s)		: - f : un flottant
 	// Valeur de retour	: /
 	// Pré-condition(s)	: f != 0
-	// Post-condition(s)	: /
+    // Post-condition(s): /
 	// Commentaire(s)	: divise les valeurs du vector courant par f
 	void operator/=(const float f)
 	{
@@ -239,11 +239,11 @@ public:
 		}
 	}
 
-	// Fonction		: dot (produit scalaire)
+    // Fonction         : dot (produit scalaire)
 	// Argument(s)		: - v : une référence sur un vector
 	// Valeur de retour	: le résultat du produit scalaire du vector courant avec v
 	// Pré-condition(s)	: les vectors doivent avoir la même taille
-	// Post-condition(s)	: /
+    // Post-condition(s): /
 	// Commentaire(s)	: /
 	int dot(const Vector<N, T>& v)
 	{
@@ -263,11 +263,11 @@ public:
 		return res;
 	}
 
-	// Fonction		: cross (produit vectoriel)
+    // Fonction         : cross (produit vectoriel)
 	// Argument(s)		: - v : une référence sur un vector
 	// Valeur de retour	: le résultat du produit vectoriel du vector courant avec v
 	// Pré-condition(s)	: les vectors doivent avoir la même taille
-	// Post-condition(s)	: /
+    // Post-condition(s): /
 	// Commentaire(s)	: /
 	Vector<N, T> cross(const Vector<N, T>& v)
 	{
@@ -287,12 +287,12 @@ public:
 	}
 };
 
-// Fonction		: operator *
+// Fonction         : operator *
 // Argument(s)		: - v : une référence sur un vector
-//			  - f : un flottant
+//                    - f : un flottant
 // Valeur de retour	: un nouveau vector résultat du produit de v par f
 // Pré-condition(s)	: /
-// Post-condition(s)	: /
+// Post-condition(s): /
 // Commentaire(s)	: /
 template <int N, typename T> Vector<N, T> operator*(Vector<N, T>& v, const double f)
 {
@@ -304,12 +304,12 @@ template <int N, typename T> Vector<N, T> operator*(Vector<N, T>& v, const doubl
 	return res;
 }
 
-// Fonction		: operator *
+// Fonction         : operator *
 // Argument(s)		: - f : un flottant
-//			  - v : une référence sur un vector
+//                    - v : une référence sur un vector
 // Valeur de retour	: un nouveau vector résultat du produit de f par v
 // Pré-condition(s)	: /
-// Post-condition(s)	: /
+// Post-condition(s): /
 // Commentaire(s)	: /
 template <int N, typename T> Vector<N, T> operator*(const double f, Vector<N, T>& v)
 {
@@ -321,12 +321,12 @@ template <int N, typename T> Vector<N, T> operator*(const double f, Vector<N, T>
 	return res;
 }
 
-// Fonction		: operator /
+// Fonction         : operator /
 // Argument(s)		: - f : un flottant
-//			  - v : une référence sur un vector
+//                    - v : une référence sur un vector
 // Valeur de retour	: un nouveau vector résultat de la division de f par v
 // Pré-condition(s)	: /
-// Post-condition(s)	: /
+// Post-condition(s): /
 // Commentaire(s)	: /
 template <int N, typename T> Vector<N, T> operator/(const double f, Vector<N, T>& v)
 {
@@ -338,12 +338,12 @@ template <int N, typename T> Vector<N, T> operator/(const double f, Vector<N, T>
 	return res;
 }
 
-// Fonction		: operator /
+// Fonction         : operator /
 // Argument(s)		: - v : une référence sur un vector
-//			  - f : un flottant
+//                    - f : un flottant
 // Valeur de retour	: un nouveau vector résultat de la division de v par f
 // Pré-condition(s)	: /
-// Post-condition(s)	: /
+// Post-condition(s): /
 // Commentaire(s)	: /
 template <int N, typename T> Vector<N, T> operator/(Vector<N, T>& v, const double f)
 {

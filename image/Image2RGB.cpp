@@ -6,21 +6,21 @@
 #include <cmath>
 #include "Image2RGB.h"
 
-// Fonction		: Image2RGB
+// Fonction         : Image2RGB
 // Argument(s)		: - width : un entier contenant la largeur de l'image
-//			  - height ; un entier contenant la hauteur de l'image
+//                    - height ; un entier contenant la hauteur de l'image
 // Valeur de retour	: /
 // Pré-condition(s)	: /
-// Post-condition(s)	: /
+// Post-condition(s): /
 // Commentaire(s)	: alloue la place pout stocker width*height pixels
 Image2RGB::Image2RGB(int width, int height) : Image2D(width, height), _max_rgb(0)
 {}
 
-// Fonction		: load
+// Fonction         : load
 // Argument(s)		: - filename : le nom du fichier dans lequel lire l'image
 // Valeur de retour	: /
 // Pré-condition(s)	: /
-// Post-condition(s)	: / 
+// Post-condition(s): /
 // Commentaire(s)	: lit le fichier filename et charge l'image
 void Image2RGB::load(std::string filename)
 {
@@ -58,11 +58,11 @@ void Image2RGB::load(std::string filename)
 	delete[] b_array;
 }
 
-// Fonction		: save
+// Fonction         : save
 // Argument(s)		: - filename : nom du fichier dans lequel sauvegarder l'image
 // Valeur de retour	: /
 // Pré-condition(s)	: /
-// Post-condition(s)	: /
+// Post-condition(s): /
 // Commentaire(s)	: sauvegarde l'image au formar PPM dans le fichier filename
 void Image2RGB::save(std::string filename)
 {
@@ -90,13 +90,13 @@ void Image2RGB::save(std::string filename)
 	delete[] b_array;
 }
 
-// Fonction		: __check_data
+// Fonction         : __check_data
 // Argument(s)		: - width : entier contenant la largeur de l'image
-//			  - height : entier contenant la hauteur de l'image
-//			  - max_rgb : entier contenant l'intensité maximale de RGB 
-//			  - r_array : tableau contenant les valeurs R de chaque pixel
-//			  - g_array : tableau contenant les valeurs G de chaque pixel
-//			  - b_array : tableau contenant les valeurs B de chaque pixel
+//                    - height : entier contenant la hauteur de l'image
+//                    - max_rgb : entier contenant l'intensité maximale de RGB
+//                    - r_array : tableau contenant les valeurs R de chaque pixel
+//                    - g_array : tableau contenant les valeurs G de chaque pixel
+//                    - b_array : tableau contenant les valeurs B de chaque pixel
 // Valeur de retour	: /
 // Pré-condition(s)	: /
 // Post-condition(s)	: /
@@ -182,14 +182,14 @@ void Image2RGB::__check_data(int width, int height, int max_rgb, int *r_array, i
 	}
 }
 
-// Fonction		: __read_header
+// Fonction         : __read_header
 // Argument(s)		: - infile : flux d'entrée dans lequel lire l'image
-//			  - width : référence sur un entier contenant la largeur de l'image
-//			  - height : référence sur un entier contenant la hauteur de l'image
-//			  - max_rgb : référence sur un entier contenant l'intensité maximale de RGB
+//                    - width : référence sur un entier contenant la largeur de l'image
+//                    - height : référence sur un entier contenant la hauteur de l'image
+//                    - max_rgb : référence sur un entier contenant l'intensité maximale de RGB
 // Valeur de retour	: /
 // Pré-condition(s)	: /
-// Post-condition(s)	: /
+// Post-condition(s): /
 // Commentaire(s)	: lit le header et positionne width, height et max_rgb
 void Image2RGB::__read_header(std::ifstream &infile, int &width, int &height, int &max_rgb)
 {
@@ -291,14 +291,14 @@ void Image2RGB::__read_header(std::ifstream &infile, int &width, int &height, in
 
 // Fonction 		: __read_data
 // Argument(s)		: - infile : flux d'entrée dans lequel lire les données 
-//			  - width : entier contenant la largeur de l'image
-//			  - height : entier contenant la hauteur de l'image
-//			  - r_array : tableau contenant les valeurs R de chaque pixel
-//			  - g_array : tableau contenant les valeurs G de chaque pixel
-//			  - b_array : tableau contenant les valeurs B de chaque pixel
+//                    - width : entier contenant la largeur de l'image
+//                    - height : entier contenant la hauteur de l'image
+//                    - r_array : tableau contenant les valeurs R de chaque pixel
+//                    - g_array : tableau contenant les valeurs G de chaque pixel
+//                    - b_array : tableau contenant les valeurs B de chaque pixel
 // Valeur de retour	: /
 // Pré-condition(s)	: /
-// Post-condition(s)	: / 
+// Post-condition(s): /
 // Commentaire()	: lit les données et remplit les tableaux r_array, g_array et b_array
 void Image2RGB::__read_data(std::ifstream &infile, int width, int height, int *r_array, int *g_array, int *b_array)
 {
@@ -334,17 +334,17 @@ void Image2RGB::__read_data(std::ifstream &infile, int width, int height, int *r
 	}
 }
 
-// Fonction		: __read
+// Fonction         : __read
 // Argument(s)		: - filename : nom du fichier dans lequel lire l'image
-//			  - width : référence sur un entier contenant la largeur de l'image
-//			  - height : référence sur une entier contenant la hauteur de l'image
-//			  - max_rgb : référence sur un entier contenant l'intensité maximala RGB
-//			  - r_array : pointeur sur un tableau contenant les valeurs R de chaque pixel
-//			  - g_array : pointeur sur un tableau contenant les valeurs G de chaque pixel
-//			  - b_array : pointeur sur un tableau contenant les valeurs B de chaque pixel
+//                    - width : référence sur un entier contenant la largeur de l'image
+//                    - height : référence sur une entier contenant la hauteur de l'image
+//                    - max_rgb : référence sur un entier contenant l'intensité maximala RGB
+//                    - r_array : pointeur sur un tableau contenant les valeurs R de chaque pixel
+//                    - g_array : pointeur sur un tableau contenant les valeurs G de chaque pixel
+//                    - b_array : pointeur sur un tableau contenant les valeurs B de chaque pixel
 // Valeur de retour	: /
 // Pré-condition(s)	: /
-// Post-condition(s)	: /
+// Post-condition(s): /
 // Commentaire(s)	: lit le fichier filename, positionne width, height et max_rgb et remplit les tableaux r_array, g_array et b_array
 void Image2RGB::__read(std::string filename, int &width, int &height, int &max_rgb, int **r_array, int **g_array, int **b_array)
 {
@@ -376,15 +376,15 @@ void Image2RGB::__read(std::string filename, int &width, int &height, int &max_r
 	input.close();
 }
 
-// Fonction		: __write_header
+// Fonction         : __write_header
 // Argument(s)		: - outfile : flux de sortie dans lequel écrire le header
-//			  - filename : nom du fichier dans lequel écrire
-//			  - width : entier contenant la largeur actuelle de l'image
-//			  - height : entier contenant le hauteur actuelle de l'image
-//			  - max_rgb : entier contenant l'intensité maximale actuelle de RGB
+//                    - filename : nom du fichier dans lequel écrire
+//                    - width : entier contenant la largeur actuelle de l'image
+//                    - height : entier contenant le hauteur actuelle de l'image
+//                    - max_rgb : entier contenant l'intensité maximale actuelle de RGB
 // Valeur de retour	: /
 // Pré-condition(s)	: /
-// Post-condition(s)	: /
+// Post-condition(s): /
 // Commentaire(s)	: écrit le header dans le flux de sortie outfile
 void Image2RGB::__write_header(std::ofstream &outfile, std::string filename, int width, int height, int max_rgb)
 {
@@ -394,16 +394,16 @@ void Image2RGB::__write_header(std::ofstream &outfile, std::string filename, int
 	outfile << max_rgb << "\n";
 }
 
-// Fonction		: __write_data
+// Fonction         : __write_data
 // Argument(s)		: - outfile : flux de sortie dans lequel écrire l'image
-//			  - width : entier contenant la largeur actuelle de l'image
-//			  - height : entier contenant la hauteur actuelle de l'image
-//			  - r_array : tableau contenant les valeurs R de chaque pixel
-//			  - g_array : tableau contenant les valeurs G de chaque pixel
-//			  - b_array : tableau contenant les valeurs B de chaque pixel
+//                    - width : entier contenant la largeur actuelle de l'image
+//                    - height : entier contenant la hauteur actuelle de l'image
+//                    - r_array : tableau contenant les valeurs R de chaque pixel
+//                    - g_array : tableau contenant les valeurs G de chaque pixel
+//                    - b_array : tableau contenant les valeurs B de chaque pixel
 // Valeur de retour	: /
 // Pré-condition(s)	: /
-// Post-condition(s)	: /
+// Post-condition(s): /
 // Commentaire(s)	: écrit les données dans le flux de sortie outfile
 void Image2RGB::__write_data(std::ofstream &outfile, int width, int height, int *r_array, int *g_array, int *b_array)
 {
@@ -439,14 +439,14 @@ void Image2RGB::__write_data(std::ofstream &outfile, int width, int height, int 
 
 // Fonction 		: __write
 // Argument(s)		: - filename : nom du fichier dans lequel écrire l'image 
-//			  - width : entier contenant la largeur actuelle de l'image
-//			  - height : entier contenant la hauteur actuelle de l'image
-//			  - r_array : tableau contenant les valeurs R de chaque pixel
-//			  - g_array : tableau contenant les valeurs G de chaque pixel
-//			  - b_array : tableau contenant les valeurs B de chaque pixel
+//                    - width : entier contenant la largeur actuelle de l'image
+//                    - height : entier contenant la hauteur actuelle de l'image
+//                    - r_array : tableau contenant les valeurs R de chaque pixel
+//                    - g_array : tableau contenant les valeurs G de chaque pixel
+//                    - b_array : tableau contenant les valeurs B de chaque pixel
 // Valeur de retour	: /
 // Pré-condition(s)	: /
-// Post-condition(s)	: /
+// Post-condition(s): /
 // Commentaire(s)	: écrit le header et les données dans le fichier filename
 void Image2RGB::__write(std::string filename, int width, int height, int *r_array, int *g_array, int *b_array)
 {
@@ -501,11 +501,11 @@ void Image2RGB::__write(std::string filename, int width, int height, int *r_arra
 	output.close();
 }
 
-// Fonction		: __capitalize
+// Fonction         : __capitalize
 // Argument(s)		: c : un caractère à traiter
 // Valeur de retour	: un caractère (le même si c n'est pas une lettre, la majuscule corespondante sinon)
 // Pré-condition(s)	: /
-// Post-condition(s)	: /
+// Post-condition(s): /
 // Commentaire(s)	: retourne c en majuscule si c'est une lettre, sinon retourne c
 char Image2RGB::__capitalize(char c)
 {
@@ -517,12 +517,12 @@ char Image2RGB::__capitalize(char c)
 	return cc;
 }
 
-// Fonction		: s_eqi
+// Fonction         : s_eqi
 // Argument(s)		: - s1 : une chaine de caractère
-//			  - s2 : autre chaine de caractère
+//                    - s2 : autre chaine de caractère
 // Valeur de retour	: vrai si les deux chaines sont égales
 // Pré-condition(s)	: /
-// Post-condition(s)	: /
+// Post-condition(s): /
 // Commentaire(s)	: le test d'égalité est différent de string::compare puisqu'il ne tient pas compte de la casse
 bool Image2RGB::__s_eq(std::string s1, std::string s2)
 {
@@ -578,11 +578,11 @@ bool Image2RGB::__s_eq(std::string s1, std::string s2)
 	return true;
 }
 
-// Fonction		: __s_len
+// Fonction         : __s_len
 // Argument(s)		: - s : une chaine de caractère
 // Valeur de retour	: un entier correspondant à la longueur de la chaine
 // Pré-condition	: /
-// Post-condition(s)	: /
+// Post-condition(s): /
 // Commentaire(s)	: la longueur est différente de string::length 
 //			  la longueur est calculée jusqu'au dernier blanc
 int Image2RGB::__s_len(std::string s)
@@ -601,10 +601,10 @@ int Image2RGB::__s_len(std::string s)
 	return n;
 }
 
-// Fonction		: s_word_extract_first
+// Fonction         : s_word_extract_first
 // Argument(s)		: - s : chaine de caractère à traiter
-//			  - s1 : référence sur une chaine de caractères
-//			  - s2 : référence sur une chaine de caractères
+//                    - s1 : référence sur une chaine de caractères
+//                    - s2 : référence sur une chaine de caractères
 // Valeur de retour	: /
 // Pré-condition(s)	: /
 // Post-condition(s)	: /
