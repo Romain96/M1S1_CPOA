@@ -1,4 +1,40 @@
-#ifndef BOUNDINGBOX_H
-#define BOUNDINGBOX_H
+#ifndef __BOUNDINGBOX_H__
+#define __BOUNDINGBOX_H__
 
-#endif // BOUNDINGBOX_H
+#include "Vector.h"
+#include "Utils.h"
+
+// représente les boîtes englobantes en coordonnées 2D float (vec2f)
+// les boîtes englobantes sont alignées sur les axes
+class BoundingBox
+{
+protected:
+    Vec2f _upper_left_point;
+    Vec2f _upper_right_point;
+    Vec2f _lower_left_point;
+    Vec2f _lower_right_point;
+public:
+    // constructeur
+    BoundingBox(Vec2f& ulp, Vec2f& urp, Vec2f& llp, Vec2f& lrp);
+
+    // getters
+    Vec2f& getUpperLeftPoint();
+    Vec2f& getUpperRightPoint();
+    Vec2f& getLowerLeftPoint();
+    Vec2f& getLowerRightPoint();
+
+    // setters
+    void setUpperLeftPoint(Vec2f& ulp);
+    void setUpperRightPoint(Vec2f& urp);
+    void setLowerLeftPoint(Vec2f& llp);
+    void setLowerRightPoint(Vec2f& lrp);
+};
+
+// union
+BoundingBox& operator +(BoundingBox &bb1, BoundingBox &bb2);
+// intersection
+BoundingBox& operator ^(BoundingBox &bb1, BoundingBox &bb2);
+// différence
+BoundingBox& operator -(BoundingBox &bb1, BoundingBox &bb2);
+
+#endif // __BOUNDINGBOX_H__
