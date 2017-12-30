@@ -1,4 +1,4 @@
-#include "boundingbox.h"
+#include "BoundingBox.h".h"
 
 // Fonction         : BoundingBox
 // Argument(s)		: - ulp : vecteur contenant les coordonnées du point supérieur gauche
