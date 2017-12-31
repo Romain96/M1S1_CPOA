@@ -55,7 +55,7 @@ Vec2f& CsgPrimitive::getCenter()
 // Pré-condition(s)	: /
 // Post-condition(s): /
 // Commentaire(s)	: retourne la distance à l'origine
-Vec2f& CsgPrimitive::getDistanceToOrigin()
+float& CsgPrimitive::getDistanceToOrigin()
 {
     return _distanceToOrigin;
 }

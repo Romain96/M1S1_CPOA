@@ -21,7 +21,7 @@ public:
 
     // getters
     Vec2f& getCenter();
-    float getDistanceToOrigin();
+    float& getDistanceToOrigin();
     Matrix33d& getMatrix();
     BoundingBox& getBoundingBox();
 
