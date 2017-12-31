@@ -3,28 +3,23 @@
 
 #include "BoundingBox.h"
 #include "Vector.h"
+#include "Matrix33d.h"
 #include "Utils.h"
+#include "CsgPrimitive.h"
 
 // représente les disques de diamètre 1 centré sur l'origine (repère local)
-class CsgDisk
+class CsgDisk : public CsgPrimitive
 {
-protected:
-    float _diameter;
-    Vec2f _center;
-    BoundingBox _boundingBox;
+    // pas de nouveaux attribus (le rayon est distanceToOrigin)
 public:
     // constructeur
-    CsgDisk(Vec2f& center);
+    CsgDisk(Vec2f& center, float radius);
 
     // getters
-    float getDiameter();
-    Vec2f& getCenter();
-    BoundingBox& getBoundingBox();
+    float getRadius();
 
     // setters
-    void setDiameter(float diameter);
-    void setCenter(Vec2f& center);
-    void setBoundingBox(BoundingBox& bb);
+    void setRadius(float radius);
 };
 
 #endif // __CSGDISK_H__

@@ -2,31 +2,26 @@
 #define __CSGREGULARPOLYGON_H__
 
 #include "Vector.h"
+#include "Matrix33d.h"
 #include "Utils.h"
 #include "BoundingBox.h"
+#include "CsgPrimitive.h"
 
 // représente les polygones réguliers de plus de 2 sommets
-class CsgRegularPolygon
+class CsgRegularPolygon : public CsgPrimitive
 {
 protected:
     int _vertexNumber;
-    Vec2f _center;
-    float _diameter;
-    BoundingBox _boundingBox;
 
 public:
     // constructeur
-    CsgRegularPolygon(int vertexNumber , Vec2f& center);
+    CsgRegularPolygon(int vertexNumber , Vec2f& center, float distanceToOrigin);
 
     // getters
     int getVertexNumber();
-    Vec2f& getCenter();
-    BoundingBox& getBoundingBox();
 
     // setters
     void setVertexNumber(int vertexNumber);
-    void setCenter(Vec2f& center);
-    void setBoundingBox(BoundingBox& bb);
 };
 
 #endif // __CSGREGULARPOLYGON_H__

@@ -1,0 +1,4 @@
+#ifndef CSGOPERATION_H
+#define CSGOPERATION_H
+
+#endif // CSGOPERATION_H

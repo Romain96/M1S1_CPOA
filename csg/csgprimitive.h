@@ -1,0 +1,4 @@
+#ifndef CSGPRIMITIVE_H
+#define CSGPRIMITIVE_H
+
+#endif // CSGPRIMITIVE_H
