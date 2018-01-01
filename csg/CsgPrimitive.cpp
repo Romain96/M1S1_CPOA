@@ -10,7 +10,7 @@
 // Valeur de retour	: /
 // Pré-condition(s)	: vertexNumber >= 3
 // Post-condition(s): /
-// Commentaire(s)	: constructeur paamétré
+// Commentaire(s)	: constructeur paramétré
 CsgPrimitive::CsgPrimitive(Vec2f center, float distanceToOrigin) :
     _center(center),
     _distanceToOrigin(distanceToOrigin)
