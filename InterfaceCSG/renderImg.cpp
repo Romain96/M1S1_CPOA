@@ -8,20 +8,22 @@
 
 
 
-RenderImg::RenderImg(/*BoundingBox& bb,*/ QWidget *parent ):
+RenderImg::RenderImg(BoundingBox& bb, QWidget *parent ):
 	QGLWidget(QGLFormat(QGL::SampleBuffers), parent),
 	m_texture(0),
-	m_widthTex(0),
-	m_heightTex(0),
+    m_widthTex(1024),
+    m_heightTex(1024),
 	m_ptrTex(NULL),
-//	m_img(1024,1024),
+    m_img(1024,1024),
 	m_drawSobel(false),
-	m_BBdraw(false)
-//	m_BB(bb)
+    m_BBdraw(false),
+    m_BB(bb)
   // QQ INIT A AJOUTER ?
 
 {
-
+    m_timer = new QTimer(this);
+    m_timer->setInterval(20);
+    connect(m_timer, SIGNAL(timeout()), this, SLOT(animate()));
 	// VOTRE CODE ICI
 
 }
@@ -30,20 +32,22 @@ RenderImg::RenderImg(/*BoundingBox& bb,*/ QWidget *parent ):
 void RenderImg::loadTexture(const std::string& filename)
 {
 	// VOTRE CODE ICI
+    m_img.load(filename);
 
-	glBindTexture(GL_TEXTURE_2D, m_texture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, m_widthTex, m_heightTex, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, m_ptrTex);
-	glBindTexture(GL_TEXTURE_2D, 0);
+    glBindTexture(GL_TEXTURE_2D, m_texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, m_widthTex, m_heightTex, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, m_ptrTex);
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 
 
 void RenderImg::updateDataTexture()
 {
-//	m_ptrTex = m_img.getDataPtr();
-	glBindTexture(GL_TEXTURE_2D, m_texture);
-	glTexSubImage2D(GL_TEXTURE_2D,0,0,0,m_widthTex, m_heightTex, GL_LUMINANCE, GL_UNSIGNED_BYTE, m_ptrTex);
-	glBindTexture(GL_TEXTURE_2D, 0);
+    m_ptrTex = m_img.getDataPtr();
+    glBindTexture(GL_TEXTURE_2D, m_texture);
+    glTexSubImage2D(GL_TEXTURE_2D,0,0,0,m_widthTex, m_heightTex, GL_LUMINANCE, GL_UNSIGNED_BYTE, m_ptrTex);
+    glBindTexture(GL_TEXTURE_2D, 0);
+
 	updateGL();
 }
 
@@ -56,6 +60,11 @@ unsigned int RenderImg::getWidth()
 unsigned int RenderImg::getHeight()
 {
 		return 0; // RETURN IMAGE HEIGHT
+}
+
+Image2Grey& RenderImg::getImg()
+{
+    return m_img;
 }
 
 RenderImg::~RenderImg()
@@ -112,8 +121,8 @@ void RenderImg::paintGL()
 	if (m_drawSobel)
 		drawSobel();
 
-//	if (m_BBdraw)
-//		drawBB(m_BB);
+    if (m_BBdraw)
+        drawBB(m_BB);
 
 }
 

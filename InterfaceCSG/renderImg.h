@@ -4,8 +4,9 @@
 #include <QGLWidget>
 #include <QTimer>
 
-//#include "image2grey.h"
-//#include "vec2f.h"
+#include "Image2Grey.h"
+#include "Vector.h"
+#include "Utils.h"
 //#include "particle.h"
 
 //forward declaration
@@ -18,13 +19,13 @@ class RenderImg : public QGLWidget
 	QTimer *m_timer;
 
 public:
-	RenderImg(/*BoundingBox& bb,*/ QWidget *parent = 0);
+    RenderImg(BoundingBox& bb, QWidget *parent = 0);
 	~RenderImg();
 
 	void loadTexture(const std::string& filename);
 	void updateDataTexture();
 
-//	Image2grey & getImg();
+    Image2Grey & getImg();
 	unsigned int getWidth();
 	unsigned int getHeight();
 
@@ -95,7 +96,7 @@ protected:
 	bool m_drawSobel;
 
 	bool m_BBdraw;
-//	BoundingBox& m_BB;
+    BoundingBox& m_BB;
 
 
 	void drawBB(const BoundingBox& bb);
@@ -105,6 +106,7 @@ protected:
 //	ici les declaration de:
 //   - l'image a niveau de gris
 //	 - l'image gradiant'
+    Image2Grey m_img;
 
 //	 la fontaine de particule
 //	Fountain fountain;

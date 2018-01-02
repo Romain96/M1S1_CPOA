@@ -8,7 +8,13 @@
 // Les noeuds sont des primitives ou des opérations ou un mélange des deux
 class CsgNode
 {
+private:
+    static int _nodeUniqueIdGenerator;
+
 protected:
+    // id du node (pour les comparer/classer)
+    int _nodeId;
+
     // chaque noeud code une opération
     CsgOperation _operation;
 
@@ -24,10 +30,11 @@ protected:
 
 public:
     // constructeur
-    CsgNode(CsgOperation& operation);
+    CsgNode(CsgOperation operation);
     ~CsgNode();
 
     // getters
+    int getId();
     CsgOperation& getOperation();
     bool getLeftChildIsPrimitive();
     bool getRightChildIsPrimitive();
@@ -35,8 +42,10 @@ public:
     CsgPrimitive *getRightChildPrimitive();
     CsgOperation *getLeftChildOperation();
     CsgOperation *getRightChildOperation();
+    BoundingBox& getBoundingBox();
 
     // setters
+    void setId(int id);
     void setOperation(CsgOperation& operation);
     void setLeftChildIsPrimitive(bool isPrimitive);
     void setRightChildIsPrimitive(bool isPrimitive);
@@ -44,6 +53,7 @@ public:
     void setRightChildPrimitive(CsgPrimitive *rightChild);
     void setLeftChildOperation(CsgOperation *leftChild);
     void setRightChildOperation(CsgOperation *rightChild);
+    void setBoundingBox(BoundingBox& boundingBox);
 };
 
 #endif // __CSGNODE_H__

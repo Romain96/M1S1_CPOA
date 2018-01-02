@@ -1,7 +1,10 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-//#include"csgPrimitive.h"
+#include "CsgPrimitive.h"
+#include "BoundingBox.h"
+#include "CsgTree.h"
+#include "renderImg.h"
 
 #include <QFileDialog>
 #include <QTextCursor>
@@ -15,17 +18,17 @@
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MainWindow),
-//	m_currentNode(NULL),
-//	m_prim(NULL),
-//	m_oper(NULL),
+    m_currentNode(NULL),
+    m_prim(NULL),
+    m_oper(NULL),
 	m_graphTextEdit(NULL),
 	m_stopSignal(false)
 
 {
 	ui->setupUi(this);
 
-	m_render = new RenderImg();
-//	m_render = new RenderImg(this->m_bb);
+    //m_render = new RenderImg();
+    m_render = new RenderImg(this->m_bb);
 
 	ui->HLayout->insertWidget(0,m_render,99);
 	m_render->setFocusPolicy(Qt::ClickFocus);
@@ -274,7 +277,8 @@ void MainWindow::saveImage()
 	if (!fileName.isEmpty())
 	{
 		std::string strFN = fileName.toStdString();
-//		m_render->getImg().savePGMascii(strFN);
+        //m_render->getImg().savePGMascii(strFN);
+        m_render->getImg().save(strFN);
 	}
 }
 

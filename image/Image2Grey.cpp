@@ -19,7 +19,9 @@
 // Post-condition(s): /
 // Commentaire(s)	: positione l'imatensité maximale à 0
 Image2Grey::Image2Grey(int width, int height) : Image2D(width, height), _max_intensity(0)
-{}
+{
+    // rien
+}
 
 // Fonction         : subsampling (sous-échanillonage)
 // Argument(s)		: - img : référence sur l'image à traiter

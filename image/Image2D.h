@@ -44,6 +44,17 @@ public:
 		delete[] data_;
 	}
 
+    // Fonction         : getDataPtr
+    // Argument(s)		: /
+    // Valeur de retour	: un pointeur sur les données
+    // Pré-condition()	: /
+    // Post-condition(s): /
+    // Commentaire(s)	: /
+    T *getDataPtr()
+    {
+        return data_;
+    }
+
     // Fonction         : getWidth
 	// Argument(s)		: /
 	// Valeur de retour	: un entier contenant la largeur actuelle de l'image

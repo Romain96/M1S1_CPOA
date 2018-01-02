@@ -1,6 +1,9 @@
 #include "CsgPrimitive.h"
 #include "CsgOperation.h"
+#include "BoundingBox.h"
 #include "CsgNode.h"
+
+int CsgNode::_nodeUniqueIdGenerator = 0;
 
 // Fonction         : CsgNode
 // Argument(s)		: - operation : le type d'opération du noeud
@@ -8,7 +11,7 @@
 // Pré-condition(s)	: /
 // Post-condition(s): /
 // Commentaire(s)	: constructeur paramétré
-CsgNode::CsgNode(CsgOperation &operation) :
+CsgNode::CsgNode(CsgOperation operation) :
     _operation(operation),
     _leftChildIsPrimitive(true),
     _leftChildPrimitive(nullptr),
@@ -17,7 +20,8 @@ CsgNode::CsgNode(CsgOperation &operation) :
     _rightChildPrimitive(nullptr),
     _rightChildOperation(nullptr)
 {
-    // rien
+    // génération de l'id du noeud
+    _nodeId = _nodeUniqueIdGenerator++;
 }
 
 // Fonction         : ~CsgNode
@@ -41,6 +45,17 @@ CsgNode::~CsgNode()
 //-----------------------------------------------------------------------------
 // SECTION DES GETTERS
 //-----------------------------------------------------------------------------
+
+// Fonction         : getId
+// Argument(s)		: /
+// Valeur de retour	: un entier
+// Pré-condition(s)	: /
+// Post-condition(s): /
+// Commentaire(s)	: retourne l'id du noeud
+int CsgNode::getId()
+{
+    return _nodeId;
+}
 
 // Fonction         : getOperation
 // Argument(s)		: /
@@ -122,6 +137,17 @@ CsgOperation *CsgNode::getRightChildOperation()
 //-----------------------------------------------------------------------------
 // SECTION DES SETTERS
 //-----------------------------------------------------------------------------
+
+// Fonction         : setId
+// Argument(s)		: - id : le nouvel id du noeud
+// Valeur de retour	: /
+// Pré-condition(s)	: /
+// Post-condition(s): /
+// Commentaire(s)	: modifie l'id du node
+void CsgNode::setId(int id)
+{
+    _nodeId = id;
+}
 
 // Fonction         : setOperation
 // Argument(s)		: - operation : le nouveau type d'opération
