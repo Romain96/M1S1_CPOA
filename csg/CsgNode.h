@@ -21,12 +21,12 @@ protected:
     // et a un fils gauche (opération/primitive)
     bool _leftChildIsPrimitive;
     CsgPrimitive *_leftChildPrimitive;
-    CsgOperation *_leftChildOperation;
+    CsgNode *_leftChildOperation;
 
     // et a un fils droit (opération/primitive)
     bool _rightChildIsPrimitive;
     CsgPrimitive *_rightChildPrimitive;
-    CsgOperation *_rightChildOperation;
+    CsgNode *_rightChildOperation;
 
 public:
     // constructeur
@@ -40,9 +40,8 @@ public:
     bool getRightChildIsPrimitive();
     CsgPrimitive *getLeftChildPrimitive();
     CsgPrimitive *getRightChildPrimitive();
-    CsgOperation *getLeftChildOperation();
-    CsgOperation *getRightChildOperation();
-    BoundingBox& getBoundingBox();
+    CsgNode *getLeftChildOperation();
+    CsgNode *getRightChildOperation();
 
     // setters
     void setId(int id);
@@ -51,9 +50,8 @@ public:
     void setRightChildIsPrimitive(bool isPrimitive);
     void setLeftChildPrimitive(CsgPrimitive *leftChild);
     void setRightChildPrimitive(CsgPrimitive *rightChild);
-    void setLeftChildOperation(CsgOperation *leftChild);
-    void setRightChildOperation(CsgOperation *rightChild);
-    void setBoundingBox(BoundingBox& boundingBox);
+    void setLeftChildOperation(CsgNode *leftChild);
+    void setRightChildOperation(CsgNode *rightChild);
 };
 
 #endif // __CSGNODE_H__

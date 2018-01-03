@@ -114,22 +114,22 @@ CsgPrimitive *CsgNode::getRightChildPrimitive()
 
 // Fonction         : getLeftChildOperation
 // Argument(s)		: /
-// Valeur de retour	: un pointeur sur une CsgOperation
+// Valeur de retour	: un pointeur sur une CsgNode
 // Pré-condition(s)	: /
 // Post-condition(s): /
 // Commentaire(s)	: retourne le fils gauche en tant qu'opération
-CsgOperation *CsgNode::getLeftChildOperation()
+CsgNode *CsgNode::getLeftChildOperation()
 {
     return _leftChildOperation;
 }
 
 // Fonction         : getRightChildOperation
 // Argument(s)		: /
-// Valeur de retour	: un pointeur sur une CsgOperation
+// Valeur de retour	: un pointeur sur une CsgNode
 // Pré-condition(s)	: /
 // Post-condition(s): /
 // Commentaire(s)	: retourne le fils droit en tant qu'opération
-CsgOperation *CsgNode::getRightChildOperation()
+CsgNode *CsgNode::getRightChildOperation()
 {
     return _rightChildOperation;
 }
@@ -209,12 +209,12 @@ void CsgNode::setRightChildPrimitive(CsgPrimitive *rightChild)
 }
 
 // Fonction         : setLeftChildOperation
-// Argument(s)		: - leftChild : pointeur sur un CsgOperation
+// Argument(s)		: - leftChild : pointeur sur un CsgNode
 // Valeur de retour	: /
 // Pré-condition(s)	: /
 // Post-condition(s): /
 // Commentaire(s)	: modifie le pointeur du fils gauche en tant qu'opération
-void CsgNode::setLeftChildOperation(CsgOperation *leftChild)
+void CsgNode::setLeftChildOperation(CsgNode *leftChild)
 {
     if (_leftChildOperation != nullptr)
         delete _leftChildOperation;
@@ -222,12 +222,12 @@ void CsgNode::setLeftChildOperation(CsgOperation *leftChild)
 }
 
 // Fonction         : setRightChildOperation
-// Argument(s)		: - rightChild : pointeur sur un CsgPrimitive
+// Argument(s)		: - rightChild : pointeur sur un CsgNode
 // Valeur de retour	: /
 // Pré-condition(s)	: /
 // Post-condition(s): /
 // Commentaire(s)	: modifie le pointeur du fils droit en tant qu'opération
-void CsgNode::setRightChildOperation(CsgOperation *rightChild)
+void CsgNode::setRightChildOperation(CsgNode *rightChild)
 {
     if (_rightChildOperation != nullptr)
         delete _rightChildOperation;

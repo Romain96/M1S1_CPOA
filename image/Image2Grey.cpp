@@ -18,9 +18,11 @@
 // Pré-condition(s)	: /
 // Post-condition(s): /
 // Commentaire(s)	: positione l'imatensité maximale à 0
-Image2Grey::Image2Grey(int width, int height) : Image2D(width, height), _max_intensity(0)
+Image2Grey::Image2Grey(int width, int height) : Image2D(width, height), _max_intensity(255)
 {
-    // rien
+    // init à noir
+    for (int i = 0; i < width*height; i++)
+        data_[i] = 0;
 }
 
 // Fonction         : subsampling (sous-échanillonage)
@@ -201,7 +203,7 @@ Image2D<Vec2f> *Image2Grey::gradient_sobel(Image2Grey &img)
 					vertical_conv += img(k,l);
 					horizontal_conv += img(k,l);
 				}
-			}
+            }
 			// remplissage du vec2f
 			gradient[0] = (float)vertical_conv;
 			gradient[1] = (float)horizontal_conv;
@@ -590,10 +592,10 @@ void Image2Grey::__write(std::string filename, int width, int height, int *data_
 	}
 
 	// calcul de l'intensité maximale
-	int max_intensity = 0;
+    int max_intensity = 255;
 	int *indexg = data_array;
 
-	for (int j = 0; j < height; j++)
+    for (int j = 0; j < height; j++)
 	{
 		for (int i = 0; i < width; i++)
 		{
@@ -604,7 +606,7 @@ void Image2Grey::__write(std::string filename, int width, int height, int *data_
 			indexg = indexg + 1;
 
 		}
-	}
+    }
 
 	// écriture du header avec __write_header
 	__write_header(output, filename, width, height, max_intensity);

@@ -19,20 +19,20 @@ CsgPrimitive::CsgPrimitive(Vec2f center, float distanceToOrigin) :
     _matrix = Matrix33d();
 
     Vec2f ulp;
-    ulp[0] = center[0] - _distanceToOrigin/2.f;
-    ulp[1] = center[1] - _distanceToOrigin/2.f;
+    ulp[0] = center[0] - _distanceToOrigin;
+    ulp[1] = center[1] - _distanceToOrigin;
 
     Vec2f urp;
-    urp[0] = center[0] + _distanceToOrigin/2.f;
-    urp[1] = center[1] - _distanceToOrigin/2.f;
+    urp[0] = center[0] + _distanceToOrigin;
+    urp[1] = center[1] - _distanceToOrigin;
 
     Vec2f llp;
-    llp[0] = center[0] - _distanceToOrigin/2.f;
-    llp[1] = center[1] + _distanceToOrigin/2.f;
+    llp[0] = center[0] - _distanceToOrigin;
+    llp[1] = center[1] + _distanceToOrigin;
 
     Vec2f lrp;
-    lrp[0] = center[0] + _distanceToOrigin/2.f;
-    lrp[1] = center[1] + _distanceToOrigin/2.f;
+    lrp[0] = center[0] + _distanceToOrigin;
+    lrp[1] = center[1] + _distanceToOrigin;
 
     // bounding box dépend du centre et de la distance à l'origine
     _boundingBox = BoundingBox(ulp, urp, llp, lrp);

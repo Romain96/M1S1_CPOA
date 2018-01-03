@@ -34,12 +34,22 @@ public:
 
     // getters
     CsgNode* getNode(int i);
+    CsgNode* getLastInsertedNode();
 
     // setters
     void setNode(CsgNode *node, int i);
 
+    // vide l'arbre
+    void clear();
+
     // ajout de primitives
     void addPrimitive(CsgPrimitive *primitive);
+
+    // regroupement de primitives en noeud
+    void joinPrimitives(CsgOperation *operation, CsgPrimitive *leftChild, CsgPrimitive *rightChild);
+    void joinPrimitives(CsgOperation *operation, CsgPrimitive *leftChild, CsgNode *rightChild);
+    void joinPrimitives(CsgOperation *operation, CsgNode *leftChild, CsgPrimitive *rightChild);
+    void joinPrimitives(CsgOperation *operation, CsgNode *leftChild, CsgNode *rightChild);
 };
 
 #endif // __CSGTREE_H__

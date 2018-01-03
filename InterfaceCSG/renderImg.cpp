@@ -3,7 +3,7 @@
 #include <iostream>
 
 //#include "imgGradient.h"
-//#include "boundingbox.h"
+#include "BoundingBox.h"
 #include <limits>
 
 
@@ -34,6 +34,7 @@ void RenderImg::loadTexture(const std::string& filename)
 	// VOTRE CODE ICI
     m_img.load(filename);
 
+    m_ptrTex = m_img.getDataPtr();
     glBindTexture(GL_TEXTURE_2D, m_texture);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, m_widthTex, m_heightTex, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, m_ptrTex);
     glBindTexture(GL_TEXTURE_2D, 0);
@@ -302,10 +303,16 @@ void RenderImg::drawBB(const BoundingBox& bb)
 {
 	glBegin(GL_LINE_LOOP);
 	glColor3f(1.0f,0.5f,0.5f);
-//	glVertex2f( xImg2GL(??), yImg2GL(??) );
-//	glVertex2f( xImg2GL(??), yImg2GL(??) );
-//	glVertex2f( xImg2GL(??), yImg2GL(??) );
-//	glVertex2f( xImg2GL(??), yImg2GL(??) );
+
+    Vec2f ulp = bb.getUpperLeftPoint();
+    Vec2f urp = bb.getUpperRightPoint();
+    Vec2f llp = bb.getLowerLeftPoint();
+    Vec2f lrp = bb.getLowerRightPoint();
+
+    glVertex2f( xImg2GL(ulp[0]), yImg2GL(ulp[1]) );
+    glVertex2f( xImg2GL(llp[0]), yImg2GL(llp[1]) );
+    glVertex2f( xImg2GL(lrp[0]), yImg2GL(lrp[1]) );
+    glVertex2f( xImg2GL(urp[0]), yImg2GL(urp[1]) );
 	glEnd();
 }
 

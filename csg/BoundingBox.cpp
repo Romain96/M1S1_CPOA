@@ -39,7 +39,7 @@ BoundingBox::BoundingBox(Vec2f &ulp, Vec2f &urp, Vec2f &llp, Vec2f &lrp) :
 // Pré-condition(s)	: /
 // Post-condition(s): /
 // Commentaire(s)	: retourne les coordonnées actuelles du point supérieur gauche de la bounding box
-Vec2f& BoundingBox::getUpperLeftPoint()
+const Vec2f& BoundingBox::getUpperLeftPoint() const
 {
     return _upper_left_point;
 }
@@ -50,7 +50,7 @@ Vec2f& BoundingBox::getUpperLeftPoint()
 // Pré-condition(s)	: /
 // Post-condition(s): /
 // Commentaire(s)	: retourne les coordonnées actuelles du point supérieur droit de la bounding box
-Vec2f& BoundingBox::getUpperRightPoint()
+const Vec2f& BoundingBox::getUpperRightPoint() const
 {
     return _upper_right_point;
 }
@@ -61,7 +61,7 @@ Vec2f& BoundingBox::getUpperRightPoint()
 // Pré-condition(s)	: /
 // Post-condition(s): /
 // Commentaire(s)	: retourne les coordonnées actuelles du point inférieur gauche de la bounding box
-Vec2f& BoundingBox::getLowerLeftPoint()
+const Vec2f& BoundingBox::getLowerLeftPoint() const
 {
     return _lower_left_point;
 }
@@ -72,7 +72,7 @@ Vec2f& BoundingBox::getLowerLeftPoint()
 // Pré-condition(s)	: /
 // Post-condition(s): /
 // Commentaire(s)	: retourne les coordonnées actuelles du point inférieur droit de la bounding box
-Vec2f& BoundingBox::getLowerRightPoint()
+const Vec2f& BoundingBox::getLowerRightPoint() const
 {
     return _lower_right_point;
 }
@@ -232,7 +232,7 @@ BoundingBox& operator -(BoundingBox& bb1, BoundingBox& bb2)
     Vec2f llp = bb1.getLowerLeftPoint();
     Vec2f lrp = bb1.getLowerRightPoint();
 
-    // TODO
+    // traité le plus simplement possible : bounding box de bb1
 
     // DEBUG
     std::cout << "upper left point : " << ulp[0] << "," << ulp[1] << std::endl;

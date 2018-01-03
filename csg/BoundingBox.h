@@ -19,10 +19,10 @@ public:
     BoundingBox(Vec2f& ulp, Vec2f& urp, Vec2f& llp, Vec2f& lrp);
 
     // getters
-    Vec2f& getUpperLeftPoint();
-    Vec2f& getUpperRightPoint();
-    Vec2f& getLowerLeftPoint();
-    Vec2f& getLowerRightPoint();
+    const Vec2f& getUpperLeftPoint() const;
+    const Vec2f& getUpperRightPoint() const;
+    const Vec2f& getLowerLeftPoint() const;
+    const Vec2f& getLowerRightPoint() const;
 
     // setters
     void setUpperLeftPoint(Vec2f& ulp);

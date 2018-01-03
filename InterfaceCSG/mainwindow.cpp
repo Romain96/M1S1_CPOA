@@ -2,6 +2,8 @@
 #include "ui_mainwindow.h"
 
 #include "CsgPrimitive.h"
+#include "CsgDisk.h"
+#include "CsgRegularPolygon.h"
 #include "BoundingBox.h"
 #include "CsgTree.h"
 #include "renderImg.h"
@@ -108,10 +110,33 @@ void MainWindow::closeEvent(QCloseEvent* /*event*/)
 void MainWindow::createPrimtive()
 {
 	int prim =  ui->prim_type->currentIndex();
-	int sides = ui->nb_sides->value();
+    int sides = ui->nb_sides->value();
 
-// VOTRE CODE ICI : primitive creation
-//	m_currentNode = ??
+    std::cout << "create primitive" << std::endl;
+
+    // VOTRE CODE ICI : primitive creation
+    //	m_currentNode = ??
+
+    Vec2f center; center[0] = 512; center[1] = 512;
+
+    switch (prim)
+    {
+        // disque
+        case 0:
+            std::cout << "adding new disk primitive" << std::endl;
+            m_tree.addPrimitive(new CsgDisk(center, 100));
+            break;;
+        // polygone régulier
+        case 1:
+            std::cout << "adding new regular polygon primitive" << std::endl;
+            m_tree.addPrimitive(new CsgRegularPolygon(sides, center, 100));
+            break;
+        default:
+            std::cout << "unknown primitive..." << std::endl;
+            break;
+    }
+    m_currentNode = m_tree.getLastInsertedNode();
+    std::cout << "id current node : " << m_currentNode->getId() << std::endl;
 
 	drawTree();
 //	ui->currentNode->setValue(??); // recupere l'id du noeud cree
@@ -131,17 +156,23 @@ void MainWindow::createOperation()
 	std::cout << " child: "<< left << " & "<< right;
 	std::cout << std::endl;
 
-//	CsgOperation* oper=NULL;
+    CsgOperation* oper=NULL;
 	switch(typeOp)
 	{
+        // union
 		case 0:
-
+            std::cout << "adding new union" << std::endl;
+            oper = new CsgOperation(operationTypes::UNION);
 			break;
+        // intersection
 		case 1:
-
+            std::cout << "adding new intersection" << std::endl;
+            oper = new CsgOperation(operationTypes::INTERSECTION);
 			break;
+        // différence
 		case 2:
-
+            std::cout << "adding new difference" << std::endl;
+            oper = new CsgOperation(operationTypes::DIFFERENCE);
 			break;
 		default:
 			std::cerr << "unknown operation" << std::endl;
@@ -149,10 +180,22 @@ void MainWindow::createOperation()
 			break;
 	};
 
-//	if (oper == NULL)
-//		return;
+    if (oper == NULL)
+        return;
 
-// mettre a jour ui->currentNode ui->id_filsGauche ui->id_filsDroit
+    // regroupement des deux primitives/opérations
+
+    // rechercher le noeud correspondant à left
+    CsgNode *leftChild = m_tree.getNode(left);
+
+    // rechercher le noeud correspondant à right
+    CsgNode *rightChild = m_tree.getNode(right);
+
+    // regrouper les deux avec joinPrimitives
+    m_tree.joinPrimitives(oper, leftChild, rightChild);
+
+    // mettre a jour ui->currentNode ui->id_filsGauche ui->id_filsDroit
+
 
 //	m_transfo = Matrix33d::identity();
 //	m_current_center = oper->getBBox().center();
@@ -347,10 +390,10 @@ void MainWindow::saveCSG()
 
 void MainWindow::clearCSG()
 {
-//	m_tree.clear();
+    m_tree.clear();
 	updateTextGraph();
 	updateTreeRender();
-// mettre a jour ui->currentNode ui->id_filsGauche ui->id_filsDroit ui->currentNode
+    // mettre a jour ui->currentNode ui->id_filsGauche ui->id_filsDroit ui->currentNode
 }
 
 
@@ -361,7 +404,7 @@ void MainWindow::clone()
 	updateTextGraph();
 	updateTreeRender();
 
-// mettre a jour ui->currentNode ui->id_filsGauche ui->id_filsDroit ui->currentNode
+    // mettre a jour ui->currentNode ui->id_filsGauche ui->id_filsDroit ui->currentNode
 
 }
 
@@ -376,7 +419,7 @@ void MainWindow::drawTree()
 		// OPTION: trace le noeud courant dans l'image de m_render
 		// VOTRE CODE ICI
 
-		m_render->setBBDraw(true);
+        m_render->setBBDraw(true);
 //		m_bb = m_currentNode->getBBox();
 	}
 	else
@@ -444,16 +487,17 @@ void MainWindow::updateTextGraph()
 {
 	// update Graph in TextWindow
 	m_graphTextEdit->clear();
-//	std::string str = m_tree.asciiArtGraph();
-//	m_graphTextEdit->appendPlainText(str.c_str());
+    //std::string str = m_tree.asciiArtGraph();
+    //m_graphTextEdit->appendPlainText(str.c_str());
 }
 
 
 void MainWindow::currentNodeChanged(int id)
 {
-//	m_currentNode = m_tree.fromId(id);
+    //	m_currentNode = m_tree.fromId(id);
 
-// VOTRE CODE ICI
+    // VOTRE CODE ICI
+    m_currentNode = m_tree.getNode(id);
 
 	resetTransfoWidgets();
 
@@ -462,7 +506,7 @@ void MainWindow::currentNodeChanged(int id)
 
 void MainWindow::swapLRRoot()
 {
-// VOTRE CODE ICI
+    // VOTRE CODE ICI
 	updateTextGraph();
 	updateTreeRender();
 }
@@ -471,9 +515,9 @@ void MainWindow::swapLRRoot()
 
 void MainWindow::unjoinRoot()
 {
-// VOTRE CODE ICI
+    // VOTRE CODE ICI
 
-//	m_currentNode = NULL;
+    //	m_currentNode = NULL;
 	updateTextGraph();
 	updateTreeRender();
 }
