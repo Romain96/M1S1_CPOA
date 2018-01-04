@@ -29,6 +29,9 @@ public:
     void setUpperRightPoint(Vec2f& urp);
     void setLowerLeftPoint(Vec2f& llp);
     void setLowerRightPoint(Vec2f& lrp);
+
+    // méthodes
+    Vec2f& center();
 };
 
 // union

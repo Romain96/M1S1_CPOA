@@ -77,6 +77,20 @@ const Vec2f& BoundingBox::getLowerRightPoint() const
     return _lower_right_point;
 }
 
+// Fonction         : center
+// Argument(s)		: /
+// Valeur de retour	: un vec2f
+// Pré-condition(s)	: /
+// Post-condition(s): /
+// Commentaire(s)	: retourne les coordonnées du centre de la bounding box
+Vec2f& BoundingBox::center()
+{
+    static Vec2f center;
+    center[0] = _upper_right_point[0] - _upper_left_point[0];
+    center[1] = _lower_left_point[1] - _upper_left_point[1];
+    return center;
+}
+
 // Fonction         : operator +
 // Argument(s)		: - bb1 : bounding box 1
 //                    - bb2 : bounding box 2
