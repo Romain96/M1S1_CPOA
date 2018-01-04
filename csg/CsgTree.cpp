@@ -317,7 +317,7 @@ void CsgTree::drawInImage(Image2Grey &img)
     {
         int key = it->first;
         CsgNode *node = it->second;
-        std::cout << "\tdrawing node of id " << key << std::endl;
+        std::cout << "\tdrawing root node of id " << key << std::endl;
         __drawNode(img, node);
         it++;
     }
@@ -334,8 +334,11 @@ void CsgTree::drawInImage(Image2Grey &img)
 // Commentaire(s)	: dessine le contenu du node (primitive ou opération)
 void CsgTree::__drawNode(Image2Grey &img, CsgNode *node)
 {
-    CsgPrimitive *to_print = node->getLeftChildPrimitive();
-    BoundingBox bb = to_print->getBoundingBox();
+    CsgPrimitive *leftChildPrimitive = node->getLeftChildPrimitive();
+    CsgPrimitive *rightChildPrimitive = node->getRightChildPrimitive();
+    CsgNode *leftChildOperation = node->getLeftChildOperation();
+    CsgNode *rightChildOperation = node->getRightChildOperation();
+    BoundingBox bb = node->getOperation().getBoundingBox();
 
     switch (node->getOperation().getOperationType())
     {
@@ -353,21 +356,161 @@ void CsgTree::__drawNode(Image2Grey &img, CsgNode *node)
                     point[0] = (float)i;
                     point[1] = (float)j;
 
-                    if (to_print->isInsidePrimitive(point))
+                    if (leftChildPrimitive->isInsidePrimitive(point))
                     {
                         img(i, j) = 255;
                     }
                 }
             }
             break;
+
         // Union : dessin des pixels du fils gauche et du fils droit
         case operationTypes::UNION:
             std::cout << "drawing union" << std::endl;
+
+            // si les deux fils sont des primitives on les dessines
+            if (node->getLeftChildIsPrimitive() && node->getRightChildIsPrimitive())
+            {
+                for (int i = bb.getUpperLeftPoint()[0]; i < bb.getUpperRightPoint()[0]; i++)
+                {
+                    for (int j = bb.getUpperLeftPoint()[1]; j < bb.getLowerLeftPoint()[1]; j++)
+                    {
+                        // TODO prendre en compte les transformations
+                        Vec2f point;
+                        point[0] = (float)i;
+                        point[1] = (float)j;
+
+                        if (leftChildPrimitive->isInsidePrimitive(point) || rightChildPrimitive->isInsidePrimitive(point))
+                        {
+                            img(i, j) = 255;
+                        }
+                    }
+                }
+            }
+            // si l'un est une primitive on le dessine et on appelle __drawNode sur l'autre
+            else if (node->getLeftChildIsPrimitive() && !node->getRightChildIsPrimitive())
+            {
+                for (int i = bb.getUpperLeftPoint()[0]; i < bb.getUpperRightPoint()[0]; i++)
+                {
+                    for (int j = bb.getUpperLeftPoint()[1]; j < bb.getLowerLeftPoint()[1]; j++)
+                    {
+                        // TODO prendre en compte les transformations
+                        Vec2f point;
+                        point[0] = (float)i;
+                        point[1] = (float)j;
+
+                        if (leftChildPrimitive->isInsidePrimitive(point))
+                        {
+                            img(i, j) = 255;
+                        }
+                    }
+                }
+
+                __drawNode(img, rightChildOperation);
+            }
+            // si l'un est une primitive on le dessine et on appelle __drawNode sur l'autre
+            else if (!node->getLeftChildIsPrimitive() && node->getRightChildIsPrimitive())
+            {
+                __drawNode(img, leftChildOperation);
+
+                for (int i = bb.getUpperLeftPoint()[0]; i < bb.getUpperRightPoint()[0]; i++)
+                {
+                    for (int j = bb.getUpperLeftPoint()[1]; j < bb.getLowerLeftPoint()[1]; j++)
+                    {
+                        // TODO prendre en compte les transformations
+                        Vec2f point;
+                        point[0] = (float)i;
+                        point[1] = (float)j;
+
+                        if (rightChildPrimitive->isInsidePrimitive(point))
+                        {
+                            img(i, j) = 255;
+                        }
+                    }
+                }
+            }
+            // si les deux sont des opérations on appelle __drawNode sur les deux
+            else
+            {
+                __drawNode(img, leftChildOperation);
+                __drawNode(img, rightChildOperation);
+            }
             break;
+
         // Intersection : dessin de des pixels dans le fils gauche et droit
         case operationTypes::INTERSECTION:
             std::cout << "drawing intersection" << std::endl;
+
+            // si les deux fils sont des primitives on les dessines
+            if (node->getLeftChildIsPrimitive() && node->getRightChildIsPrimitive())
+            {
+                for (int i = bb.getUpperLeftPoint()[0]; i < bb.getUpperRightPoint()[0]; i++)
+                {
+                    for (int j = bb.getUpperLeftPoint()[1]; j < bb.getLowerLeftPoint()[1]; j++)
+                    {
+                        // TODO prendre en compte les transformations
+                        Vec2f point;
+                        point[0] = (float)i;
+                        point[1] = (float)j;
+
+                        if (leftChildPrimitive->isInsidePrimitive(point) && rightChildPrimitive->isInsidePrimitive(point))
+                        {
+                            img(i, j) = 255;
+                        }
+                    }
+                }
+            }
+            // si l'un est une primitive on le dessine et on appelle __drawNode sur l'autre
+            else if (node->getLeftChildIsPrimitive() && !node->getRightChildIsPrimitive())
+            {
+                for (int i = bb.getUpperLeftPoint()[0]; i < bb.getUpperRightPoint()[0]; i++)
+                {
+                    for (int j = bb.getUpperLeftPoint()[1]; j < bb.getLowerLeftPoint()[1]; j++)
+                    {
+                        // TODO prendre en compte les transformations
+                        Vec2f point;
+                        point[0] = (float)i;
+                        point[1] = (float)j;
+
+                        if (leftChildPrimitive->isInsidePrimitive(point))
+                        {
+                            img(i, j) = 255;
+                        }
+                    }
+                }
+
+                __drawNode(img, rightChildOperation);
+            }
+            // si l'un est une primitive on le dessine et on appelle __drawNode sur l'autre
+            else if (!node->getLeftChildIsPrimitive() && node->getRightChildIsPrimitive())
+            {
+                __drawNode(img, leftChildOperation);
+
+                for (int i = bb.getUpperLeftPoint()[0]; i < bb.getUpperRightPoint()[0]; i++)
+                {
+                    for (int j = bb.getUpperLeftPoint()[1]; j < bb.getLowerLeftPoint()[1]; j++)
+                    {
+                        // TODO prendre en compte les transformations
+                        Vec2f point;
+                        point[0] = (float)i;
+                        point[1] = (float)j;
+
+                        if (rightChildPrimitive->isInsidePrimitive(point))
+                        {
+                            img(i, j) = 255;
+                        }
+                    }
+                }
+            }
+            // si les deux sont des opérations on appelle __drawNode sur les deux
+            else
+            {
+                __drawNode(img, leftChildOperation);
+                __drawNode(img, rightChildOperation);
+            }
+
             break;
+
         // Différence : dessin des pixels du fils gauche qui ne sont pas dans le fils droit
         case operationTypes::DIFFERENCE:
             std::cout << "drawing difference" << std::endl;
