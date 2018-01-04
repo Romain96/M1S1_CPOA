@@ -44,6 +44,17 @@ CsgNode* CsgTree::getLastInsertedNode()
     return _nodes[_nodeCounter - 1];
 }
 
+// Fonction         : getLastNodeId
+// Argument(s)		: /
+// Valeur de retour	: un entier
+// Pré-condition(s)	: /
+// Post-condition(s): /
+// Commentaire(s)	: retourne l'e dernier noeud inséré dans la liste des noeuds'id di dernier noeud inséré
+int CsgTree::getLastNodeId()
+{
+    return _nodeCounter - 1;
+}
+
 // Fonction         : setNode
 // Argument(s)		: - node : le nouveau noeud
 //                    - i : l'indice du noeud

@@ -35,6 +35,7 @@ public:
     // getters
     CsgNode* getNode(int i);
     CsgNode* getLastInsertedNode();
+    int getLastNodeId();
 
     // setters
     void setNode(CsgNode *node, int i);

@@ -140,6 +140,7 @@ void MainWindow::createPrimtive()
 
 	drawTree();
 //	ui->currentNode->setValue(??); // recupere l'id du noeud cree
+    ui->currentNode->setValue(m_tree.getLastNodeId());
 	updateTextGraph();
 
 }
