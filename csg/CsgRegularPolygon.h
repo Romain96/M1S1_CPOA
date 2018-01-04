@@ -7,14 +7,13 @@
 #include "BoundingBox.h"
 #include "CsgPrimitive.h"
 #include <iostream>
-#include <map>
 
 // représente les polygones réguliers de plus de 2 sommets
 class CsgRegularPolygon : public CsgPrimitive
 {
 protected:
     int _vertexNumber;
-    std::map<int, Vec2f> _vertexList;
+    Vec2f *_vertexList;
 
 public:
     // constructeur

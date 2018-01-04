@@ -317,7 +317,7 @@ void CsgTree::drawInImage(Image2Grey &img)
     {
         int key = it->first;
         CsgNode *node = it->second;
-        std::cout << "\tdrawing node of of id" << key << std::endl;
+        std::cout << "\tdrawing node of id " << key << std::endl;
         __drawNode(img, node);
         it++;
     }

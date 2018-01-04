@@ -4,7 +4,6 @@
 #include "BoundingBox.h"
 #include "CsgRegularPolygon.h"
 #include <iostream>
-#include <map>
 #include <math.h>
 
 // Fonction         : CsgRegularPolygon
@@ -19,16 +18,17 @@ CsgRegularPolygon::CsgRegularPolygon(int vertexNumber, Vec2f &center, float dist
     CsgPrimitive(center, distanceToOrigin)
 {
     _vertexNumber = vertexNumber;
-    _vertexList = std::map<int, Vec2f>();
+    _vertexList = new Vec2f[_vertexNumber];
     Vec2f point;
     double angle = 360.f / (double)_vertexNumber;
     double currentAngle = 0.f;
 
     for (int i = 0; i < _vertexNumber; i++)
     {
-        point[0] = _distanceToOrigin * cos(currentAngle);
-        point[1] = _distanceToOrigin * sin(currentAngle);
-        _vertexList.insert(std::pair<int, Vec2f>(i, point));
+        point[0] = _center[0] + _distanceToOrigin * cos(currentAngle * M_PI/180);
+        point[1] = _center[1] + _distanceToOrigin * sin(currentAngle * M_PI/180);
+        _vertexList[i] = point;
+        std::cout << "init pts : " << point[0] << " " << point[1] << std::endl;
         currentAngle += angle;
     }
 }
@@ -71,9 +71,9 @@ bool CsgRegularPolygon::isInsidePrimitive(Vec2f &point)
 
     for (int i = 0; i < _vertexNumber; i++)
     {
-        if ((_vertexList[i][1] > point[1]) != (_vertexList[j][1] > point[1]) &&
-                (point[0] < _vertexList[i][0]) + (_vertexList[j][0] - _vertexList[i][0]) * (point[1] - _vertexList[i][1]) /
-                (_vertexList[j][1] - _vertexList[i][1]))
+        if (((_vertexList[i][1] > point[1]) != (_vertexList[j][1] > point[1])) &&
+                (point[0] < _vertexList[i][0] + (_vertexList[j][0] - _vertexList[i][0]) * (point[1] - _vertexList[i][1]) /
+                                (_vertexList[j][1] - _vertexList[i][1])))
         {
             state = !state;
         }
