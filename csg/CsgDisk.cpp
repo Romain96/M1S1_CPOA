@@ -39,3 +39,21 @@ void CsgDisk::setRadius(float radius)
     // utilisation du setDistanceToOrigin
     CsgPrimitive::setDistanceToOrigin(radius);
 }
+
+// Fonction         : isInsidePrimitive
+// Argument(s)		: - point : vec2f contenant les coordonnées du point à tester
+// Valeur de retour	: vrai si le point est dans la primitive, faux sinon
+// Pré-condition(s)	: /
+// Post-condition(s): /
+// Commentaire(s)	: vérifie que le point est dans la primitive (disque)
+bool CsgDisk::isInsidePrimitive(Vec2f &point)
+{
+    // le point est dans le disque s'il est à une distance inférieure ou égale du centre du disque
+    float distanceSquared = (_center[0] - point[0])*(_center[0] - point[0]) + (_center[1] - point[1])*(_center[1] - point[1]);
+    float radiusSquared = _distanceToOrigin * _distanceToOrigin;
+
+    if (distanceSquared <= radiusSquared)
+        return true;
+    else
+        return false;
+}

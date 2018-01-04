@@ -1,5 +1,8 @@
 #include <iostream>
 #include <map>
+#include <algorithm>
+#include <iterator>
+#include <utility>
 #include "CsgNode.h"
 #include "CsgTree.h"
 #include "CsgOperation.h"
@@ -296,4 +299,82 @@ void CsgTree::joinPrimitives(CsgOperation *operation, CsgNode *leftChild, CsgNod
     _treeCounter++;
 
     std::cout << "operation & operation regrouped into new node" << std::endl;
+}
+
+// Fonction         : drawInImage
+// Argument(s)		: - img : pointeur sur une Image2Grey
+// Valeur de retour	: /
+// Pré-condition(s)	: /
+// Post-condition(s): /
+// Commentaire(s)	: dessine le(s) arbre(s) CSG sur l'image img
+void CsgTree::drawInImage(Image2Grey &img)
+{
+    std::cout << "drawing in image now" << std::endl;
+
+    std::map<int, CsgNode*, csgNodeComparator>::iterator it = _roots.begin();
+
+    while (it != _roots.end())
+    {
+        int key = it->first;
+        CsgNode *node = it->second;
+        std::cout << "\tdrawing node of of id" << key << std::endl;
+        __drawNode(img, node);
+        it++;
+    }
+
+    std::cout << "drawing finished" << std::endl;
+}
+
+// Fonction         : __drawNode
+// Argument(s)		: -img : pointeur sur une Image2Grey
+//                    - node : pointeur sur un CsgNode
+// Valeur de retour	: /
+// Pré-condition(s)	: /
+// Post-condition(s): /
+// Commentaire(s)	: dessine le contenu du node (primitive ou opération)
+void CsgTree::__drawNode(Image2Grey &img, CsgNode *node)
+{
+    CsgPrimitive *to_print = node->getLeftChildPrimitive();
+    BoundingBox bb = to_print->getBoundingBox();
+
+    switch (node->getOperation().getOperationType())
+    {
+        // None : c'est une primitive : dessin de la primitive
+        case operationTypes::NONE:
+            std::cout << "drawing primitive" << std::endl;
+
+            for (int i = bb.getUpperLeftPoint()[0]; i < bb.getUpperRightPoint()[0]; i++)
+            {
+                for (int j = bb.getUpperLeftPoint()[1]; j < bb.getLowerLeftPoint()[1]; j++)
+                {
+                    // pour chaque pixel on le dessine en blanc s'il est dans la primitive
+                    // TODO prendre en compte les transformations
+                    Vec2f point;
+                    point[0] = (float)i;
+                    point[1] = (float)j;
+
+                    if (to_print->isInsidePrimitive(point))
+                    {
+                        img(i, j) = 255;
+                    }
+                }
+            }
+            break;
+        // Union : dessin des pixels du fils gauche et du fils droit
+        case operationTypes::UNION:
+            std::cout << "drawing union" << std::endl;
+            break;
+        // Intersection : dessin de des pixels dans le fils gauche et droit
+        case operationTypes::INTERSECTION:
+            std::cout << "drawing intersection" << std::endl;
+            break;
+        // Différence : dessin des pixels du fils gauche qui ne sont pas dans le fils droit
+        case operationTypes::DIFFERENCE:
+            std::cout << "drawing difference" << std::endl;
+            break;
+        // erreur
+        default:
+            std::cout << "error unknown operation" << std::endl;
+        break;
+    }
 }

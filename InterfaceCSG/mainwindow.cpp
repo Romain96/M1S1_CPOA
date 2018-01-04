@@ -196,7 +196,9 @@ void MainWindow::createOperation()
     m_tree.joinPrimitives(oper, leftChild, rightChild);
 
     // mettre a jour ui->currentNode ui->id_filsGauche ui->id_filsDroit
-
+    m_transfo = Matrix33d();
+    m_centerSelection = oper->getBoundingBox().center();
+    m_currentNode = m_tree.getLastInsertedNode();
 
 //	m_transfo = Matrix33d::identity();
 //	m_current_center = oper->getBBox().center();
@@ -413,7 +415,7 @@ void MainWindow::clone()
 void MainWindow::drawTree()
 {
 	m_render->clean();
-//	m_tree.drawInImage( m_render->getImg() );
+    m_tree.drawInImage( m_render->getImg() );
 
 	if (ui->checkBox_drawCurrent->isChecked()/* && m_currentNode!=NULL*/)
 	{

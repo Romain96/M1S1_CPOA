@@ -20,6 +20,9 @@ public:
 
     // setters
     void setRadius(float radius);
+
+    // méthodes
+    bool isInsidePrimitive(Vec2f &point);
 };
 
 #endif // __CSGDISK_H__

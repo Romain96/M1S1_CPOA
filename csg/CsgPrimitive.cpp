@@ -163,3 +163,16 @@ void CsgPrimitive::setBoundingBox(BoundingBox &bb)
 {
     _boundingBox = bb;
 }
+
+// Fonction         : isInsidePrimitive
+// Argument(s)		: - point : vec2f contenant les coordonnées du point à tester
+// Valeur de retour	: vrai si le point est dans la primitive, faux sinon
+// Pré-condition(s)	: /
+// Post-condition(s): /
+// Commentaire(s)	: vérifie que le point est dans la primitive
+bool CsgPrimitive::isInsidePrimitive(Vec2f &point)
+{
+    // rien
+    return false;
+}
+

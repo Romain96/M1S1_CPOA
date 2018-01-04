@@ -30,6 +30,9 @@ public:
     void setDistanceToOrigin(float distanceToOrigin);
     void setMatrix(Matrix33d& mat);
     void setBoundingBox(BoundingBox& bb);
+
+    // méthodes
+    virtual bool isInsidePrimitive(Vec2f& point);
 };
 
 #endif // __CSGPRIMITIVE_H__

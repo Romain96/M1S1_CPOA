@@ -4,13 +4,14 @@
 #include <iostream>
 #include <map>
 #include "CsgNode.h"
+#include "Image2Grey.h"
 
 // comparateur de nodes
 struct csgNodeComparator
 {
-    bool operator ()(CsgNode& node1, CsgNode& node2)
+    bool operator ()(const int& key1, const int& key2) const
     {
-        return node1.getId() < node2.getId();
+        return key1 < key2;
     }
 };
 
@@ -23,10 +24,10 @@ private:
 
 protected:
     // liste de tous les arbres CSG
-    std::map<int, CsgNode*> _roots;
+    std::map<int, CsgNode*, csgNodeComparator> _roots;
 
     // liste de tous les noeuds de tous les arbres
-    std::map<int, CsgNode*> _nodes;
+    std::map<int, CsgNode*, csgNodeComparator> _nodes;
 
 public:
     // constructeur
@@ -51,6 +52,12 @@ public:
     void joinPrimitives(CsgOperation *operation, CsgPrimitive *leftChild, CsgNode *rightChild);
     void joinPrimitives(CsgOperation *operation, CsgNode *leftChild, CsgPrimitive *rightChild);
     void joinPrimitives(CsgOperation *operation, CsgNode *leftChild, CsgNode *rightChild);
+
+    // dessin de l'arbre sur l'image
+    void drawInImage(Image2Grey& img);
+
+    // dessine un noeud (méthode récursive)
+    void __drawNode(Image2Grey& img, CsgNode *node);
 };
 
 #endif // __CSGTREE_H__
