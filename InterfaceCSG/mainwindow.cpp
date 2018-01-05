@@ -152,6 +152,8 @@ void MainWindow::createOperation()
 	int left = ui->id_filsGauche->value();
 	int right = ui->id_filsDroit->value();
 
+    right = 1; //TEST
+
 	std::cout << "createOperation  ";
 	std::cout << "type "<< typeOp;
 	std::cout << " child: "<< left << " & "<< right;
@@ -191,11 +193,14 @@ void MainWindow::createOperation()
 
     // rechercher le noeud correspondant à right
     CsgNode *rightChild = m_tree.getNode(right);
+    if (rightChild == nullptr)
+        std::cout << "fuck" << std::endl;
 
     // regrouper les deux avec joinPrimitives
     m_tree.joinPrimitives(oper, leftChild, rightChild);
 
     // mettre a jour ui->currentNode ui->id_filsGauche ui->id_filsDroit
+
     m_transfo = Matrix33d();
     m_centerSelection = oper->getBoundingBox().center();
     m_currentNode = m_tree.getLastInsertedNode();

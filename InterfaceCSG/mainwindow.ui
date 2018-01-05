@@ -90,7 +90,11 @@
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="id_filsGauche"/>
+         <widget class="QSpinBox" name="id_filsGauche">
+          <property name="readOnly">
+           <bool>false</bool>
+          </property>
+         </widget>
         </item>
         <item>
          <widget class="Line" name="line">
@@ -398,7 +402,7 @@
      <x>0</x>
      <y>0</y>
      <width>1038</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuCSG">

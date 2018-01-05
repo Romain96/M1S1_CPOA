@@ -170,7 +170,7 @@ BoundingBox& operator +(BoundingBox& bb1, BoundingBox& bb2)
 // Commentaire(s)	: crée une nouvelle bounding box résultat de l'intersection des deux bounding box arguments
 BoundingBox& operator ^(BoundingBox& bb1, BoundingBox& bb2)
 {
-    // nouveaux points délimitant la bounding box union
+    // nouveaux points délimitant la bounding box intersection
     Vec2f ulp;
     Vec2f urp;
     Vec2f llp;

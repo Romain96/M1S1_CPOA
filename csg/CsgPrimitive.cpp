@@ -172,7 +172,6 @@ void CsgPrimitive::setBoundingBox(BoundingBox &bb)
 // Commentaire(s)	: vérifie que le point est dans la primitive
 bool CsgPrimitive::isInsidePrimitive(Vec2f &point)
 {
-    // rien
     return false;
 }
 

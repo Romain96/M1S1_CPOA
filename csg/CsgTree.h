@@ -48,9 +48,6 @@ public:
     void addPrimitive(CsgPrimitive *primitive);
 
     // regroupement de primitives en noeud
-    void joinPrimitives(CsgOperation *operation, CsgPrimitive *leftChild, CsgPrimitive *rightChild);
-    void joinPrimitives(CsgOperation *operation, CsgPrimitive *leftChild, CsgNode *rightChild);
-    void joinPrimitives(CsgOperation *operation, CsgNode *leftChild, CsgPrimitive *rightChild);
     void joinPrimitives(CsgOperation *operation, CsgNode *leftChild, CsgNode *rightChild);
 
     // dessin de l'arbre sur l'image

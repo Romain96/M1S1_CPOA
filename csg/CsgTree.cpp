@@ -110,149 +110,8 @@ void CsgTree::addPrimitive(CsgPrimitive *primitive)
 }
 
 //-----------------------------------------------------------------------------
-// VARIANTES DE JOINPRIMITIVES
+// METHODES
 //-----------------------------------------------------------------------------
-
-// Fonction         : joinPrimitive
-// Argument(s)		: - oper : pointeur sur l'opération
-//                    - leftChild : pointeur sur une CsgPrimitive
-//                    - rightChild : pointeur sur une CsgPrimitive
-// Valeur de retour	: /
-// Pré-condition(s)	: /
-// Post-condition(s): /
-// Commentaire(s)	: regroupe les deux primitives/opération dans un nouveau noeud
-void CsgTree::joinPrimitives(CsgOperation *operation, CsgPrimitive *leftChild, CsgPrimitive *rightChild)
-{
-    // calcul de la bounding box du noeud
-    BoundingBox bb;
-    switch (operation->getOperationType())
-    {
-        case operationTypes::UNION:
-            bb = leftChild->getBoundingBox() + rightChild->getBoundingBox();
-            break;
-        case operationTypes::INTERSECTION:
-            bb = leftChild->getBoundingBox() ^ rightChild->getBoundingBox();
-            break;
-        case operationTypes::DIFFERENCE:
-            bb = leftChild->getBoundingBox() - rightChild->getBoundingBox();
-            break;
-        case operationTypes::NONE:
-        default:
-            break;
-    }
-    operation->setBoundingBox(bb);
-
-    // génération d'un nouveau noeud
-    CsgNode *node = new CsgNode(operation->getOperationType());
-    node->setLeftChildIsPrimitive(true);
-    node->setRightChildIsPrimitive(true);
-    node->setLeftChildPrimitive(leftChild);
-    node->setRightChildPrimitive(rightChild);
-
-    // ajout dans la liste des noeuds
-    _nodes.insert(std::pair<int, CsgNode*>(_nodeCounter, node));
-    _nodeCounter++;
-
-    // ce noeud devient la racine d'un nouvel arbre
-    _roots.insert(std::pair<int, CsgNode*>(_treeCounter, node));
-    _treeCounter++;
-
-    std::cout << "primitive & primitive regrouped into new node" << std::endl;
-}
-
-// Fonction         : joinPrimitive
-// Argument(s)		: - oper : pointeur sur l'opération
-//                    - leftChild : pointeur sur une CsgOperation
-//                    - rightChild : pointeur sur une CsgPrimitive
-// Valeur de retour	: /
-// Pré-condition(s)	: /
-// Post-condition(s): /
-// Commentaire(s)	: regroupe les deux primitives/opération dans un nouveau noeud
-void CsgTree::joinPrimitives(CsgOperation *operation, CsgNode *leftChild, CsgPrimitive *rightChild)
-{
-    // calcul de la bounding box du noeud
-    BoundingBox bb;
-    switch (operation->getOperationType())
-    {
-        case operationTypes::UNION:
-            bb = leftChild->getOperation().getBoundingBox() + rightChild->getBoundingBox();
-            break;
-        case operationTypes::INTERSECTION:
-            bb = leftChild->getOperation().getBoundingBox() ^ rightChild->getBoundingBox();
-            break;
-        case operationTypes::DIFFERENCE:
-            bb = leftChild->getOperation().getBoundingBox() - rightChild->getBoundingBox();
-            break;
-        case operationTypes::NONE:
-        default:
-            break;
-    }
-    operation->setBoundingBox(bb);
-
-    // génération d'un nouveau noeud
-    CsgNode *node = new CsgNode(operation->getOperationType());
-    node->setLeftChildIsPrimitive(false);
-    node->setRightChildIsPrimitive(true);
-    node->setLeftChildOperation(leftChild);
-    node->setRightChildPrimitive(rightChild);
-
-    // ajout dans la liste des noeuds
-    _nodes.insert(std::pair<int, CsgNode*>(_nodeCounter, node));
-    _nodeCounter++;
-
-    // ce noeud devient la racine d'un nouvel arbre
-    _roots.insert(std::pair<int, CsgNode*>(_treeCounter, node));
-    _treeCounter++;
-
-    std::cout << "operation & primitive regrouped into new node" << std::endl;
-}
-
-// Fonction         : joinPrimitive
-// Argument(s)		: - oper : pointeur sur l'opération
-//                    - leftChild : pointeur sur une CsgPrimitive
-//                    - rightChild : pointeur sur une CsgNode
-// Valeur de retour	: /
-// Pré-condition(s)	: /
-// Post-condition(s): /
-// Commentaire(s)	: regroupe les deux primitives/opération dans un nouveau noeud
-void CsgTree::joinPrimitives(CsgOperation *operation, CsgPrimitive *leftChild, CsgNode *rightChild)
-{
-    // calcul de la bounding box du noeud
-    BoundingBox bb;
-    switch (operation->getOperationType())
-    {
-        case operationTypes::UNION:
-            bb = leftChild->getBoundingBox() + rightChild->getOperation().getBoundingBox();
-            break;
-        case operationTypes::INTERSECTION:
-            bb = leftChild->getBoundingBox() ^ rightChild->getOperation().getBoundingBox();
-            break;
-        case operationTypes::DIFFERENCE:
-            bb = leftChild->getBoundingBox() - rightChild->getOperation().getBoundingBox();
-            break;
-        case operationTypes::NONE:
-        default:
-            break;
-    }
-    operation->setBoundingBox(bb);
-
-    // génération d'un nouveau noeud
-    CsgNode *node = new CsgNode(operation->getOperationType());
-    node->setLeftChildIsPrimitive(true);
-    node->setRightChildIsPrimitive(false);
-    node->setLeftChildPrimitive(leftChild);
-    node->setRightChildOperation(rightChild);
-
-    // ajout dans la liste des noeuds
-    _nodes.insert(std::pair<int, CsgNode*>(_nodeCounter, node));
-    _nodeCounter++;
-
-    // ce noeud devient la racine d'un nouvel arbre
-    _roots.insert(std::pair<int, CsgNode*>(_treeCounter, node));
-    _treeCounter++;
-
-    std::cout << "primitive & operation regrouped into new node" << std::endl;
-}
 
 // Fonction         : joinPrimitive
 // Argument(s)		: - oper : pointeur sur l'opération
@@ -281,10 +140,10 @@ void CsgTree::joinPrimitives(CsgOperation *operation, CsgNode *leftChild, CsgNod
         default:
             break;
     }
-    operation->setBoundingBox(bb);
 
     // génération d'un nouveau noeud
     CsgNode *node = new CsgNode(operation->getOperationType());
+    node->getOperation().setBoundingBox(bb);
     node->setLeftChildIsPrimitive(false);
     node->setRightChildIsPrimitive(false);
     node->setLeftChildOperation(leftChild);
@@ -297,6 +156,10 @@ void CsgTree::joinPrimitives(CsgOperation *operation, CsgNode *leftChild, CsgNod
     // ce noeud devient la racine d'un nouvel arbre
     _roots.insert(std::pair<int, CsgNode*>(_treeCounter, node));
     _treeCounter++;
+
+    // si les deux fils étaient des racines, ils ne le sont plus
+    _roots.erase(leftChild->getId());
+    _roots.erase(rightChild->getId());
 
     std::cout << "operation & operation regrouped into new node" << std::endl;
 }

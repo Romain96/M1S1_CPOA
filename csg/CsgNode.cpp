@@ -13,10 +13,10 @@ int CsgNode::_nodeUniqueIdGenerator = 0;
 // Commentaire(s)	: constructeur paramétré
 CsgNode::CsgNode(CsgOperation operation) :
     _operation(operation),
-    _leftChildIsPrimitive(true),
+    _leftChildIsPrimitive(false),
     _leftChildPrimitive(nullptr),
     _leftChildOperation(nullptr),
-    _rightChildIsPrimitive(true),
+    _rightChildIsPrimitive(false),
     _rightChildPrimitive(nullptr),
     _rightChildOperation(nullptr)
 {
@@ -246,6 +246,7 @@ void CsgNode::setRightChildOperation(CsgNode *rightChild)
 // Commentaire(s)	: /
 bool CsgNode::isInsideOperation(Vec2f &point)
 {
+    std::cout << "point is " << point[0] << " " << point[1] << std::endl;
     // TODO prendre en compte les transformations
     switch (_operation.getOperationType())
     {
@@ -258,9 +259,9 @@ bool CsgNode::isInsideOperation(Vec2f &point)
         if (_leftChildIsPrimitive && _rightChildIsPrimitive)
             return _leftChildPrimitive->isInsidePrimitive(point) || _rightChildPrimitive->isInsidePrimitive(point);
         else if (_leftChildIsPrimitive && !_rightChildIsPrimitive)
-            return _leftChildPrimitive->isInsidePrimitive(point) || _rightChildPrimitive->isInsidePrimitive(point);
+            return _leftChildPrimitive->isInsidePrimitive(point) || _rightChildOperation->isInsideOperation(point);
         else if (!_leftChildIsPrimitive && _rightChildIsPrimitive)
-            return _leftChildPrimitive->isInsidePrimitive(point) || _rightChildPrimitive->isInsidePrimitive(point);
+            return _leftChildOperation->isInsideOperation(point) || _rightChildPrimitive->isInsidePrimitive(point);
         else
             return _leftChildOperation->isInsideOperation(point) || _rightChildOperation->isInsideOperation(point);
         break;
@@ -269,9 +270,9 @@ bool CsgNode::isInsideOperation(Vec2f &point)
         if (_leftChildIsPrimitive && _rightChildIsPrimitive)
             return _leftChildPrimitive->isInsidePrimitive(point) && _rightChildPrimitive->isInsidePrimitive(point);
         else if (_leftChildIsPrimitive && !_rightChildIsPrimitive)
-            return _leftChildPrimitive->isInsidePrimitive(point) && _rightChildPrimitive->isInsidePrimitive(point);
+            return _leftChildPrimitive->isInsidePrimitive(point) && _rightChildOperation->isInsideOperation(point);
         else if (!_leftChildIsPrimitive && _rightChildIsPrimitive)
-            return _leftChildPrimitive->isInsidePrimitive(point) && _rightChildPrimitive->isInsidePrimitive(point);
+            return _leftChildOperation->isInsideOperation(point) && _rightChildPrimitive->isInsidePrimitive(point);
         else
             return _leftChildOperation->isInsideOperation(point) && _rightChildOperation->isInsideOperation(point);
         break;
@@ -280,9 +281,9 @@ bool CsgNode::isInsideOperation(Vec2f &point)
         if (_leftChildIsPrimitive && _rightChildIsPrimitive)
             return _leftChildPrimitive->isInsidePrimitive(point) && !_rightChildPrimitive->isInsidePrimitive(point);
         else if (_leftChildIsPrimitive && !_rightChildIsPrimitive)
-            return _leftChildPrimitive->isInsidePrimitive(point) && !_rightChildPrimitive->isInsidePrimitive(point);
+            return _leftChildPrimitive->isInsidePrimitive(point) && !_rightChildOperation->isInsideOperation(point);
         else if (!_leftChildIsPrimitive && _rightChildIsPrimitive)
-            return _leftChildPrimitive->isInsidePrimitive(point) && !_rightChildPrimitive->isInsidePrimitive(point);
+            return _leftChildOperation->isInsideOperation(point) && !_rightChildPrimitive->isInsidePrimitive(point);
         else
             return _leftChildOperation->isInsideOperation(point) && !_rightChildOperation->isInsideOperation(point);
         break;
