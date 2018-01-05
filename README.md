@@ -14,7 +14,7 @@ Projet réalisé dans le cadre de l'UE "Création et Programmation Objets Avanc�
 | Image2D | - | Représente les images en 2D. Template du type de pixel T |
 | Image2Grey | Image2D | Représente les images en niveau de gris. Permet de charger et sauvegarder des images au format PGM ascii |
 | Image2RGB | Image2D | Représente les images au format RGB. Permet de charger et suavegarder des images au format PPM ascii |
-| BoundingBow | - | Représente les boîtes englobantes alignées sur les axes |
+| BoundingBox | - | Représente les boîtes englobantes alignées sur les axes |
 | CsgPrimitive | - | Représente les primitive graphiques |
 | CsgDisk | CsgPrimitive | Représente les disques de diamètre 1 |
 | CsgRegulaPolygon | CsgPrimitive | Représente les polygones de plus de 2 sommets |
@@ -26,12 +26,12 @@ Projet réalisé dans le cadre de l'UE "Création et Programmation Objets Avanc�
 
 | **Milestone** | **Date début** | **Date fin** |
 |---------------|----------------|--------------|
-| Array/Vector/Matrix | 2017-10-08 | en cours |
-| Image2D/Image2Grey/Image2RGB | 2017-10-21 | en cours |
+| Array/Vector/Matrix | 2017-10-08 | 2017-11-14 |
+| Image2D/Image2Grey/Image2RGB | 2017-10-21 | 2017-11-14 |
 | BoundingBox | 2017-12-30 | en cours |
 | CsgPrimitive/CsgDisk/CsgRegularPolygon | 2017-12-30 | en cours |
-| CsgNode/CsgTree | xxxx-xx-xx | - |
-| Particles | xxxx-xx-xx | - |
+| CsgNode/CsgTree | 2018-01-01 | en cours |
+| Particules | xxxx-xx-xx | xxxx-xx-xx |
 
 ## Informations
 
