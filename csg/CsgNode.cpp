@@ -246,7 +246,6 @@ void CsgNode::setRightChildOperation(CsgNode *rightChild)
 // Commentaire(s)	: /
 bool CsgNode::isInsideOperation(Vec2f &point)
 {
-    std::cout << "point is " << point[0] << " " << point[1] << std::endl;
     // TODO prendre en compte les transformations
     switch (_operation.getOperationType())
     {

@@ -43,9 +43,9 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->scale->setMinimum(-100);
 	ui->scale->setMaximum(100);
 	
-	ui->currentNode->setMaximum(0);
-	ui->id_filsGauche->setMaximum(0);
-	ui->id_filsDroit->setMaximum(0);
+    //ui->currentNode->setMaximum(0);
+    //ui->id_filsGauche->setMaximum(0);
+    //ui->id_filsDroit->setMaximum(0);
 	
 	connect(ui->create_oper,SIGNAL(clicked()),SLOT(createOperation()));
 	connect(ui->create_prim,SIGNAL(clicked()),SLOT(createPrimtive()));
@@ -138,8 +138,16 @@ void MainWindow::createPrimtive()
     m_currentNode = m_tree.getLastInsertedNode();
     std::cout << "id current node : " << m_currentNode->getId() << std::endl;
 
+    // mettre a jour ui->currentNode ui->id_filsGauche ui->id_filsDroit
+    int max = m_tree.getLastNodeId();
+    std::cout << "max is " << max << std::endl;
+    ui->currentNode->setMaximum(max);
+    ui->id_filsGauche->setMaximum(max);
+    ui->id_filsDroit->setMaximum(max);
+
 	drawTree();
-//	ui->currentNode->setValue(??); // recupere l'id du noeud cree
+
+    // récupère l'id du noeud crée
     ui->currentNode->setValue(m_tree.getLastNodeId());
 	updateTextGraph();
 
@@ -151,8 +159,6 @@ void MainWindow::createOperation()
 	int typeOp = ui->Operation->currentIndex();
 	int left = ui->id_filsGauche->value();
 	int right = ui->id_filsDroit->value();
-
-    right = 1; //TEST
 
 	std::cout << "createOperation  ";
 	std::cout << "type "<< typeOp;
@@ -193,13 +199,16 @@ void MainWindow::createOperation()
 
     // rechercher le noeud correspondant à right
     CsgNode *rightChild = m_tree.getNode(right);
-    if (rightChild == nullptr)
-        std::cout << "fuck" << std::endl;
 
     // regrouper les deux avec joinPrimitives
     m_tree.joinPrimitives(oper, leftChild, rightChild);
 
     // mettre a jour ui->currentNode ui->id_filsGauche ui->id_filsDroit
+    int max = m_tree.getLastNodeId();
+    std::cout << "max is " << max << std::endl;
+    ui->currentNode->setMaximum(max);
+    ui->id_filsGauche->setMaximum(max);
+    ui->id_filsDroit->setMaximum(max);
 
     m_transfo = Matrix33d();
     m_centerSelection = oper->getBoundingBox().center();
