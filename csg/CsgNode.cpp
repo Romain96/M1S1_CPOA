@@ -247,7 +247,7 @@ void CsgNode::setRightChildOperation(CsgNode *rightChild)
 bool CsgNode::isInsideOperation(Vec2f &point)
 {
     // TODO prendre en compte les transformations
-    switch (_operation)
+    switch (_operation.getOperationType())
     {
     // primitive : appel à isInsidePrimitive()
     case operationTypes::NONE:
