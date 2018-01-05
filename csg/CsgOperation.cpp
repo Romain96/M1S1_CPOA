@@ -57,4 +57,3 @@ void CsgOperation::setBoundingBox(BoundingBox &boundingBox)
 {
     _boundingBox = boundingBox;
 }
-

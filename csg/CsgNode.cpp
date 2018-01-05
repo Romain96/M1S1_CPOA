@@ -233,3 +233,62 @@ void CsgNode::setRightChildOperation(CsgNode *rightChild)
         delete _rightChildOperation;
     _rightChildOperation = rightChild;
 }
+
+//-----------------------------------------------------------------------------
+// SECTION DES METHODES
+//-----------------------------------------------------------------------------
+
+// Fonction         : isInsideOperation
+// Argument(s)		: - point : vec2f contenant les coordonnées du point à tester
+// Valeur de retour	: vrai si le point est dans la forme représentée par l'opération, faux sinon
+// Pré-condition(s)	: /
+// Post-condition(s): /
+// Commentaire(s)	: /
+bool CsgNode::isInsideOperation(Vec2f &point)
+{
+    // TODO prendre en compte les transformations
+    switch (_operation)
+    {
+    // primitive : appel à isInsidePrimitive()
+    case operationTypes::NONE:
+        return _leftChildPrimitive->isInsidePrimitive(point);
+        break;
+    // union : pixel dans le fils droit ou dans le fils gauche
+    case operationTypes::UNION:
+        if (_leftChildIsPrimitive && _rightChildIsPrimitive)
+            return _leftChildPrimitive->isInsidePrimitive(point) || _rightChildPrimitive->isInsidePrimitive(point);
+        else if (_leftChildIsPrimitive && !_rightChildIsPrimitive)
+            return _leftChildPrimitive->isInsidePrimitive(point) || _rightChildPrimitive->isInsidePrimitive(point);
+        else if (!_leftChildIsPrimitive && _rightChildIsPrimitive)
+            return _leftChildPrimitive->isInsidePrimitive(point) || _rightChildPrimitive->isInsidePrimitive(point);
+        else
+            return _leftChildOperation->isInsideOperation(point) || _rightChildOperation->isInsideOperation(point);
+        break;
+    // intersection : pixel dans le fils droit et dans le fils gauche
+    case operationTypes::INTERSECTION:
+        if (_leftChildIsPrimitive && _rightChildIsPrimitive)
+            return _leftChildPrimitive->isInsidePrimitive(point) && _rightChildPrimitive->isInsidePrimitive(point);
+        else if (_leftChildIsPrimitive && !_rightChildIsPrimitive)
+            return _leftChildPrimitive->isInsidePrimitive(point) && _rightChildPrimitive->isInsidePrimitive(point);
+        else if (!_leftChildIsPrimitive && _rightChildIsPrimitive)
+            return _leftChildPrimitive->isInsidePrimitive(point) && _rightChildPrimitive->isInsidePrimitive(point);
+        else
+            return _leftChildOperation->isInsideOperation(point) && _rightChildOperation->isInsideOperation(point);
+        break;
+    // différence : pixel dans le fils gauche et pas dans le fils droit
+    case operationTypes::DIFFERENCE:
+        if (_leftChildIsPrimitive && _rightChildIsPrimitive)
+            return _leftChildPrimitive->isInsidePrimitive(point) && !_rightChildPrimitive->isInsidePrimitive(point);
+        else if (_leftChildIsPrimitive && !_rightChildIsPrimitive)
+            return _leftChildPrimitive->isInsidePrimitive(point) && !_rightChildPrimitive->isInsidePrimitive(point);
+        else if (!_leftChildIsPrimitive && _rightChildIsPrimitive)
+            return _leftChildPrimitive->isInsidePrimitive(point) && !_rightChildPrimitive->isInsidePrimitive(point);
+        else
+            return _leftChildOperation->isInsideOperation(point) && !_rightChildOperation->isInsideOperation(point);
+        break;
+    default:
+        std::cout << "CsgNode::isInsideOperation unknown operation" << std::endl;
+        return false;
+        break;
+    }
+}

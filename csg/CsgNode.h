@@ -52,6 +52,9 @@ public:
     void setRightChildPrimitive(CsgPrimitive *rightChild);
     void setLeftChildOperation(CsgNode *leftChild);
     void setRightChildOperation(CsgNode *rightChild);
+
+    // méthodes
+    bool isInsideOperation(Vec2f& point);
 };
 
 #endif // __CSGNODE_H__
