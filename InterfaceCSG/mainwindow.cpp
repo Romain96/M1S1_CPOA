@@ -267,15 +267,17 @@ void MainWindow::transfoChanged()
 
     // récupération du noeud courant (opération ou primitive)
     CsgNode *node = m_tree.getNode(ui->currentNode->value());
-    // récupération de la matrice de translation
-    Matrix33d trans = trans.staticTranslation(transx, transy);
-    // récupération de la matrice de rotation
+
     Matrix33d fromLocaltoOrigin;
     fromLocaltoOrigin(0,2) = -512.f;
     fromLocaltoOrigin(1,2) = -512.f;
     Matrix33d fromOriginToLocal;
     fromOriginToLocal(0,2) = 512.f;
     fromOriginToLocal(1,2) = 512.f;
+
+    // récupération de la matrice de translation
+    Matrix33d trans = fromOriginToLocal * trans.staticTranslation(transx, transy) * fromLocaltoOrigin;
+    // récupération de la matrice de rotation
     Matrix33d rot = fromOriginToLocal * rot.staticRotation(angle) * fromLocaltoOrigin;
     // récupération de la matrice d'homothétie
     Matrix33d homo = fromOriginToLocal * homo.staticShrink(scale, scale) * fromLocaltoOrigin;
@@ -294,8 +296,8 @@ void MainWindow::transfoChanged()
 
     // construction de la matrice de transformation
     //Matrix33d transfo = homo * trans * rot;
-    Matrix33d transfo = trans * rot;
-    transfo = homo * transfo;
+    Matrix33d transfo = homo * trans * rot;
+    //transfo = homo * transfo;
 
     std::cout << transfo(0,0) << " " << transfo(0,1) << " " << transfo(0,2) << std::endl;
     std::cout << transfo(1,0) << " " << transfo(1,1) << " " << transfo(1,2) << std::endl;
@@ -312,7 +314,54 @@ void MainWindow::transfoChanged()
     }
     else
     {
-        // on verra
+        // nouvelle transfo
+        fromLocaltoOrigin(0,2) = -node->getOperation().getBoundingBox().center()[0];
+        fromLocaltoOrigin(1,2) = -node->getOperation().getBoundingBox().center()[1];
+        // et transfo inverse
+        fromOriginToLocal(0,2) = node->getOperation().getBoundingBox().center()[0];
+        fromOriginToLocal(1,2) = node->getOperation().getBoundingBox().center()[1];
+
+        // récupération de la matrice de translation
+        trans = fromOriginToLocal * trans.staticTranslation(transx, transy) * fromLocaltoOrigin;
+        // récupération de la matrice de rotation
+        rot = fromOriginToLocal * rot.staticRotation(angle) * fromLocaltoOrigin;
+        // récupération de la matrice d'homothétie
+        homo = fromOriginToLocal * homo.staticShrink(scale, scale) * fromLocaltoOrigin;
+
+        transfo = homo * trans * rot;
+        node->setMatrix(transfo);
+
+        Vec2f center;
+        center = node->getOperation().getBoundingBox().center();
+
+        int xmin = node->getOperation().getBoundingBox().getUpperLeftPoint()[0];
+        int ymin = node->getOperation().getBoundingBox().getUpperLeftPoint()[1];
+        //int distanceToOrigin = sqrt((center[0] - xmin)*(center[0] - xmin) + (center[1] - ymin)*(center[1] - ymin));
+
+        Vec2f ulp;
+        ulp[0] = (node->getOperation().getBoundingBox().getUpperLeftPoint()[0] + transx);
+        ulp[1] = (node->getOperation().getBoundingBox().getUpperLeftPoint()[1] + transy);
+
+        Vec2f urp;
+        urp[0] = (node->getOperation().getBoundingBox().getUpperRightPoint()[0] + transx);
+        urp[1] = (node->getOperation().getBoundingBox().getUpperRightPoint()[1] + transy);
+
+        Vec2f llp;
+        llp[0] = (node->getOperation().getBoundingBox().getLowerLeftPoint()[0] + transx);
+        llp[1] = (node->getOperation().getBoundingBox().getLowerLeftPoint()[1] + transy);
+
+        Vec2f lrp;
+        lrp[0] = (node->getOperation().getBoundingBox().getLowerRightPoint()[0] + transx);
+        lrp[1] = (node->getOperation().getBoundingBox().getLowerRightPoint()[1] + transy);
+
+        // debug
+        std::cout << "ulp " << ulp[0] << " " << ulp[1] << std::endl;
+        std::cout << "urp " << urp[0] << " " << ulp[1] << std::endl;
+        std::cout << "llp " << llp[0] << " " << llp[1] << std::endl;
+        std::cout << "lrp " << lrp[0] << " " << lrp[1] << std::endl;
+
+        BoundingBox bb = BoundingBox(ulp, urp, llp, lrp);
+        node->getOperation().setBoundingBox(bb);
     }
 
 
@@ -488,7 +537,7 @@ void MainWindow::drawTree()
 		// VOTRE CODE ICI
 
         m_render->setBBDraw(true);
-//		m_bb = m_currentNode->getBBox();
+        m_bb = m_currentNode->getOperation().getBoundingBox();
 	}
 	else
 	{

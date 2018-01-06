@@ -125,25 +125,21 @@ void CsgRegularPolygon::updateBoundingBox(int tx, int ty, int angle, double scal
             ymax = point[1];
     }
     // la nouvelle bounding box a pour coordonnées
-    // (xmin, ymin)
     Vec2f ulp;
-    ulp[0] = xmin;
-    ulp[1] = ymin;
+    ulp[0] = std::max(0, (int)(_center[0] - (_center[0] - xmin) * scale));
+    ulp[1] = std::max(0, (int)(_center[1] - (_center[1] - ymin) * scale));
 
-    // (xmax, ymin)
     Vec2f urp;
-    urp[0] = xmax;
-    urp[1] = ymin;
+    urp[0] = std::min(1023, (int)(_center[0] + (xmax - _center[0]) * scale));
+    urp[1] = std::max(0, (int)(_center[1] - (_center[1] - ymin) * scale));
 
-    // (xmin, ymax)
     Vec2f llp;
-    llp[0] = xmin;
-    llp[1] = ymax;
+    llp[0] = std::max(0, (int)(_center[0] - (_center[0] - xmin) * scale));
+    llp[1] = std::min(1023, (int)(_center[1] + (ymax - _center[1]) * scale));
 
-    // (xmax, ymax)
     Vec2f lrp;
-    lrp[0] = xmax;
-    lrp[1] = ymax;
+    lrp[0] = std::min(1024, (int)(_center[0] + (xmax - _center[0]) * scale));
+    lrp[1] = std::min(1023, (int)(_center[1] + (ymax - _center[1]) * scale));
 
     // debug
     std::cout << "ulp " << ulp[0] << " " << ulp[1] << std::endl;
