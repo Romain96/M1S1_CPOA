@@ -270,7 +270,13 @@ void MainWindow::transfoChanged()
     // récupération de la matrice de translation
     Matrix33d trans = trans.staticTranslation(transx, transy);
     // récupération de la matrice de rotation
-    Matrix33d rot = rot.staticRotation(angle);
+    Matrix33d fromLocaltoOrigin;
+    fromLocaltoOrigin(0,2) = -512.f;
+    fromLocaltoOrigin(1,2) = -512.f;
+    Matrix33d fromOriginToLocal;
+    fromOriginToLocal(0,2) = 512.f;
+    fromOriginToLocal(1,2) = 512.f;
+    Matrix33d rot = fromOriginToLocal * rot.staticRotation(angle) * fromLocaltoOrigin;
     // récupération de la matrice d'homothétie
     Matrix33d homo = homo.staticShrink(scale, scale);
 
