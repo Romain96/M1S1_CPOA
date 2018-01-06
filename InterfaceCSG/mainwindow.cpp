@@ -255,9 +255,9 @@ void MainWindow::transfoChanged()
 	// recupere la primitive courante et lui applique les transformations
 	// VOTRE CODE ICI
 
-    double transx = ui->translationX->value();
-    double transy = ui->translationY->value();
-    double angle = ui->rotation->value();
+    int transx = ui->translationX->value();
+    int transy = ui->translationY->value();
+    int angle = ui->rotation->value();
     double scale;
     int ss = ui->scale->value();
     if (ss >= 0)
@@ -278,7 +278,7 @@ void MainWindow::transfoChanged()
     fromOriginToLocal(1,2) = 512.f;
     Matrix33d rot = fromOriginToLocal * rot.staticRotation(angle) * fromLocaltoOrigin;
     // récupération de la matrice d'homothétie
-    Matrix33d homo = homo.staticShrink(scale, scale);
+    Matrix33d homo = fromOriginToLocal * homo.staticShrink(scale, scale) * fromLocaltoOrigin;
 
     std::cout << trans(0,0) << " " << trans(0,1) << " " << trans(0,2) << std::endl;
     std::cout << trans(1,0) << " " << trans(1,1) << " " << trans(1,2) << std::endl;

@@ -4,7 +4,7 @@
 #include "BoundingBox.h"
 #include "CsgRegularPolygon.h"
 #include <iostream>
-#include <math.h>
+#include <cmath>
 
 // Fonction         : CsgRegularPolygon
 // Argument(s)		: - vertexNumber : le nombre de sommets du polygone
@@ -103,17 +103,18 @@ void CsgRegularPolygon::updateBoundingBox(int tx, int ty, int angle, double scal
     Vec2f point;
     double angleStep = 360.f / (double)_vertexNumber;
     double currentAngle = (double)(_startingAngle + angle);
-    int xmin = _boundingBox.center()[0];
-    int xmax = _boundingBox.center()[0];
-    int ymin = _boundingBox.center()[1];
-    int ymax = _boundingBox.center()[1];
+    std::cout << "starting angle is " << currentAngle << std::endl;
+    int xmin = 1024;
+    int xmax = 0;
+    int ymin = 1024;
+    int ymax = 0;
 
     for (int i = 0; i < _vertexNumber; i++)
     {
-        point[0] = (_center[0] + tx) + (_distanceToOrigin * scale) * cos(currentAngle * M_PI/180);
-        point[1] = (_center[1] + ty) + (_distanceToOrigin * scale) * sin(currentAngle * M_PI/180);
+        point[0] = (_center[0] + tx) + (_distanceToOrigin * scale) * cos(currentAngle * M_PI/180.f);
+        point[1] = (_center[1] + ty) + (_distanceToOrigin * scale) * sin(currentAngle * M_PI/180.f);
         std::cout << "new pts : " << point[0] << " " << point[1] << std::endl;
-        currentAngle += angleStep;
+        currentAngle = std::fmod(currentAngle + angleStep, 360.f);
         if (point[0] < xmin)
             xmin = point[0];
         if (point[0] > xmax)
