@@ -189,9 +189,9 @@ Vec3f operator *(const Vec3f& v, const Matrix33d& m)
 {
 	Vec3f res;
 
-	res[0] = v[0] * m(0,0) + v[1] * m(1,0) + v[2] * m(2,0);
-	res[1] = v[0] * m(0,1) + v[1] * m(1,1) + v[2] * m(2,1); 
-	res[2] = v[0] * m(0,2) + v[1] * m(1,2) + v[2] * m(2,2);
+    res[0] = v[0] * m(0,0) + v[1] * m(0,1) + v[2] * m(0,2);
+    res[1] = v[0] * m(1,0) + v[1] * m(1,1) + v[2] * m(1,2);
+    res[2] = v[0] * m(2,0) + v[1] * m(2,1) + v[2] * m(2,2);
 
 	return res;
 }
@@ -207,9 +207,9 @@ Vec3f operator *(const Matrix33d& m, const Vec3f& v)
 {
 	Vec3f res;
 
-	res[0] = v[0] * m(0,0) + v[1] * m(1,0) + v[2] * m(2,0);
-	res[1] = v[0] * m(0,1) + v[1] * m(1,1) + v[2] * m(2,1);
-	res[2] = v[0] * m(0,2) + v[1] * m(1,2) + v[2] * m(2,2);
+    res[0] = v[0] * m(0,0) + v[1] * m(0,1) + v[2] * m(0,2);
+    res[1] = v[0] * m(1,0) + v[1] * m(1,1) + v[2] * m(1,2);
+    res[2] = v[0] * m(2,0) + v[1] * m(2,1) + v[2] * m(2,2);
 
 	return res;
 }
@@ -226,9 +226,9 @@ Vec3f operator *(const Vec2f& v, const Matrix33d& m)
 	Vec3f res;
 
 	// remplacement de v[2] par 1.0 (coordonnée homogène)
-	res[0] = v[0] * m(0,0) + v[1] * m(1,0) + 1.0 * m(2,0);
-	res[1] = v[1] * m(0,1) + v[1] * m(1,1) + 1.0 * m(2,1);
-	res[2] = v[2] * m(0,2) + v[1] * m(1,2) + 1.0 * m(2,2);	
+    res[0] = v[0] * m(0,0) + v[1] * m(0,1) + 1.f * m(0,2);
+    res[1] = v[0] * m(1,0) + v[1] * m(1,1) + 1.f * m(1,2);
+    res[2] = v[0] * m(2,0) + v[1] * m(2,1) + 1.f * m(2,2);
 
 	return res;
 }
@@ -245,9 +245,9 @@ Vec3f operator *(const Matrix33d& m, const Vec2f& v)
 	Vec3f res;
 
 	// replacement de v[2] par 1.0 (coordonnée homogène)
-	res[0] = v[0] * m(0,0) + v[1] * m(1,0) + 1.0 * m(2,0);
-	res[1] = v[0] * m(0,1) + v[1] * m(1,1) + 1.0 * m(2,1);
-	res[2] = v[0] * m(0,2) + v[1] * m(1,2) + 1.0 * m(2,2);
+    res[0] = v[0] * m(0,0) + v[1] * m(0,1) + 1.f * m(0,2);
+    res[1] = v[0] * m(1,0) + v[1] * m(1,1) + 1.f * m(1,2);
+    res[2] = v[0] * m(2,0) + v[1] * m(2,1) + 1.f * m(2,2);
 
 	return res;
 }

@@ -124,12 +124,12 @@ void MainWindow::createPrimtive()
         // disque
         case 0:
             std::cout << "adding new disk primitive" << std::endl;
-            m_tree.addPrimitive(new CsgDisk(center, 0.5));
+            m_tree.addPrimitive(new CsgDisk(center, 2.f));
             break;;
         // polygone régulier
         case 1:
             std::cout << "adding new regular polygon primitive" << std::endl;
-            m_tree.addPrimitive(new CsgRegularPolygon(sides, center, 0.5));
+            m_tree.addPrimitive(new CsgRegularPolygon(sides, center, 2.f));
             break;
         default:
             std::cout << "unknown primitive..." << std::endl;
@@ -287,7 +287,9 @@ void MainWindow::transfoChanged()
     std::cout << homo(2,0) << " " << homo(2,1) << " " << homo(2,2) << std::endl << std::endl;
 
     // construction de la matrice de transformation
-    Matrix33d transfo = trans * rot * homo;
+    //Matrix33d transfo = homo * trans * rot;
+    Matrix33d transfo = trans * rot;
+    transfo = homo * transfo;
 
     std::cout << transfo(0,0) << " " << transfo(0,1) << " " << transfo(0,2) << std::endl;
     std::cout << transfo(1,0) << " " << transfo(1,1) << " " << transfo(1,2) << std::endl;

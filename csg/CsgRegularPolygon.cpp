@@ -146,9 +146,9 @@ void CsgRegularPolygon::updateBoundingBox(int tx, int ty, int angle, double scal
 
     // debug
     std::cout << "ulp " << ulp[0] << " " << ulp[1] << std::endl;
-    std::cout << "ulp " << urp[0] << " " << ulp[1] << std::endl;
-    std::cout << "ulp " << llp[0] << " " << llp[1] << std::endl;
-    std::cout << "ulp " << lrp[0] << " " << lrp[1] << std::endl;
+    std::cout << "urp " << urp[0] << " " << ulp[1] << std::endl;
+    std::cout << "llp " << llp[0] << " " << llp[1] << std::endl;
+    std::cout << "lrp " << lrp[0] << " " << lrp[1] << std::endl;
 
     _boundingBox = BoundingBox(ulp, urp, llp, lrp);
 

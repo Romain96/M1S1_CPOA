@@ -203,6 +203,20 @@ void CsgTree::__drawNode(Image2Grey &img, CsgNode *node)
     std::cout << inverse(2,0) << " " << inverse(2,1) << " " << inverse(2,2) << std::endl;
 
     // parcours des pixels de la bounding box de l'opération (de la racine)
+    std::cout << "checking from " << bb.getUpperLeftPoint()[0] << " to " << bb.getUpperLeftPoint()[1] << " and from " <<
+                 bb.getLowerRightPoint()[0] << " to " << bb.getLowerRightPoint()[1] << std::endl;
+
+
+    //debug
+    point[0] = bb.getUpperLeftPoint()[0];
+    point[1] = bb.getUpperLeftPoint()[1];
+    local = inverse * point;
+    std::cout << "internally from " << local[0] << ", " << local[1] << std::endl;
+    point[0] = bb.getLowerRightPoint()[0];
+    point[1] = bb.getLowerRightPoint()[1];
+    local = inverse * point;
+    std::cout << "up to " << local[0] << ", " << local[1] << std::endl;
+
     for (int i = bb.getUpperLeftPoint()[0]; i <= bb.getUpperRightPoint()[0]; i++)
     {
         for (int j = bb.getUpperLeftPoint()[1]; j <= bb.getLowerLeftPoint()[1]; j++)
