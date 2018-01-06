@@ -159,13 +159,13 @@ Matrix33d Matrix33d::staticRotation(const double alpha)
 // Commentaire(s)	: /
 Matrix33d Matrix33d::staticShrink(const double hx, const double hy)
 {
-    	Matrix33d homo;
+    Matrix33d homo;
 	
 	// en partant de la matrice identité
-    	homo.data_[0] = hx;	// M[0][2]
-    	homo.data_[4] = hy;	// M[1][2]
+    homo.data_[0] = hx;	// M[0][2]
+    homo.data_[4] = hy;	// M[1][2]
 
-    	return homo;
+    return homo;
 }
 
 // Fonction         : operator *
@@ -240,4 +240,50 @@ Vec3f operator *(const Matrix33d& m, const Vec2f& v)
 	res[2] = v[0] * m(0,2) + v[1] * m(1,2) + 1.0 * m(2,2);
 
 	return res;
+}
+
+// Fonction         : operator *
+// Argument(s)		: - m1 : une référence sur une matrix33d
+//                    - m2 : une référence sur une matrix33d
+// Valeur de retour	: une nouvelle matrix33d
+// Pré-condition(s)	: /
+// Post-condition(s): /
+// Commentaire(s)	: résultat en coordonnées homogènes
+Matrix33d operator *(const Matrix33d& m1, const Matrix33d& m2)
+{
+    Matrix33d res;
+
+    for (int i = 0; i < 3; i++)
+    {
+        for (int  j = 0; j < 3; j++)
+        {
+            double sum = 0;
+            for (int k = 1; k < 3; k++)
+            {
+                sum += m1(i, k) * m2(k, j);
+            }
+            res(i, j) = sum;
+        }
+    }
+    return res;
+}
+
+// Fonction         : operator +
+// Argument(s)		: - m1 : une référence sur une matrix33d
+//                    - m2 : une référence sur une matrix33d
+// Valeur de retour	: une nouvelle matrix33d
+// Pré-condition(s)	: /
+// Post-condition(s): /
+// Commentaire(s)	: résultat en coordonnées homogènes
+Matrix33d operator +(const Matrix33d& m1, const Matrix33d& m2)
+{
+    Matrix33d res;
+    for (int i = 0; i < 3; i++)
+    {
+        for (int j = 0; j < 3; j++)
+        {
+            res(i, j) = m1(i, j) + m2(i, j);
+        }
+    }
+    return res;
 }

@@ -82,3 +82,74 @@ bool CsgRegularPolygon::isInsidePrimitive(Vec2f &point)
 
     return state;
 }
+
+// Fonction         : updateBoundingBox
+// Argument(s)		: - tx : translation en x (pixels)
+//                    - ty : translation en y (pixels)
+//                    - angle : angle de rotation (degrès)
+//                    - scale : coefficient d'agrandissement/réduction (entier)
+// Valeur de retour	: /
+// Pré-condition(s)	: /
+// Post-condition(s): /
+// Commentaire(s)	: met à jour la bounding box de la pimitive après transformation
+void CsgRegularPolygon::updateBoundingBox(int tx, int ty, int angle, int scale)
+{
+    // les translations correspondent simplement au coordonnées de bounding box translatées
+    // les homothéties et rotation demandent de recalculer les points temporairement
+    std::cout << "updating BB for poly with tx = " << tx << " ty = " << ty << " angle = " << angle << " scale = " << scale << std::endl;
+
+    Vec2f *temp= new Vec2f[_vertexNumber];
+    Vec2f point;
+    double angleStep = 360.f / (double)_vertexNumber;
+    double currentAngle = (double)angle;
+    int xmin = _boundingBox.getUpperLeftPoint()[0];
+    int xmax = _boundingBox.getUpperRightPoint()[0];
+    int ymin = _boundingBox.getUpperLeftPoint()[1];
+    int ymax = _boundingBox.getLowerLeftPoint()[1];
+
+    for (int i = 0; i < _vertexNumber; i++)
+    {
+        point[0] = (_center[0] + tx) + (_distanceToOrigin + scale) * cos(currentAngle * M_PI/180);
+        point[1] = (_center[1] + ty) + (_distanceToOrigin + scale) * sin(currentAngle * M_PI/180);
+        temp[i] = point;
+        std::cout << "new pts : " << point[0] << " " << point[1] << std::endl;
+        currentAngle += angleStep;
+        if (point[0] < xmin)
+            xmin = point[0];
+        if (point[0] > xmax)
+            xmax = point[0];
+        if (point[1] < ymin)
+            ymin = point[1];
+        if (point[1] > ymax)
+            ymax = point[1];
+    }
+    // la nouvelle bounding box a pour coordonnées
+    // (xmin, ymin)
+    Vec2f ulp;
+    ulp[0] = xmin;
+    ulp[1] = ymin;
+
+    // (xmax, ymin)
+    Vec2f urp;
+    urp[0] = xmax;
+    urp[1] = ymin;
+
+    // (xmin, ymax)
+    Vec2f llp;
+    llp[0] = xmin;
+    llp[1] = ymax;
+
+    // (xmax, ymax)
+    Vec2f lrp;
+    lrp[0] = xmax;
+    lrp[1] = ymax;
+
+    // debug
+    std::cout << "ulp " << ulp[0] << " " << ulp[1] << std::endl;
+    std::cout << "ulp " << urp[0] << " " << ulp[1] << std::endl;
+    std::cout << "ulp " << llp[0] << " " << llp[1] << std::endl;
+    std::cout << "ulp " << lrp[0] << " " << lrp[1] << std::endl;
+
+    _boundingBox = BoundingBox(ulp, urp, llp, lrp);
+
+}

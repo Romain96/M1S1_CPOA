@@ -101,7 +101,7 @@ CsgNode *CsgNode::getRightChild()
 // Pré-condition(s)	: /
 // Post-condition(s): /
 // Commentaire(s)	: retourne le pointeur sur la primitive
-CsgPrimitive *CsgNode::getPrimitive(CsgPrimitive *primitive)
+CsgPrimitive *CsgNode::getPrimitive()
 {
     return _primitive;
 }

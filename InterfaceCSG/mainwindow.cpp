@@ -261,8 +261,40 @@ void MainWindow::transfoChanged()
     // récupération de la matrice d'homothétie
     Matrix33d homo = homo.staticShrink(ui->scale->value(), ui->scale->value());
 
-    // formation de la nouvelle matrice de transformation
-    node->setMatrix(trans);
+    std::cout << trans(0,0) << " " << trans(0,1) << " " << trans(0,2) << std::endl;
+    std::cout << trans(1,0) << " " << trans(1,1) << " " << trans(1,2) << std::endl;
+    std::cout << trans(2,0) << " " << trans(2,1) << " " << trans(2,2) << std::endl;
+
+    std::cout << rot(0,0) << " " << rot(0,1) << " " << rot(0,2) << std::endl;
+    std::cout << rot(1,0) << " " << rot(1,1) << " " << rot(1,2) << std::endl;
+    std::cout << rot(2,0) << " " << rot(2,1) << " " << rot(2,2) << std::endl;
+
+    std::cout << homo(0,0) << " " << homo(0,1) << " " << homo(0,2) << std::endl;
+    std::cout << homo(1,0) << " " << homo(1,1) << " " << homo(1,2) << std::endl;
+    std::cout << homo(2,0) << " " << homo(2,1) << " " << homo(2,2) << std::endl;
+
+    // construction de la matrice de transformation
+    //Matrix33d transfo = rot + trans + homo;
+    Matrix33d transfo = trans;
+
+    std::cout << transfo(0,0) << " " << transfo(0,1) << " " << transfo(0,2) << std::endl;
+    std::cout << transfo(1,0) << " " << transfo(1,1) << " " << transfo(1,2) << std::endl;
+    std::cout << transfo(2,0) << " " << transfo(2,1) << " " << transfo(2,2) << std::endl;
+
+    node->setMatrix(transfo);
+
+    // mise à jour de la bounding box
+    if (node->getOperation().getOperationType() == operationTypes::NONE)
+    {
+        CsgPrimitive *prim = node->getPrimitive();
+        prim->updateBoundingBox(ui->translationX->value(), ui->translationY->value(), ui->rotation->value(), ui->scale->value());
+        node->getOperation().setBoundingBox(prim->getBoundingBox());
+    }
+    else
+    {
+        // on verra
+    }
+
 
 	// de même avec un noeud Operation !
 

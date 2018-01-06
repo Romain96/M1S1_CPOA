@@ -139,6 +139,10 @@ void CsgPrimitive::setBoundingBox(BoundingBox &bb)
     _boundingBox = bb;
 }
 
+//-----------------------------------------------------------------------------
+// SECTION DES METHODES
+//-----------------------------------------------------------------------------
+
 // Fonction         : isInsidePrimitive
 // Argument(s)		: - point : vec2f contenant les coordonnées du point à tester
 // Valeur de retour	: vrai si le point est dans la primitive, faux sinon
@@ -148,5 +152,19 @@ void CsgPrimitive::setBoundingBox(BoundingBox &bb)
 bool CsgPrimitive::isInsidePrimitive(Vec2f &point)
 {
     return false;
+}
+
+// Fonction         : updateBoundingBox
+// Argument(s)		: - tx : translation en x (pixels)
+//                    - ty : translation en y (pixels)
+//                    - angle : angle de rotation (degrès)
+//                    - scale : coefficient d'agrandissement/réduction (entier)
+// Valeur de retour	: /
+// Pré-condition(s)	: /
+// Post-condition(s): /
+// Commentaire(s)	: met à jour la bounding box de la pimitive après transformation
+void CsgPrimitive::updateBoundingBox(int tx, int ty, int angle, int scale)
+{
+    // rien : dépend du la primitive elle-même
 }
 

@@ -42,7 +42,7 @@ public:
     Matrix33d& getMatrix();
     CsgNode *getLeftChild();
     CsgNode *getRightChild();
-    CsgPrimitive *getPrimitive(CsgPrimitive *primitive);
+    CsgPrimitive *getPrimitive();
 
     // setters
     void setId(int id);

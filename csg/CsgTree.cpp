@@ -196,14 +196,20 @@ void CsgTree::__drawNode(Image2Grey &img, CsgNode *node)
 {
     BoundingBox bb = node->getOperation().getBoundingBox();
     Vec2f point;
+    Vec3f local;
 
     // parcours des pixels de la bounding box de l'opération (de la racine)
     for (int i = bb.getUpperLeftPoint()[0]; i <= bb.getUpperRightPoint()[0]; i++)
     {
         for (int j = bb.getUpperLeftPoint()[1]; j <= bb.getLowerLeftPoint()[1]; j++)
         {
+            // le point doit être transformé dans le repère local de l'opération/la primitive
             point[0] = i;
             point[1] = j;
+            local = node->getMatrix().inverse() * point;
+            point[0] = local[0];
+            point[1] = local[1];
+            //std::cout << "to print " << point[0] << " " << point[1] << std::endl;
             // le pixel est dessiné en blanc s'il est dans l'opération
             if (node->isInsideOperation(point))
             {

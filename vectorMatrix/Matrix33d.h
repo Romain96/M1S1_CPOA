@@ -53,4 +53,9 @@ Vec3f operator *(const Vec2f& v, const Matrix33d& m);
 // idem dans l'autre sens
 Vec3f operator *(const Matrix33d& m, const Vec2f& v);
 
+// multiplication de matrices
+Matrix33d operator *(const Matrix33d& m1, const Matrix33d& m2);
+
+Matrix33d operator +(const Matrix33d& m1, const Matrix33d& m2);
+
 #endif
