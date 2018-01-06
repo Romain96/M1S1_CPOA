@@ -96,8 +96,7 @@ void CsgTree::addPrimitive(CsgPrimitive *primitive)
 
     // génération d'un noeud sans opération
     CsgNode *node = new CsgNode(operationTypes::NONE);
-    node->setLeftChildIsPrimitive(true);
-    node->setLeftChildPrimitive(primitive);
+    node->setPrimitive(primitive);
     node->getOperation().setBoundingBox(primitive->getBoundingBox());
 
     // ce noeud représente un nouvel arbre
@@ -144,10 +143,8 @@ void CsgTree::joinPrimitives(CsgOperation *operation, CsgNode *leftChild, CsgNod
     // génération d'un nouveau noeud
     CsgNode *node = new CsgNode(operation->getOperationType());
     node->getOperation().setBoundingBox(bb);
-    node->setLeftChildIsPrimitive(false);
-    node->setRightChildIsPrimitive(false);
-    node->setLeftChildOperation(leftChild);
-    node->setRightChildOperation(rightChild);
+    node->setLeftChild(leftChild);
+    node->setRightChild(rightChild);
 
     // ajout dans la liste des noeuds
     _nodes.insert(std::pair<int, CsgNode*>(_nodeCounter, node));

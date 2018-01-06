@@ -15,9 +15,6 @@ CsgPrimitive::CsgPrimitive(Vec2f center, float distanceToOrigin) :
     _center(center),
     _distanceToOrigin(distanceToOrigin)
 {
-    // matrice de transformation identité au départ
-    _matrix = Matrix33d();
-
     Vec2f ulp;
     ulp[0] = center[0] - _distanceToOrigin;
     ulp[1] = center[1] - _distanceToOrigin;
@@ -58,17 +55,6 @@ Vec2f& CsgPrimitive::getCenter()
 float& CsgPrimitive::getDistanceToOrigin()
 {
     return _distanceToOrigin;
-}
-
-// Fonction         : getMatrix
-// Argument(s)		: /
-// Valeur de retour	: la matrice de transformation actuelle
-// Pré-condition(s)	: /
-// Post-condition(s): /
-// Commentaire(s)	: retourne la matrice de transformation actuelle de la primitive
-Matrix33d& CsgPrimitive::getMatrix()
-{
-    return _matrix;
 }
 
 // Fonction         : getBoundingBox
@@ -140,17 +126,6 @@ void CsgPrimitive::setDistanceToOrigin(float distanceToOrigin)
 
     BoundingBox bb = BoundingBox(ulp, urp, llp, lrp);
     setBoundingBox(bb);
-}
-
-// Fonction         : setMatrix
-// Argument(s)		: - mat :  la nouvelle matrice de transformation
-// Valeur de retour	: /
-// Pré-condition(s)	: /
-// Post-condition(s): /
-// Commentaire(s)	: modifie la matrice de transformation de la primitive
-void CsgPrimitive::setMatrix(Matrix33d &mat)
-{
-    _matrix = mat;
 }
 
 // Fonction         : setBoundingBox

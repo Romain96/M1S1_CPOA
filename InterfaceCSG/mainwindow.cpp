@@ -205,7 +205,6 @@ void MainWindow::createOperation()
 
     // mettre a jour ui->currentNode ui->id_filsGauche ui->id_filsDroit
     int max = m_tree.getLastNodeId();
-    std::cout << "max is " << max << std::endl;
     ui->currentNode->setMaximum(max);
     ui->id_filsGauche->setMaximum(max);
     ui->id_filsDroit->setMaximum(max);
@@ -213,13 +212,6 @@ void MainWindow::createOperation()
     m_transfo = Matrix33d();
     m_centerSelection = oper->getBoundingBox().center();
     m_currentNode = m_tree.getLastInsertedNode();
-
-//	m_transfo = Matrix33d::identity();
-//	m_current_center = oper->getBBox().center();
-//	m_currentNode = oper;
-
-// mettre a jour ui->currentNode ui->id_filsGauche ui->id_filsDroit
-
 
 	updateTreeRender();
 
@@ -260,6 +252,17 @@ void MainWindow::transfoChanged()
 	// recupere la primitive courante et lui applique les transformations
 	// VOTRE CODE ICI
 
+    // récupération du noeud courant (opération ou primitive)
+    CsgNode *node = m_tree.getNode(ui->currentNode->value());
+    // récupération de la matrice de translation
+    Matrix33d trans = trans.staticTranslation(ui->translationX->value(), ui->translationY->value());
+    // récupération de la matrice de rotation
+    Matrix33d rot = rot.staticRotation(ui->rotation->value());
+    // récupération de la matrice d'homothétie
+    Matrix33d homo = homo.staticShrink(ui->scale->value(), ui->scale->value());
+
+    // formation de la nouvelle matrice de transformation
+    node->setMatrix(trans);
 
 	// de même avec un noeud Operation !
 

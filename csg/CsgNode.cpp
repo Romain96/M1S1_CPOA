@@ -13,12 +13,10 @@ int CsgNode::_nodeUniqueIdGenerator = 0;
 // Commentaire(s)	: constructeur paramétré
 CsgNode::CsgNode(CsgOperation operation) :
     _operation(operation),
-    _leftChildIsPrimitive(false),
-    _leftChildPrimitive(nullptr),
-    _leftChildOperation(nullptr),
-    _rightChildIsPrimitive(false),
-    _rightChildPrimitive(nullptr),
-    _rightChildOperation(nullptr)
+    _matrix(),
+    _leftChild(nullptr),
+    _rightChild(nullptr),
+    _primitive(nullptr)
 {
     // génération de l'id du noeud
     _nodeId = _nodeUniqueIdGenerator++;
@@ -32,14 +30,10 @@ CsgNode::CsgNode(CsgOperation operation) :
 // Commentaire(s)	: destructeur
 CsgNode::~CsgNode()
 {
-    if (_leftChildPrimitive != nullptr)
-        delete _leftChildPrimitive;
-    if (_leftChildOperation != nullptr)
-        delete _leftChildOperation;
-    if (_rightChildPrimitive != nullptr)
-        delete _rightChildPrimitive;
-    if (_rightChildOperation != nullptr)
-        delete _rightChildOperation;
+    if (_leftChild != nullptr)
+        delete _leftChild;
+    if (_rightChild != nullptr)
+        delete _rightChild;
 }
 
 //-----------------------------------------------------------------------------
@@ -68,70 +62,48 @@ CsgOperation& CsgNode::getOperation()
     return _operation;
 }
 
-// Fonction         : getLeftChildIsPrimitive
+// Fonction         : getMatrix
 // Argument(s)		: /
-// Valeur de retour	: vrai si le fils gauche est une primitive, faux sinon
+// Valeur de retour	: une matrix33d
 // Pré-condition(s)	: /
 // Post-condition(s): /
-// Commentaire(s)	: /
-bool CsgNode::getLeftChildIsPrimitive()
+// Commentaire(s)	: retourne la matrice de transformation de l'opération
+Matrix33d& CsgNode::getMatrix()
 {
-    return _leftChildIsPrimitive;
+    return _matrix;
 }
 
-// Fonction         : getRightChildIsPrimitive
-// Argument(s)		: /
-// Valeur de retour	: vrai si le fils droit est une primitive, faux sinon
-// Pré-condition(s)	: /
-// Post-condition(s): /
-// Commentaire(s)	: /
-bool CsgNode::getRightChildIsPrimitive()
-{
-    return _rightChildIsPrimitive;
-}
-
-// Fonction         : getLeftChildPrimitive
-// Argument(s)		: /
-// Valeur de retour	: un pointeur sur un CsgPrimitive
-// Pré-condition(s)	: /
-// Post-condition(s): /
-// Commentaire(s)	: retourne le fils gauche en tant que primitive
-CsgPrimitive *CsgNode::getLeftChildPrimitive()
-{
-    return _leftChildPrimitive;
-}
-
-// Fonction         : getRightChildPrimitive
-// Argument(s)		: /
-// Valeur de retour	: un pointeur sur un CsgPrimitive
-// Pré-condition(s)	: /
-// Post-condition(s): /
-// Commentaire(s)	: retourne le fils droit en tant que primitive
-CsgPrimitive *CsgNode::getRightChildPrimitive()
-{
-    return _rightChildPrimitive;
-}
-
-// Fonction         : getLeftChildOperation
+// Fonction         : getLeftChild
 // Argument(s)		: /
 // Valeur de retour	: un pointeur sur une CsgNode
 // Pré-condition(s)	: /
 // Post-condition(s): /
 // Commentaire(s)	: retourne le fils gauche en tant qu'opération
-CsgNode *CsgNode::getLeftChildOperation()
+CsgNode *CsgNode::getLeftChild()
 {
-    return _leftChildOperation;
+    return _leftChild;
 }
 
-// Fonction         : getRightChildOperation
+// Fonction         : getRightChild
 // Argument(s)		: /
 // Valeur de retour	: un pointeur sur une CsgNode
 // Pré-condition(s)	: /
 // Post-condition(s): /
 // Commentaire(s)	: retourne le fils droit en tant qu'opération
-CsgNode *CsgNode::getRightChildOperation()
+CsgNode *CsgNode::getRightChild()
 {
-    return _rightChildOperation;
+    return _rightChild;
+}
+
+// Fonction         : getPrimitive
+// Argument(s)		: /
+// Valeur de retour	: un pointeur sur un CsgPrimitive
+// Pré-condition(s)	: /
+// Post-condition(s): /
+// Commentaire(s)	: retourne le pointeur sur la primitive
+CsgPrimitive *CsgNode::getPrimitive(CsgPrimitive *primitive)
+{
+    return _primitive;
 }
 
 //-----------------------------------------------------------------------------
@@ -160,78 +132,52 @@ void CsgNode::setOperation(CsgOperation &operation)
     _operation = operation;
 }
 
-// Fonction         : setLeftChildIsPrimitive
-// Argument(s)		: - isPrimitve : booléen indiquant si le fils gauche est une primitive
+// Fonction         : CsgNode
+// Argument(s)		: - mat : la nouvelle matrice
 // Valeur de retour	: /
 // Pré-condition(s)	: /
 // Post-condition(s): /
-// Commentaire(s)	: modifie le pointeur à utiliser (vrai pour une primitive, faux pour une opération)
-void CsgNode::setLeftChildIsPrimitive(bool isPrimitive)
+// Commentaire(s)	: modifie la matrice de transformation de l'opération
+void CsgNode::setMatrix(Matrix33d &mat)
 {
-    _leftChildIsPrimitive = isPrimitive;
+    _matrix = mat;
 }
 
-// Fonction         : setRightChildIsPrimitive
-// Argument(s)		: - isPrimitve : booléen indiquant si le fils droit est une primitive
-// Valeur de retour	: /
-// Pré-condition(s)	: /
-// Post-condition(s): /
-// Commentaire(s)	: modifie le pointeur à utiliser (vrai pour une primitive, faux pour une opération)
-void CsgNode::setRightChildIsPrimitive(bool isPrimitive)
-{
-    _rightChildIsPrimitive = isPrimitive;
-}
-
-// Fonction         : setLeftChildPrimitive
-// Argument(s)		: - leftChild : pointeur sur un CsgPrimitive
-// Valeur de retour	: /
-// Pré-condition(s)	: /
-// Post-condition(s): /
-// Commentaire(s)	: modifie le pointeur du fils gauche en tant que primitive
-void CsgNode::setLeftChildPrimitive(CsgPrimitive *leftChild)
-{
-    if (_leftChildPrimitive != nullptr)
-        delete _leftChildPrimitive;
-    _leftChildPrimitive = leftChild;
-}
-
-// Fonction         : setRightChildPrimitive
-// Argument(s)		: - rightChild : pointeur sur un CsgPrimitive
-// Valeur de retour	: /
-// Pré-condition(s)	: /
-// Post-condition(s): /
-// Commentaire(s)	: modifie le pointeur du fils droit en tant que primitive
-void CsgNode::setRightChildPrimitive(CsgPrimitive *rightChild)
-{
-    if (_rightChildPrimitive != nullptr)
-        delete _rightChildPrimitive;
-    _rightChildPrimitive = rightChild;
-}
-
-// Fonction         : setLeftChildOperation
+// Fonction         : setLeftChild
 // Argument(s)		: - leftChild : pointeur sur un CsgNode
 // Valeur de retour	: /
 // Pré-condition(s)	: /
 // Post-condition(s): /
 // Commentaire(s)	: modifie le pointeur du fils gauche en tant qu'opération
-void CsgNode::setLeftChildOperation(CsgNode *leftChild)
+void CsgNode::setLeftChild(CsgNode *leftChild)
 {
-    if (_leftChildOperation != nullptr)
-        delete _leftChildOperation;
-    _leftChildOperation = leftChild;
+    if (_leftChild != nullptr)
+        delete _leftChild;
+    _leftChild = leftChild;
 }
 
-// Fonction         : setRightChildOperation
+// Fonction         : setRightChild
 // Argument(s)		: - rightChild : pointeur sur un CsgNode
 // Valeur de retour	: /
 // Pré-condition(s)	: /
 // Post-condition(s): /
 // Commentaire(s)	: modifie le pointeur du fils droit en tant qu'opération
-void CsgNode::setRightChildOperation(CsgNode *rightChild)
+void CsgNode::setRightChild(CsgNode *rightChild)
 {
-    if (_rightChildOperation != nullptr)
-        delete _rightChildOperation;
-    _rightChildOperation = rightChild;
+    if (_rightChild != nullptr)
+        delete _rightChild;
+    _rightChild = rightChild;
+}
+
+// Fonction         : setPrimitive
+// Argument(s)		: - rightChild : pointeur sur un CsgPrimitive
+// Valeur de retour	: /
+// Pré-condition(s)	: /
+// Post-condition(s): /
+// Commentaire(s)	: modifie le pointeur sur la primitive
+void CsgNode::setPrimitive(CsgPrimitive *primitive)
+{
+    _primitive = primitive;
 }
 
 //-----------------------------------------------------------------------------
@@ -251,40 +197,19 @@ bool CsgNode::isInsideOperation(Vec2f &point)
     {
     // primitive : appel à isInsidePrimitive()
     case operationTypes::NONE:
-        return _leftChildPrimitive->isInsidePrimitive(point);
+        return _primitive->isInsidePrimitive(point);
         break;
     // union : pixel dans le fils droit ou dans le fils gauche
     case operationTypes::UNION:
-        if (_leftChildIsPrimitive && _rightChildIsPrimitive)
-            return _leftChildPrimitive->isInsidePrimitive(point) || _rightChildPrimitive->isInsidePrimitive(point);
-        else if (_leftChildIsPrimitive && !_rightChildIsPrimitive)
-            return _leftChildPrimitive->isInsidePrimitive(point) || _rightChildOperation->isInsideOperation(point);
-        else if (!_leftChildIsPrimitive && _rightChildIsPrimitive)
-            return _leftChildOperation->isInsideOperation(point) || _rightChildPrimitive->isInsidePrimitive(point);
-        else
-            return _leftChildOperation->isInsideOperation(point) || _rightChildOperation->isInsideOperation(point);
+        return _leftChild->isInsideOperation(point) || _rightChild->isInsideOperation(point);
         break;
     // intersection : pixel dans le fils droit et dans le fils gauche
     case operationTypes::INTERSECTION:
-        if (_leftChildIsPrimitive && _rightChildIsPrimitive)
-            return _leftChildPrimitive->isInsidePrimitive(point) && _rightChildPrimitive->isInsidePrimitive(point);
-        else if (_leftChildIsPrimitive && !_rightChildIsPrimitive)
-            return _leftChildPrimitive->isInsidePrimitive(point) && _rightChildOperation->isInsideOperation(point);
-        else if (!_leftChildIsPrimitive && _rightChildIsPrimitive)
-            return _leftChildOperation->isInsideOperation(point) && _rightChildPrimitive->isInsidePrimitive(point);
-        else
-            return _leftChildOperation->isInsideOperation(point) && _rightChildOperation->isInsideOperation(point);
+        return _leftChild->isInsideOperation(point) && _rightChild->isInsideOperation(point);
         break;
     // différence : pixel dans le fils gauche et pas dans le fils droit
     case operationTypes::DIFFERENCE:
-        if (_leftChildIsPrimitive && _rightChildIsPrimitive)
-            return _leftChildPrimitive->isInsidePrimitive(point) && !_rightChildPrimitive->isInsidePrimitive(point);
-        else if (_leftChildIsPrimitive && !_rightChildIsPrimitive)
-            return _leftChildPrimitive->isInsidePrimitive(point) && !_rightChildOperation->isInsideOperation(point);
-        else if (!_leftChildIsPrimitive && _rightChildIsPrimitive)
-            return _leftChildOperation->isInsideOperation(point) && !_rightChildPrimitive->isInsidePrimitive(point);
-        else
-            return _leftChildOperation->isInsideOperation(point) && !_rightChildOperation->isInsideOperation(point);
+        return _leftChild->isInsideOperation(point) && !_rightChild->isInsideOperation(point);
         break;
     default:
         std::cout << "CsgNode::isInsideOperation unknown operation" << std::endl;
