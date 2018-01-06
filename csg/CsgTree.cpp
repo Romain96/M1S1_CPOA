@@ -203,8 +203,8 @@ void CsgTree::__drawNode(Image2Grey &img, CsgNode *node)
     std::cout << inverse(2,0) << " " << inverse(2,1) << " " << inverse(2,2) << std::endl;
 
     // parcours des pixels de la bounding box de l'opération (de la racine)
-    std::cout << "checking from " << bb.getUpperLeftPoint()[0] << " to " << bb.getUpperLeftPoint()[1] << " and from " <<
-                 bb.getLowerRightPoint()[0] << " to " << bb.getLowerRightPoint()[1] << std::endl;
+    std::cout << "checking from " << bb.getUpperLeftPoint()[0] << ", " << bb.getUpperLeftPoint()[1] << " to " <<
+                 bb.getLowerRightPoint()[0] << ", " << bb.getLowerRightPoint()[1] << std::endl;
 
 
     //debug
@@ -227,7 +227,7 @@ void CsgTree::__drawNode(Image2Grey &img, CsgNode *node)
             local = inverse * point;
             point[0] = local[0];
             point[1] = local[1];
-            std::cout << "point to test " << point[0] << " " << point[1] << std::endl;
+            //std::cout << "point to test " << point[0] << " " << point[1] << std::endl;
             // le pixel est dessiné en blanc s'il est dans l'opération
             if (node->isInsideOperation(point))
             {

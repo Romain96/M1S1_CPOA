@@ -192,24 +192,55 @@ void CsgNode::setPrimitive(CsgPrimitive *primitive)
 // Commentaire(s)	: /
 bool CsgNode::isInsideOperation(Vec2f &point)
 {
-    // TODO prendre en compte les transformations
+    Vec3f localLeftChild;
+    Vec3f localRightChild;
+    Vec2f pointLeftChild;
+    Vec2f pointRightChild;
+
     switch (_operation.getOperationType())
     {
     // primitive : appel à isInsidePrimitive()
     case operationTypes::NONE:
         return _primitive->isInsidePrimitive(point);
         break;
+
     // union : pixel dans le fils droit ou dans le fils gauche
     case operationTypes::UNION:
-        return _leftChild->isInsideOperation(point) || _rightChild->isInsideOperation(point);
+        // postionnement du point dans les repères locaux des fils gauche et droit
+        localLeftChild = _leftChild->getMatrix().inverse() * point;
+        localRightChild = _rightChild->getMatrix().inverse() * point;
+        pointLeftChild[0] = localLeftChild[0];
+        pointLeftChild[1] = localLeftChild[1];
+        pointRightChild[0] = localRightChild[0];
+        pointRightChild[1] = localRightChild[1];
+
+        return _leftChild->isInsideOperation(pointLeftChild) || _rightChild->isInsideOperation(pointRightChild);
         break;
+
     // intersection : pixel dans le fils droit et dans le fils gauche
     case operationTypes::INTERSECTION:
-        return _leftChild->isInsideOperation(point) && _rightChild->isInsideOperation(point);
+        // postionnement du point dans les repères locaux des fils gauche et droit
+        localLeftChild = _leftChild->getMatrix().inverse() * point;
+        localRightChild = _rightChild->getMatrix().inverse() * point;
+        pointLeftChild[0] = localLeftChild[0];
+        pointLeftChild[1] = localLeftChild[1];
+        pointRightChild[0] = localRightChild[0];
+        pointRightChild[1] = localRightChild[1];
+
+        return _leftChild->isInsideOperation(pointLeftChild) && _rightChild->isInsideOperation(pointRightChild);
         break;
+
     // différence : pixel dans le fils gauche et pas dans le fils droit
-    case operationTypes::DIFFERENCE:
-        return _leftChild->isInsideOperation(point) && !_rightChild->isInsideOperation(point);
+    case operationTypes::DIFFERENCE:  
+        // postionnement du point dans les repères locaux des fils gauche et droit
+        localLeftChild = _leftChild->getMatrix().inverse() * point;
+        localRightChild = _rightChild->getMatrix().inverse() * point;
+        pointLeftChild[0] = localLeftChild[0];
+        pointLeftChild[1] = localLeftChild[1];
+        pointRightChild[0] = localRightChild[0];
+        pointRightChild[1] = localRightChild[1];
+
+        return _leftChild->isInsideOperation(pointLeftChild) && !_rightChild->isInsideOperation(pointRightChild);
         break;
     default:
         std::cout << "CsgNode::isInsideOperation unknown operation" << std::endl;

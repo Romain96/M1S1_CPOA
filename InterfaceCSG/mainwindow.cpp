@@ -124,12 +124,12 @@ void MainWindow::createPrimtive()
         // disque
         case 0:
             std::cout << "adding new disk primitive" << std::endl;
-            m_tree.addPrimitive(new CsgDisk(center, 2.f));
+            m_tree.addPrimitive(new CsgDisk(center, 100.f));
             break;;
         // polygone régulier
         case 1:
             std::cout << "adding new regular polygon primitive" << std::endl;
-            m_tree.addPrimitive(new CsgRegularPolygon(sides, center, 2.f));
+            m_tree.addPrimitive(new CsgRegularPolygon(sides, center, 100.f));
             break;
         default:
             std::cout << "unknown primitive..." << std::endl;
