@@ -67,7 +67,7 @@ bool CsgDisk::isInsidePrimitive(Vec2f &point)
 // Pré-condition(s)	: /
 // Post-condition(s): /
 // Commentaire(s)	: met à jour la bounding box de la pimitive après transformation
-void CsgDisk::updateBoundingBox(int tx, int ty, int angle, int scale)
+void CsgDisk::updateBoundingBox(int tx, int ty, int angle, double scale)
 {
     // les translations correspondent aux coordonnées de la bounding box translatées
     // la rotation n'a pas de sens pour un disque
@@ -92,9 +92,9 @@ void CsgDisk::updateBoundingBox(int tx, int ty, int angle, int scale)
 
     // debug
     std::cout << "ulp " << ulp[0] << " " << ulp[1] << std::endl;
-    std::cout << "ulp " << urp[0] << " " << ulp[1] << std::endl;
-    std::cout << "ulp " << llp[0] << " " << llp[1] << std::endl;
-    std::cout << "ulp " << lrp[0] << " " << lrp[1] << std::endl;
+    std::cout << "urp " << urp[0] << " " << ulp[1] << std::endl;
+    std::cout << "llp " << llp[0] << " " << llp[1] << std::endl;
+    std::cout << "lrp " << lrp[0] << " " << lrp[1] << std::endl;
 
     _boundingBox = BoundingBox(ulp, urp, llp, lrp);
 }

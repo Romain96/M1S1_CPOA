@@ -29,7 +29,7 @@ public:
 
     // méthodes
     virtual bool isInsidePrimitive(Vec2f& point);
-    virtual void updateBoundingBox(int tx, int ty, int angle, int scale);
+    virtual void updateBoundingBox(int tx, int ty, int angle, double scale);
 };
 
 #endif // __CSGPRIMITIVE_H__

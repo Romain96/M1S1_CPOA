@@ -163,7 +163,7 @@ bool CsgPrimitive::isInsidePrimitive(Vec2f &point)
 // Pré-condition(s)	: /
 // Post-condition(s): /
 // Commentaire(s)	: met à jour la bounding box de la pimitive après transformation
-void CsgPrimitive::updateBoundingBox(int tx, int ty, int angle, int scale)
+void CsgPrimitive::updateBoundingBox(int tx, int ty, int angle, double scale)
 {
     // rien : dépend du la primitive elle-même
 }

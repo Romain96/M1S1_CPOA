@@ -82,34 +82,41 @@ Matrix33d Matrix33d::inverse()
     	Matrix33d inv;
 	
 	// calcul du déterminant de la matrice courante
-    	double det = this->data_[0] * this->data_[4] * this->data_[8] +
-		this->data_[1] * this->data_[5] * this->data_[6] +
-            	this->data_[2] * this->data_[3] * this->data_[7] -
-            	this->data_[2] * this->data_[4] * this->data_[6] -
-            	this->data_[0] * this->data_[5] * this->data_[7] -
-            	this->data_[1] * this->data_[3] * this->data_[8];
+    double det = this->data_[0] * this->data_[4] * this->data_[8] +
+        this->data_[1] * this->data_[5] * this->data_[6] +
+        this->data_[2] * this->data_[3] * this->data_[7] -
+        this->data_[2] * this->data_[4] * this->data_[6] -
+        this->data_[0] * this->data_[5] * this->data_[7] -
+        this->data_[1] * this->data_[3] * this->data_[8];
 
 	// si le déterminant est nul, la matrice n'est pas inversible
-    	if (det == (double)0.0)
-    	{
-        	// TODO : revoyer une erreur ???
-        	return inv; // id pour l'instant
-    	}
+    if (det == (double)0.0)
+    {
+        // TODO : revoyer une erreur ???
+        std::cout << "déterminant NUL !!!" << std::endl;
+        return inv; // id pour l'instant
+    }
 
 	// calcul des composantes de la matrice inverse
-    	inv.data_[0] = (this->data_[4] * this->data_[8] - this->data_[5] * this->data_[7]) / det;
-    	inv.data_[3] = -(this->data_[3] * this->data_[8] - this->data_[6] * this->data_[5]) / det;
-    	inv.data_[6] = (this->data_[3] * this->data_[7] - this->data_[6] * this->data_[4]) / det;
+    inv.data_[0] = (this->data_[4] * this->data_[8] - this->data_[5] * this->data_[7]) / det;
+    inv.data_[3] = -(this->data_[3] * this->data_[8] - this->data_[6] * this->data_[5]) / det;
+    inv.data_[6] = (this->data_[3] * this->data_[7] - this->data_[6] * this->data_[4]) / det;
 
-    	inv.data_[1] = -(this->data_[1] * this->data_[8] - this->data_[7] * this->data_[2]) / det;
-    	inv.data_[4] = (this->data_[0] * this->data_[8] - this->data_[6] * this->data_[2]) / det;
-    	inv.data_[7] = -(this->data_[0] * this->data_[7] - this->data_[6] * this->data_[1]) / det;
+    inv.data_[1] = -(this->data_[1] * this->data_[8] - this->data_[7] * this->data_[2]) / det;
+    inv.data_[4] = (this->data_[0] * this->data_[8] - this->data_[6] * this->data_[2]) / det;
+    inv.data_[7] = -(this->data_[0] * this->data_[7] - this->data_[6] * this->data_[1]) / det;
 
-    	inv.data_[2] = (this->data_[1] * this->data_[5] - this->data_[4] * this->data_[2]) / det;
-    	inv.data_[5] = -(this->data_[0] * this->data_[5] - this->data_[3] * this->data_[2]) / det;
-    	inv.data_[8] = (this->data_[0] * this->data_[4] - this->data_[3] * this->data_[1]) / det;
+    inv.data_[2] = (this->data_[1] * this->data_[5] - this->data_[4] * this->data_[2]) / det;
+    inv.data_[5] = -(this->data_[0] * this->data_[5] - this->data_[3] * this->data_[2]) / det;
+    inv.data_[8] = (this->data_[0] * this->data_[4] - this->data_[3] * this->data_[1]) / det;
 
-    	return inv;
+    for (int i = 0; i < 9; i++)
+    {
+        if (fabs(inv.data_[i]) <= 1e-5)
+            inv.data_[i] = 0.f;
+    }
+
+    return inv;
 }
 
 // Fonction         : staticTranslation
@@ -124,8 +131,8 @@ Matrix33d Matrix33d::staticTranslation(const double dx, const double dy)
     	Matrix33d trans;
 
 	// modification en partant de la matrice identité
-    	trans.data_[6] = dx;	// M[2][0]
-    	trans.data_[7] = dy;	// M[2][1]
+        trans.data_[2] = dx;	// M[0][2]
+        trans.data_[5] = dy;	// M[1][2]
 
     	return trans;
 }
@@ -142,10 +149,13 @@ Matrix33d Matrix33d::staticRotation(const double alpha)
 
 	// en partant de la matrice identité
 	// matrice de rotation est ((cos(a), -sin(a), 0), (sin(a), cos(a), 0), (0, 0, 1))
-    	rot.data_[0] = std::cos(alpha);
-    	rot.data_[1] = -std::sin(alpha);
-    	rot.data_[3] = std::sin(alpha);
-    	rot.data_[4] = std::cos(alpha);
+    rot.data_[0] = std::cos(alpha);     // M[0][0]
+    rot.data_[1] = -std::sin(alpha);    // M[0][1]
+    rot.data_[3] = std::sin(alpha);     // M[1][0]
+    rot.data_[4] = std::cos(alpha);     // M[1][1]
+
+    if (fabs(rot.data_[1]) <= 1e-5 )
+        rot.data_[1] = 0.f;
 
     return rot;
 }
@@ -160,10 +170,10 @@ Matrix33d Matrix33d::staticRotation(const double alpha)
 Matrix33d Matrix33d::staticShrink(const double hx, const double hy)
 {
     Matrix33d homo;
-	
+
 	// en partant de la matrice identité
-    homo.data_[0] = hx;	// M[0][2]
-    homo.data_[4] = hy;	// M[1][2]
+    homo.data_[0] = hx;	// M[0][0]
+    homo.data_[4] = hy;	// M[1][1]
 
     return homo;
 }
@@ -258,7 +268,7 @@ Matrix33d operator *(const Matrix33d& m1, const Matrix33d& m2)
         for (int  j = 0; j < 3; j++)
         {
             double sum = 0;
-            for (int k = 1; k < 3; k++)
+            for (int k = 0; k < 3; k++)
             {
                 sum += m1(i, k) * m2(k, j);
             }

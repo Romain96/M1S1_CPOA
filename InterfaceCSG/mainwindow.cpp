@@ -124,12 +124,12 @@ void MainWindow::createPrimtive()
         // disque
         case 0:
             std::cout << "adding new disk primitive" << std::endl;
-            m_tree.addPrimitive(new CsgDisk(center, 100));
+            m_tree.addPrimitive(new CsgDisk(center, 0.5));
             break;;
         // polygone régulier
         case 1:
             std::cout << "adding new regular polygon primitive" << std::endl;
-            m_tree.addPrimitive(new CsgRegularPolygon(sides, center, 100));
+            m_tree.addPrimitive(new CsgRegularPolygon(sides, center, 0.5));
             break;
         default:
             std::cout << "unknown primitive..." << std::endl;
@@ -247,35 +247,47 @@ void MainWindow::resetTransfo()
 	resetTransfoWidgets();
 }
 
+#define S1_FACTOR 20.0
+#define S2_FACTOR 40.0
+
 void MainWindow::transfoChanged()
 {
 	// recupere la primitive courante et lui applique les transformations
 	// VOTRE CODE ICI
 
+    double transx = ui->translationX->value();
+    double transy = ui->translationY->value();
+    double angle = ui->rotation->value();
+    double scale;
+    int ss = ui->scale->value();
+    if (ss >= 0)
+        scale = 1.0 + (double)ss/S1_FACTOR;
+    else
+        scale = 1.0 / (1.0 - (double)ss/S2_FACTOR);
+
     // récupération du noeud courant (opération ou primitive)
     CsgNode *node = m_tree.getNode(ui->currentNode->value());
     // récupération de la matrice de translation
-    Matrix33d trans = trans.staticTranslation(ui->translationX->value(), ui->translationY->value());
+    Matrix33d trans = trans.staticTranslation(transx, transy);
     // récupération de la matrice de rotation
-    Matrix33d rot = rot.staticRotation(ui->rotation->value());
+    Matrix33d rot = rot.staticRotation(angle);
     // récupération de la matrice d'homothétie
-    Matrix33d homo = homo.staticShrink(ui->scale->value(), ui->scale->value());
+    Matrix33d homo = homo.staticShrink(scale, scale);
 
     std::cout << trans(0,0) << " " << trans(0,1) << " " << trans(0,2) << std::endl;
     std::cout << trans(1,0) << " " << trans(1,1) << " " << trans(1,2) << std::endl;
-    std::cout << trans(2,0) << " " << trans(2,1) << " " << trans(2,2) << std::endl;
+    std::cout << trans(2,0) << " " << trans(2,1) << " " << trans(2,2) << std::endl << std::endl;
 
     std::cout << rot(0,0) << " " << rot(0,1) << " " << rot(0,2) << std::endl;
     std::cout << rot(1,0) << " " << rot(1,1) << " " << rot(1,2) << std::endl;
-    std::cout << rot(2,0) << " " << rot(2,1) << " " << rot(2,2) << std::endl;
+    std::cout << rot(2,0) << " " << rot(2,1) << " " << rot(2,2) << std::endl << std::endl;
 
     std::cout << homo(0,0) << " " << homo(0,1) << " " << homo(0,2) << std::endl;
     std::cout << homo(1,0) << " " << homo(1,1) << " " << homo(1,2) << std::endl;
-    std::cout << homo(2,0) << " " << homo(2,1) << " " << homo(2,2) << std::endl;
+    std::cout << homo(2,0) << " " << homo(2,1) << " " << homo(2,2) << std::endl << std::endl;
 
     // construction de la matrice de transformation
-    //Matrix33d transfo = rot + trans + homo;
-    Matrix33d transfo = trans;
+    Matrix33d transfo = trans * rot * homo;
 
     std::cout << transfo(0,0) << " " << transfo(0,1) << " " << transfo(0,2) << std::endl;
     std::cout << transfo(1,0) << " " << transfo(1,1) << " " << transfo(1,2) << std::endl;
@@ -287,7 +299,7 @@ void MainWindow::transfoChanged()
     if (node->getOperation().getOperationType() == operationTypes::NONE)
     {
         CsgPrimitive *prim = node->getPrimitive();
-        prim->updateBoundingBox(ui->translationX->value(), ui->translationY->value(), ui->rotation->value(), ui->scale->value());
+        prim->updateBoundingBox(transx, transy, angle, scale);
         node->getOperation().setBoundingBox(prim->getBoundingBox());
     }
     else
@@ -300,10 +312,6 @@ void MainWindow::transfoChanged()
 
 	updateTreeRender();
 }
-
-#define S1_FACTOR 20.0
-#define S2_FACTOR 40.0
-
 
 void MainWindow::transfoSliderChanged()
 {

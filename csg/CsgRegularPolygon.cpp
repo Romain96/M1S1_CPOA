@@ -19,9 +19,11 @@ CsgRegularPolygon::CsgRegularPolygon(int vertexNumber, Vec2f &center, float dist
 {
     _vertexNumber = vertexNumber;
     _vertexList = new Vec2f[_vertexNumber];
+    _startingAngle = 0;
+
     Vec2f point;
     double angle = 360.f / (double)_vertexNumber;
-    double currentAngle = 0.f;
+    double currentAngle = _startingAngle;
 
     for (int i = 0; i < _vertexNumber; i++)
     {
@@ -92,26 +94,24 @@ bool CsgRegularPolygon::isInsidePrimitive(Vec2f &point)
 // Pré-condition(s)	: /
 // Post-condition(s): /
 // Commentaire(s)	: met à jour la bounding box de la pimitive après transformation
-void CsgRegularPolygon::updateBoundingBox(int tx, int ty, int angle, int scale)
+void CsgRegularPolygon::updateBoundingBox(int tx, int ty, int angle, double scale)
 {
     // les translations correspondent simplement au coordonnées de bounding box translatées
     // les homothéties et rotation demandent de recalculer les points temporairement
     std::cout << "updating BB for poly with tx = " << tx << " ty = " << ty << " angle = " << angle << " scale = " << scale << std::endl;
 
-    Vec2f *temp= new Vec2f[_vertexNumber];
     Vec2f point;
     double angleStep = 360.f / (double)_vertexNumber;
-    double currentAngle = (double)angle;
-    int xmin = _boundingBox.getUpperLeftPoint()[0];
-    int xmax = _boundingBox.getUpperRightPoint()[0];
-    int ymin = _boundingBox.getUpperLeftPoint()[1];
-    int ymax = _boundingBox.getLowerLeftPoint()[1];
+    double currentAngle = (double)(_startingAngle + angle);
+    int xmin = _boundingBox.center()[0];
+    int xmax = _boundingBox.center()[0];
+    int ymin = _boundingBox.center()[1];
+    int ymax = _boundingBox.center()[1];
 
     for (int i = 0; i < _vertexNumber; i++)
     {
-        point[0] = (_center[0] + tx) + (_distanceToOrigin + scale) * cos(currentAngle * M_PI/180);
-        point[1] = (_center[1] + ty) + (_distanceToOrigin + scale) * sin(currentAngle * M_PI/180);
-        temp[i] = point;
+        point[0] = (_center[0] + tx) + (_distanceToOrigin * scale) * cos(currentAngle * M_PI/180);
+        point[1] = (_center[1] + ty) + (_distanceToOrigin * scale) * sin(currentAngle * M_PI/180);
         std::cout << "new pts : " << point[0] << " " << point[1] << std::endl;
         currentAngle += angleStep;
         if (point[0] < xmin)

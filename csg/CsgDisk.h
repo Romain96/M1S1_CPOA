@@ -23,7 +23,7 @@ public:
 
     // méthodes
     bool isInsidePrimitive(Vec2f &point);
-    void updateBoundingBox(int tx, int ty, int angle, int scale);
+    void updateBoundingBox(int tx, int ty, int angle, double scale);
 };
 
 #endif // __CSGDISK_H__

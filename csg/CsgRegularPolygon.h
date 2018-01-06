@@ -14,6 +14,7 @@ class CsgRegularPolygon : public CsgPrimitive
 protected:
     int _vertexNumber;
     Vec2f *_vertexList;
+    int _startingAngle;
 
 public:
     // constructeur
@@ -27,7 +28,7 @@ public:
 
     // méthodes
     bool isInsidePrimitive(Vec2f &point);
-    void updateBoundingBox(int tx, int ty, int angle, int scale);
+    void updateBoundingBox(int tx, int ty, int angle, double scale);
 };
 
 #endif // __CSGREGULARPOLYGON_H__
