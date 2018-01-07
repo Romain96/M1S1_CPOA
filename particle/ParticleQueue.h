@@ -8,12 +8,11 @@
 // foncteur de comparaison de particules
 // l'élément le plus prioritaire est le plus "grand"
 // dans notre cas celui qui a le temps le plus faible (le plus en retard)
-class ParticleCompare
+struct ParticleCompare
 {
-public:
-    bool operator ()(Particle& p1, Particle& p2)
+    bool operator ()(Particle& l, Particle& r)
     {
-        return p1.getDate() < p2.getDate();
+        return l.getDate() > r.getDate();
     }
 };
 
@@ -23,13 +22,23 @@ class ParticleQueue
 protected:
     // la file de particule (file de priorité)
     std::priority_queue<Particle, std::vector<Particle>, ParticleCompare> _queue;
+    // date global absolu
+    int _date;
 
 public:
     // Constructeur
     ParticleQueue();
 
+    // getters
+    int getDate();
+    std::priority_queue<Particle, std::vector<Particle>, ParticleCompare>& getQueue();
+
+    // setters
+    void setDate(int date);
+
     // méthodes
     void addParticle(int x, int y);
+    void iterateForTimeStep(int timeStep);
 };
 
 #endif // __PARTICLEQUEUE_H__

@@ -1,4 +1,28 @@
 #include "Particle.h"
+#include "Vector.h"
+#include "Utils.h"
+
+// Fonction         : Particle
+// Argument(s)		: /
+// Valeur de retour	: /
+// Pré-condition(s)	: /
+// Post-condition(s): /
+// Commentaire(s)	: constructeur
+Particle::Particle()
+{
+    // position
+    Vec2f position;
+    position[0] = 0.f;
+    position[1] = 0.f;
+    _position = position;
+    _expectedPosition = position;
+
+    // vecteur vitesse de départ est nul
+    Vec2f speed;
+    speed[0] = 0.f;
+    speed[1] = 0.f;
+    _speed = speed;
+}
 
 // Fonction         : Particle
 // Argument(s)		: - x : entier représentant l'abscisse de la particule
@@ -7,12 +31,20 @@
 // Pré-condition(s)	: /
 // Post-condition(s): /
 // Commentaire(s)	: constructeur paramétré
-Particle::Particle(int x, int y) :
-    _x(x),
-    _y(y),
-    _date(0)
+Particle::Particle(float x, float y)
 {
-    // rien
+    // position
+    Vec2f position;
+    position[0] = x;
+    position[1] = y;
+    _position = position;
+    _expectedPosition = position;
+
+    // vecteur vitesse de départ est nul
+    Vec2f speed;
+    speed[0] = 0.f;
+    speed[1] = 0.f;
+    _speed = speed;
 }
 
 //-----------------------------------------------------------------------------
@@ -21,24 +53,35 @@ Particle::Particle(int x, int y) :
 
 // Fonction         : getX
 // Argument(s)		: /
-// Valeur de retour	: un entier
+// Valeur de retour	: un Vec2f
 // Pré-condition(s)	: /
 // Post-condition(s): /
-// Commentaire(s)	: retourne l'abscisse de la particule
-int Particle::getX()
+// Commentaire(s)	: retourne la position de la particule
+Vec2f& Particle::getPosition()
 {
-    return _x;
+    return _position;
 }
 
-// Fonction         : getY
+// Fonction         : getExpectedPosition
 // Argument(s)		: /
-// Valeur de retour	: un entier
+// Valeur de retour	: un Vec2f
 // Pré-condition(s)	: /
 // Post-condition(s): /
-// Commentaire(s)	: retourne l'ordonnée de la particule
-int Particle::getY()
+// Commentaire(s)	: retourne la position future de la particule
+Vec2f& Particle::getExpectedPosition()
 {
-    return _y;
+    return _expectedPosition;
+}
+
+// Fonction         : getSpeed
+// Argument(s)		: /
+// Valeur de retour	: un vec2f
+// Pré-condition(s)	: /
+// Post-condition(s): /
+// Commentaire(s)	: retourne le vecteur de vitesse de la particule
+Vec2f& Particle::getSpeed()
+{
+    return _speed;
 }
 
 // Fonction         : getDate
@@ -56,26 +99,37 @@ int Particle::getDate()
 // SECTION DES SETTERS
 //-----------------------------------------------------------------------------
 
-// Fonction         : setX
-// Argument(s)		: - : nouvelle abscisse
+// Fonction         : setPosition
+// Argument(s)		: - pos : nouvelle position
 // Valeur de retour	: /
 // Pré-condition(s)	: /
 // Post-condition(s): /
-// Commentaire(s)	: modifie l'abscisse de la particule
-void Particle::setX(int x)
+// Commentaire(s)	: modifie la position de la particule
+void Particle::setPosition(Vec2f& pos)
 {
-    _x = x;
+    _position = pos;
 }
 
-// Fonction         : setY
-// Argument(s)		: - y : nouvelle ordonnée
+// Fonction         : setExpectedPosition
+// Argument(s)		: - pos : nouvelle position future
 // Valeur de retour	: /
 // Pré-condition(s)	: /
 // Post-condition(s): /
-// Commentaire(s)	: modifie l'odronnée de la particule
-void Particle::setY(int y)
+// Commentaire(s)	: modifie la position future de la particule
+void Particle::setExpectedPosition(Vec2f& pos)
 {
-    _y = y;
+    _expectedPosition = pos;
+}
+
+// Fonction         : setSpeed
+// Argument(s)		: - speed : nouveau vecteur vitesse
+// Valeur de retour	: /
+// Pré-condition(s)	: /
+// Post-condition(s): /
+// Commentaire(s)	: modifie le vecteur vitesse de la particule
+void Particle::setSpeed(Vec2f &speed)
+{
+    _speed = speed;
 }
 
 // Fonction         : setDate
@@ -92,6 +146,19 @@ void Particle::setDate(int date)
 //-----------------------------------------------------------------------------
 // SECTION DES METHODES
 //-----------------------------------------------------------------------------
+
+// Fonction         : validateExpectedCoordinates
+// Argument(s)		: /
+// Valeur de retour	: /
+// Pré-condition(s)	: /
+// Post-condition(s): /
+// Commentaire(s)	: valide les coordonnées futures de la particule
+//                    (devrait être utilisé seulement après détection de collision)
+void Particle::validateExpectedCoordinates()
+{
+    // les coordonnées futures deviennent les coordonnées courantes
+    _position = _expectedPosition;
+}
 
 // Fonction         : /
 // Argument(s)		: /

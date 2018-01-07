@@ -7,7 +7,8 @@
 #include "Image2Grey.h"
 #include "Vector.h"
 #include "Utils.h"
-//#include "particle.h"
+#include "Particle.h"
+#include "ParticleQueue.h"
 
 //forward declaration
 class BoundingBox;
@@ -110,6 +111,7 @@ protected:
 
 //	 la fontaine de particule
 //	Fountain fountain;
+    ParticleQueue m_particles;
 };
 
 #endif // RENDERIMG_H

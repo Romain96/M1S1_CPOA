@@ -23,6 +23,6 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 	${CMAKE_CURRENT_SOURCE_DIR}/../particle)
 
 
-target_link_libraries(${PROJECT_NAME} csg vector_matrix image Qt5::Widgets Qt5::OpenGL ${OPENGL_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} csg vector_matrix image particle Qt5::Widgets Qt5::OpenGL ${OPENGL_LIBRARIES})
 
 #target_link_libraries(${PROJECT_NAME} csg vector_matrix image particle Qt5::Widgets Qt5::OpenGL ${OPENGL_LIBRARIES})

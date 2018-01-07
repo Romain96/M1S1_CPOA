@@ -1,32 +1,46 @@
 #ifndef __PARTICLE_H__
 #define __PARTICLE_H__
 
+#include "Vector.h"
+#include "Utils.h"
+
 // Représente un particule
 class Particle
 {
 protected:
-    // chaque particule conserve sa position courante
-    int _x;
-    int _y;
+    // chaque particule conserve :
+
+    // - sa position courante
+    Vec2f _position;
+
+    // - sa position future (validée si non collision)
+    Vec2f _expectedPosition;
+
+    // - son vecteur de vitesse
+    Vec2f _speed;
+
     // ainsi que sa date en temp absolu
     int _date;
 
 public:
-    // constructeur
-    Particle(int x, int y);
+    // constructeurs
+    Particle();
+    Particle(float x, float y);
 
     // getters
-    int getX();
-    int getY();
+    Vec2f& getPosition();
+    Vec2f& getExpectedPosition();
+    Vec2f& getSpeed();
     int getDate();
 
     // setters
-    void setX(int x);
-    void setY(int y);
+    void setPosition(Vec2f& pos);
+    void setExpectedPosition(Vec2f& pos);
+    void setSpeed(Vec2f& speed);
     void setDate(int date);
 
     // méthodes
-    // TODO
+    void validateExpectedCoordinates();
 };
 
 #endif // __PARTICLE_H__

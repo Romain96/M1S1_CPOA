@@ -4,6 +4,8 @@
 
 //#include "imgGradient.h"
 #include "BoundingBox.h"
+#include "Particle.h"
+#include "ParticleQueue.h"
 #include <limits>
 
 
@@ -17,7 +19,8 @@ RenderImg::RenderImg(BoundingBox& bb, QWidget *parent ):
     m_img(1024,1024),
 	m_drawSobel(false),
     m_BBdraw(false),
-    m_BB(bb)
+    m_BB(bb),
+    m_particles()
   // QQ INIT A AJOUTER ?
 
 {
@@ -181,12 +184,30 @@ void RenderImg::mousePressEvent(QMouseEvent *event)
 	glColor3f(1.0f,0,0);
 	glBegin(GL_POINTS);
 
-	unsigned int nbp = 0;// VOTRE CODE ICI : nombre de particules
-	for (int i = 0; i < nbp; i++ )
-	{
+    //unsigned int nbp = 1;// VOTRE CODE ICI : nombre de particules
+    //for (int i = 0; i < nbp; i++ )
+    //{
 		// here get back position of each particle in ptPos
-//		glVertex2f(2.0f*ptPos[0]/m_widthTex-1.0f, -2.0f*ptPos[1]/m_heightTex+1.0f);
-	}
+        //glVertex2f(2.0f*ptPos[0]/m_widthTex-1.0f, -2.0f*ptPos[1]/m_heightTex+1.0f);
+        //m_particles.displayParticles(m_img);
+
+    //}
+
+    // parcours des particules en utilisant une copie temporaire de la file
+    std::priority_queue<Particle, std::vector<Particle>, ParticleCompare> _temp = m_particles.getQueue();
+
+    while (!_temp.empty())
+    {
+        Particle p = _temp.top();
+        float x = p.getPosition()[0];
+        float y = p.getPosition()[1];
+
+        glVertex2f(2.0f * x / m_widthTex - 1.0f, -2.0f * y / m_heightTex + 1.0f);
+
+        _temp.pop();
+    }
+
+
 	glEnd();
 
 	swapBuffers();
@@ -212,6 +233,14 @@ void RenderImg::keyPressEvent(QKeyEvent* event)
 	{
 		case 'A':
 			std::cout << " touche a enfoncee" << std::endl;
+            for (int i = 0; i < 1024; i++)
+            {
+                for (int j = 0; j < 100; j++)
+                {
+                    m_particles.addParticle(i, j);
+                }
+            }
+            //m_particles.addParticle(512,0);
 			break;
 		case 'E':
 			// qq init
@@ -235,7 +264,40 @@ void RenderImg::keyPressEvent(QKeyEvent* event)
 
 void RenderImg::animate()
 {
-	update();
+    if (m_particles.getQueue().empty())
+    {
+        m_timer->stop();
+        std::cout << "Particules are all out of screen" << std::endl;
+        return;
+    }
+    m_particles.iterateForTimeStep(100);
+
+    paintGL();
+
+    glPointSize(10.0f);
+    glColor3f(1.0f,0,0);
+    glBegin(GL_POINTS);
+
+    // parcours des particules en utilisant une copie temporaire de la file
+    std::priority_queue<Particle, std::vector<Particle>, ParticleCompare> _temp = m_particles.getQueue();
+
+    while (!_temp.empty())
+    {
+        Particle p = _temp.top();
+        float x = p.getPosition()[0];
+        float y = p.getPosition()[1];
+        glVertex2f(xImg2GL(x), yImg2GL(y));
+
+        _temp.pop();
+    }
+
+
+    glEnd();
+
+    swapBuffers();
+
+    update();
+    m_timer->start();
 }
 
 

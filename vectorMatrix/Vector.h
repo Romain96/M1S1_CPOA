@@ -294,7 +294,7 @@ public:
 // Pré-condition(s)	: /
 // Post-condition(s): /
 // Commentaire(s)	: /
-template <int N, typename T> Vector<N, T> operator*(Vector<N, T>& v, const double f)
+template <int N, typename T> Vector<N, T> operator*(Vector<N, T>& v, const float f)
 {
 	Vector<N, T> res;
 	for (int i = 0; i<v.getSize(); i++)
@@ -311,7 +311,7 @@ template <int N, typename T> Vector<N, T> operator*(Vector<N, T>& v, const doubl
 // Pré-condition(s)	: /
 // Post-condition(s): /
 // Commentaire(s)	: /
-template <int N, typename T> Vector<N, T> operator*(const double f, Vector<N, T>& v)
+template <int N, typename T> Vector<N, T> operator*(const float f, Vector<N, T>& v)
 {
 	Vector<N, T> res;
 	for (int i = 0; i<v.getSize(); i++)
@@ -328,7 +328,7 @@ template <int N, typename T> Vector<N, T> operator*(const double f, Vector<N, T>
 // Pré-condition(s)	: /
 // Post-condition(s): /
 // Commentaire(s)	: /
-template <int N, typename T> Vector<N, T> operator/(const double f, Vector<N, T>& v)
+template <int N, typename T> Vector<N, T> operator/(const float f, Vector<N, T>& v)
 {
 	Vector<N, T> res;
 	for (int i = 0; i<v.getSize(); i++)
@@ -345,7 +345,7 @@ template <int N, typename T> Vector<N, T> operator/(const double f, Vector<N, T>
 // Pré-condition(s)	: /
 // Post-condition(s): /
 // Commentaire(s)	: /
-template <int N, typename T> Vector<N, T> operator/(Vector<N, T>& v, const double f)
+template <int N, typename T> Vector<N, T> operator/(Vector<N, T>& v, const float f)
 {
 	Vector<N, T> res;
 	for (int i = 0; i<v.getSize(); i++)

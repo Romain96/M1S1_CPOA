@@ -545,6 +545,7 @@ void MainWindow::saveCSG()
 void MainWindow::clearCSG()
 {
     m_tree.clear();
+    m_currentNode = nullptr;
     ui->currentNode->setValue(0);
     ui->currentNode->setMaximum(0);
     ui->id_filsGauche->setMaximum(0);
