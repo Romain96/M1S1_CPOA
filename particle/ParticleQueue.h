@@ -4,6 +4,7 @@
 #include <queue>
 #include "Particle.h"
 #include <vector>
+#include "Image2Grey.h"
 
 // foncteur de comparaison de particules
 // l'élément le plus prioritaire est le plus "grand"
@@ -38,7 +39,7 @@ public:
 
     // méthodes
     void addParticle(int x, int y);
-    void iterateForTimeStep(int timeStep);
+    void iterateForTimeStep(Image2Grey& img, int timeStep);
 };
 
 #endif // __PARTICLEQUEUE_H__

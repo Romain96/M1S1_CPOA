@@ -3,6 +3,7 @@
 #include "Image2Grey.h"
 #include <iostream>
 #include <queue>
+#include "Image2Grey.h"
 
 // Fonction         : ParticleQueue
 // Argument(s)      : /
@@ -76,15 +77,16 @@ void ParticleQueue::addParticle(int x, int y)
 }
 
 // Fonction         : iterateForTimeStep
-// Argument(s)      : - timeStep : intervalle de temps en millisecondes
+// Argument(s)      : - img : l'image contenant la forme CSG dessinée
+//                    - timeStep : intervalle de temps en millisecondes
 // Valeur de retour : /
 // Pré-condition(s) : timeStep >= 0
 // Post-condition(s): /
 // Commentaire(s)   : effectue les itérations nécessaires au calcul des nouvelles positions des particules
 //                    en faisant avancer le temps de timeStep millisecondes
-void ParticleQueue::iterateForTimeStep(int timeStep)
+void ParticleQueue::iterateForTimeStep(Image2Grey& img, int timeStep)
 {
-    // vecteurg
+    // vecteur g (accélération de la gravité 9.81 m/s^2 vers le centre de la Terre)
     Vec2f g;
     g[0] = 0.f;
     g[1] = 9.81;
@@ -124,7 +126,14 @@ void ParticleQueue::iterateForTimeStep(int timeStep)
                 newPosition = p.getPosition() + p.getSpeed() + g * 0.5f;
 
                 // test de collision
-                // TODO
+                if (img((int)std::round(newPosition[0]), (int)std::round(newPosition[1])) > 0)
+                {
+                    std::cout << "collision !" << std::endl;
+                }
+                else
+                {
+                    // les coordonnées sont validées
+                }
 
                 //std::cout << "old pos " << p.getPosition()[0] << ", " << p.getPosition()[1] << std::endl;
                 //std::cout << "new pos " << newPosition[0] << ", " << newPosition[1] << std::endl;
@@ -143,7 +152,7 @@ void ParticleQueue::iterateForTimeStep(int timeStep)
         // replacer la particule désormais en avance dans la file
         if (p.getPosition()[0] < 0 || p.getPosition()[0] > 1023 || p.getPosition()[1] < 0 || p.getPosition()[1] > 1023)
         {
-            std::cout << "removing particle out of space" << std::endl;
+            //std::cout << "removing particle out of screen" << std::endl;
         }
         else
         {
@@ -156,7 +165,4 @@ void ParticleQueue::iterateForTimeStep(int timeStep)
 
     // la date globale a désormais avancé de timeStep millisecondes
     _date += timeStep;
-
-    // TODO
-    return;
 }

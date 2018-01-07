@@ -6,6 +6,7 @@
 #include "BoundingBox.h"
 #include "Particle.h"
 #include "ParticleQueue.h"
+#include "CsgTree.h"
 #include <limits>
 
 
@@ -202,7 +203,7 @@ void RenderImg::mousePressEvent(QMouseEvent *event)
         float x = p.getPosition()[0];
         float y = p.getPosition()[1];
 
-        glVertex2f(2.0f * x / m_widthTex - 1.0f, -2.0f * y / m_heightTex + 1.0f);
+        glVertex2f(xImg2GL(x), yImg2GL(y));
 
         _temp.pop();
     }
@@ -235,12 +236,11 @@ void RenderImg::keyPressEvent(QKeyEvent* event)
 			std::cout << " touche a enfoncee" << std::endl;
             for (int i = 0; i < 1024; i++)
             {
-                for (int j = 0; j < 100; j++)
+                for (int j = 0; j < 10; j++)
                 {
                     m_particles.addParticle(i, j);
                 }
             }
-            //m_particles.addParticle(512,0);
 			break;
 		case 'E':
 			// qq init
@@ -270,11 +270,11 @@ void RenderImg::animate()
         std::cout << "Particules are all out of screen" << std::endl;
         return;
     }
-    m_particles.iterateForTimeStep(100);
+    m_particles.iterateForTimeStep(m_img, 100);
 
     paintGL();
 
-    glPointSize(10.0f);
+    glPointSize(3.0f);
     glColor3f(1.0f,0,0);
     glBegin(GL_POINTS);
 
