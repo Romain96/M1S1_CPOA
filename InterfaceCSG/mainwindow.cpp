@@ -43,9 +43,9 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->scale->setMinimum(-100);
 	ui->scale->setMaximum(100);
 	
-    //ui->currentNode->setMaximum(0);
-    //ui->id_filsGauche->setMaximum(0);
-    //ui->id_filsDroit->setMaximum(0);
+    ui->currentNode->setMaximum(0);
+    ui->id_filsGauche->setMaximum(0);
+    ui->id_filsDroit->setMaximum(0);
 	
 	connect(ui->create_oper,SIGNAL(clicked()),SLOT(createOperation()));
 	connect(ui->create_prim,SIGNAL(clicked()),SLOT(createPrimtive()));
