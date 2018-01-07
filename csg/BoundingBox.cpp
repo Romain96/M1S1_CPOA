@@ -241,12 +241,54 @@ BoundingBox& operator ^(BoundingBox& bb1, BoundingBox& bb2)
 BoundingBox& operator -(BoundingBox& bb1, BoundingBox& bb2)
 {
     // nouveaux points délimitant la bounding box union
-    Vec2f ulp = bb1.getUpperLeftPoint();
-    Vec2f urp = bb1.getUpperRightPoint();
-    Vec2f llp = bb1.getLowerLeftPoint();
-    Vec2f lrp = bb1.getLowerRightPoint();
+    Vec2f ulp;
+    Vec2f urp;
+    Vec2f llp;
+    Vec2f lrp;
 
-    // traité le plus simplement possible : bounding box de bb1
+    // le point supérieur gauche est (x plus petit, y plus petit)
+    if (bb1.getUpperLeftPoint()[0] < bb2.getUpperLeftPoint()[0])
+        ulp[0] = bb1.getUpperLeftPoint()[0];
+    else
+        ulp[0] = bb2.getUpperLeftPoint()[0];
+
+    if (bb1.getUpperLeftPoint()[1] < bb2.getUpperLeftPoint()[1])
+        ulp[1] = bb1.getUpperLeftPoint()[1];
+    else
+        ulp[1] = bb2.getUpperLeftPoint()[1];
+
+    // le point supérieur droit est  (x plus grand, y plus petit)
+    if (bb1.getUpperRightPoint()[0] > bb2.getUpperRightPoint()[0])
+        urp[0] = bb1.getUpperRightPoint()[0];
+    else
+        urp[0] = bb2.getUpperRightPoint()[0];
+
+    if (bb1.getUpperRightPoint()[1] < bb2.getUpperRightPoint()[1])
+        urp[1] = bb1.getUpperRightPoint()[1];
+    else
+        urp[1] = bb2.getUpperRightPoint()[1];
+
+    // le point inférieur gauche est (x plus petit, y plus grand)
+    if (bb1.getLowerLeftPoint()[0] < bb2.getLowerLeftPoint()[0])
+        llp[0] = bb1.getLowerLeftPoint()[0];
+    else
+        llp[0] = bb2.getLowerLeftPoint()[0];
+
+    if (bb1.getLowerLeftPoint()[1] > bb2.getLowerLeftPoint()[1])
+        llp[1] = bb1.getLowerLeftPoint()[1];
+    else
+        llp[1] = bb2.getLowerLeftPoint()[1];
+
+    // le point inférieur droit est  (x plus grand, y plus grand)
+    if (bb1.getLowerRightPoint()[0] > bb2.getLowerRightPoint()[0])
+        lrp[0] = bb1.getLowerRightPoint()[0];
+    else
+        lrp[0] = bb2.getLowerRightPoint()[0];
+
+    if (bb1.getLowerRightPoint()[1] > bb2.getLowerRightPoint()[1])
+        lrp[1] = bb1.getLowerRightPoint()[1];
+    else
+        lrp[1] = bb2.getLowerRightPoint()[1];
 
     // DEBUG
     std::cout << "upper left point : " << ulp[0] << "," << ulp[1] << std::endl;
