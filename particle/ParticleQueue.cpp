@@ -101,6 +101,7 @@ void ParticleQueue::iterateForTimeStep(Image2Grey& img, int timeStep)
     Vec2f newSpeed;
     // nouveau vecteur position de la particule
     Vec2f newPosition;
+    bool to_remove = false;
 
     // traitement tant que la particule la plus en retard est en retard sur la date à atteindre
     while (!_queue.empty() && (p = _queue.top()).getDate() < (_date + timeStep))
@@ -109,15 +110,16 @@ void ParticleQueue::iterateForTimeStep(Image2Grey& img, int timeStep)
         previousX = p.getPosition()[0];
         previousY = p.getPosition()[1];
         particleStep = 0;
+        to_remove = false;
 
         //std::cout << "treating particle " << p.getPosition()[0] << ", " << p.getPosition()[1] << std::endl;
 
         // tant que la particule n'a pas avancé de timeStep unités de temps
-        while (particleStep < timeStep)
+        while (particleStep < timeStep && !to_remove)
         {
             // tant que la particule n'a pas avancé d'un pixel, faire avancer la particule
             // de 1 milliseconde
-            while ((p.getPosition()[0] - previousX) < 1.f && (p.getPosition()[1] - previousY) < 1.f)
+            while ((p.getPosition()[0] - previousX) < 1.f && (p.getPosition()[1] - previousY) < 1.f && !to_remove)
             {
                 //std::cout << "moving 100 ms" << std::endl;
 
@@ -126,31 +128,32 @@ void ParticleQueue::iterateForTimeStep(Image2Grey& img, int timeStep)
                 newPosition = p.getPosition() + p.getSpeed() + g * 0.5f;
 
                 // test de collision
-                if (img((int)std::round(newPosition[0]), (int)std::round(newPosition[1])) > 0)
+                if ((int)std::round(newPosition[0]) > 1023 || (int)std::round(newPosition[1]) > 1023 || (int)std::round(newPosition[1]) < 0)
+                {
+                    std::cout << "out of screen !" << std::endl;
+                    to_remove = true;
+                }
+                else if (img((int)std::round(newPosition[0]), (int)std::round(newPosition[1])) > 0)
                 {
                     std::cout << "collision !" << std::endl;
+                    // pour l'instant on se contente de supprimer ces particules
+                    to_remove = true;
                 }
                 else
                 {
-                    // les coordonnées sont validées
+                    // validation des coordonnées
+                    p.setPosition(newPosition);
+                    p.setSpeed(newSpeed);
                 }
 
-                //std::cout << "old pos " << p.getPosition()[0] << ", " << p.getPosition()[1] << std::endl;
-                //std::cout << "new pos " << newPosition[0] << ", " << newPosition[1] << std::endl;
-                //std::cout << "speed " << newSpeed[0] << ", " << newSpeed[1] << std::endl;
-
-                // validation
-                p.setPosition(newPosition);
-                p.setSpeed(newSpeed);
-
-                // la particule a avancé de 1 milliseconde
+                // la particule a avancé de 100 millisecondes
                 p.setDate(p.getDate() + 100);
                 particleStep += 100;
             }
             particleStep = timeStep;
         }
         // replacer la particule désormais en avance dans la file
-        if (p.getPosition()[0] < 0 || p.getPosition()[0] > 1023 || p.getPosition()[1] < 0 || p.getPosition()[1] > 1023)
+        if (p.getPosition()[0] < 0 || p.getPosition()[0] > 1023 || p.getPosition()[1] < 0 || p.getPosition()[1] > 1023 || to_remove)
         {
             //std::cout << "removing particle out of screen" << std::endl;
         }
