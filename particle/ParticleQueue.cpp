@@ -125,7 +125,7 @@ void ParticleQueue::iterateForTimeStep(Image2Grey& img, int timeStep)
 
                 // calculer la future position de la particule suivant son vecteur vitesse
                 newSpeed = p.getSpeed() + g * 0.1f;   // t = 100ms = 100/1000 s
-                newPosition = p.getPosition() + p.getSpeed() + g * 0.5f;
+                newPosition = p.getPosition() + p.getSpeed() + g * 0.005f;
 
                 // test de collision
                 if ((int)std::round(newPosition[0]) > 1023 || (int)std::round(newPosition[1]) > 1023 || (int)std::round(newPosition[1]) < 0)
