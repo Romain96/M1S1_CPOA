@@ -86,8 +86,8 @@ const Vec2f& BoundingBox::getLowerRightPoint() const
 Vec2f& BoundingBox::center()
 {
     static Vec2f center;
-    center[0] = _upper_right_point[0] - _upper_left_point[0];
-    center[1] = _lower_left_point[1] - _upper_left_point[1];
+    center[0] = _upper_left_point[0] + (_upper_right_point[0] - _upper_left_point[0])/2;
+    center[1] = _upper_left_point[1] + (_lower_left_point[1] - _upper_left_point[1])/2;
     return center;
 }
 

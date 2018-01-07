@@ -208,6 +208,7 @@ void MainWindow::createOperation()
     ui->currentNode->setMaximum(max);
     ui->id_filsGauche->setMaximum(max);
     ui->id_filsDroit->setMaximum(max);
+    ui->currentNode->setValue(m_tree.getLastNodeId());
 
     m_transfo = Matrix33d();
     m_centerSelection = oper->getBoundingBox().center();
@@ -269,49 +270,55 @@ void MainWindow::transfoChanged()
     CsgNode *node = m_tree.getNode(ui->currentNode->value());
 
     Matrix33d fromLocaltoOrigin;
-    fromLocaltoOrigin(0,2) = -512.f;
-    fromLocaltoOrigin(1,2) = -512.f;
     Matrix33d fromOriginToLocal;
-    fromOriginToLocal(0,2) = 512.f;
-    fromOriginToLocal(1,2) = 512.f;
+    Matrix33d trans;
+    Matrix33d rot;
+    Matrix33d homo;
+    Matrix33d transfo;
 
-    // récupération de la matrice de translation
-    Matrix33d trans = fromOriginToLocal * trans.staticTranslation(transx, transy) * fromLocaltoOrigin;
-    // récupération de la matrice de rotation
-    Matrix33d rot = fromOriginToLocal * rot.staticRotation(angle) * fromLocaltoOrigin;
-    // récupération de la matrice d'homothétie
-    Matrix33d homo = fromOriginToLocal * homo.staticShrink(scale, scale) * fromLocaltoOrigin;
-
-    std::cout << trans(0,0) << " " << trans(0,1) << " " << trans(0,2) << std::endl;
-    std::cout << trans(1,0) << " " << trans(1,1) << " " << trans(1,2) << std::endl;
-    std::cout << trans(2,0) << " " << trans(2,1) << " " << trans(2,2) << std::endl << std::endl;
-
-    std::cout << rot(0,0) << " " << rot(0,1) << " " << rot(0,2) << std::endl;
-    std::cout << rot(1,0) << " " << rot(1,1) << " " << rot(1,2) << std::endl;
-    std::cout << rot(2,0) << " " << rot(2,1) << " " << rot(2,2) << std::endl << std::endl;
-
-    std::cout << homo(0,0) << " " << homo(0,1) << " " << homo(0,2) << std::endl;
-    std::cout << homo(1,0) << " " << homo(1,1) << " " << homo(1,2) << std::endl;
-    std::cout << homo(2,0) << " " << homo(2,1) << " " << homo(2,2) << std::endl << std::endl;
-
-    // construction de la matrice de transformation
-    //Matrix33d transfo = homo * trans * rot;
-    Matrix33d transfo = homo * trans * rot;
-    //transfo = homo * transfo;
-
-    std::cout << transfo(0,0) << " " << transfo(0,1) << " " << transfo(0,2) << std::endl;
-    std::cout << transfo(1,0) << " " << transfo(1,1) << " " << transfo(1,2) << std::endl;
-    std::cout << transfo(2,0) << " " << transfo(2,1) << " " << transfo(2,2) << std::endl;
-
-    node->setMatrix(transfo);
-
-    // mise à jour de la bounding box
+    // traitement pour les primitives graphiques
     if (node->getOperation().getOperationType() == operationTypes::NONE)
-    {
+    {     
+        fromLocaltoOrigin(0,2) = -512.f;
+        fromLocaltoOrigin(1,2) = -512.f;
+
+        fromOriginToLocal(0,2) = 512.f;
+        fromOriginToLocal(1,2) = 512.f;
+
+        // récupération de la matrice de translation
+        trans = fromOriginToLocal * trans.staticTranslation(transx, transy) * fromLocaltoOrigin;
+        // récupération de la matrice de rotation
+        rot = fromOriginToLocal * rot.staticRotation(angle) * fromLocaltoOrigin;
+        // récupération de la matrice d'homothétie
+        homo = fromOriginToLocal * homo.staticShrink(scale, scale) * fromLocaltoOrigin;
+
+        std::cout << trans(0,0) << " " << trans(0,1) << " " << trans(0,2) << std::endl;
+        std::cout << trans(1,0) << " " << trans(1,1) << " " << trans(1,2) << std::endl;
+        std::cout << trans(2,0) << " " << trans(2,1) << " " << trans(2,2) << std::endl << std::endl;
+
+        std::cout << rot(0,0) << " " << rot(0,1) << " " << rot(0,2) << std::endl;
+        std::cout << rot(1,0) << " " << rot(1,1) << " " << rot(1,2) << std::endl;
+        std::cout << rot(2,0) << " " << rot(2,1) << " " << rot(2,2) << std::endl << std::endl;
+
+        std::cout << homo(0,0) << " " << homo(0,1) << " " << homo(0,2) << std::endl;
+        std::cout << homo(1,0) << " " << homo(1,1) << " " << homo(1,2) << std::endl;
+        std::cout << homo(2,0) << " " << homo(2,1) << " " << homo(2,2) << std::endl << std::endl;
+
+        // construction de la matrice de transformation
+        transfo = homo * trans * rot;
+
+        std::cout << transfo(0,0) << " " << transfo(0,1) << " " << transfo(0,2) << std::endl;
+        std::cout << transfo(1,0) << " " << transfo(1,1) << " " << transfo(1,2) << std::endl;
+        std::cout << transfo(2,0) << " " << transfo(2,1) << " " << transfo(2,2) << std::endl;
+
+        node->setMatrix(transfo);
+
+        // mise à jour de la bounding box (celle de la primitive et aussi celle de l'opération dans ce cas)
         CsgPrimitive *prim = node->getPrimitive();
         prim->updateBoundingBox(transx, transy, angle, scale);
         node->getOperation().setBoundingBox(prim->getBoundingBox());
     }
+    // traitement pour les opérations
     else
     {
         // nouvelle transfo
@@ -328,31 +335,62 @@ void MainWindow::transfoChanged()
         // récupération de la matrice d'homothétie
         homo = fromOriginToLocal * homo.staticShrink(scale, scale) * fromLocaltoOrigin;
 
+        // construction de la nouvelle matrice de transformation
         transfo = homo * trans * rot;
         node->setMatrix(transfo);
 
         Vec2f center;
         center = node->getOperation().getBoundingBox().center();
 
-        int xmin = node->getOperation().getBoundingBox().getUpperLeftPoint()[0];
-        int ymin = node->getOperation().getBoundingBox().getUpperLeftPoint()[1];
-        //int distanceToOrigin = sqrt((center[0] - xmin)*(center[0] - xmin) + (center[1] - ymin)*(center[1] - ymin));
+        // calcul des nouvelles coordonnées des 4 coins de la bounding box
+        int startingAngle = 45; // diagonale de la bounding box (coin supérieur droit)
+        int angleStep = 90;
+        double currentAngle = (double)(startingAngle + angle);
+        Vec2f temp = node->getOperation().getBoundingBox().getUpperRightPoint();
+        double diagonalLength = sqrt((temp[0] - center[0])*(temp[0] - center[0]) + (temp[1] - center[1])*(temp[1] - center[1]));
+        std::cout << "diagonal length is " << diagonalLength << std::endl;
+        std::cout << "center was " << center[0] << ", " << center[1] << "and urp was " << temp[0] << ", " << temp[1] << std::endl;
+        int xmin = 1024;
+        int xmax = 0;
+        int ymin = 1024;
+        int ymax = 0;
+        Vec2f bbPoint;
+
+        std::cout << "starting angle (op) is " << currentAngle << std::endl;
+
+        for (int i = 0; i < 4; i++)
+        {
+            bbPoint[0] = (center[0] + transx) + (diagonalLength * scale) * cos(currentAngle * M_PI/180.f);
+            bbPoint[1] = (center[1] + transy) + (diagonalLength * scale) * sin(currentAngle * M_PI/180.f);
+            std::cout << "new pt BB " << bbPoint[0] << ", " << bbPoint[1] << std::endl;
+
+            currentAngle = fmod(currentAngle + angleStep, 360.f);
+
+            if (bbPoint[0] < xmin)
+                xmin = bbPoint[0];
+            if (bbPoint[0] > xmax)
+                xmax = bbPoint[0];
+            if (bbPoint[1] < ymin)
+                ymin = bbPoint[1];
+            if (bbPoint[1] > ymax)
+                ymax = bbPoint[1];
+        }
 
         Vec2f ulp;
-        ulp[0] = (node->getOperation().getBoundingBox().getUpperLeftPoint()[0] + transx);
-        ulp[1] = (node->getOperation().getBoundingBox().getUpperLeftPoint()[1] + transy);
+        ulp[0] = std::max(0, xmin);
+        ulp[1] = std::max(0, ymin);
 
         Vec2f urp;
-        urp[0] = (node->getOperation().getBoundingBox().getUpperRightPoint()[0] + transx);
-        urp[1] = (node->getOperation().getBoundingBox().getUpperRightPoint()[1] + transy);
+        urp[0] = std::min(1023, xmax);
+        urp[1] = std::max(0, ymin);
 
         Vec2f llp;
-        llp[0] = (node->getOperation().getBoundingBox().getLowerLeftPoint()[0] + transx);
-        llp[1] = (node->getOperation().getBoundingBox().getLowerLeftPoint()[1] + transy);
+        llp[0] = std::max(0, xmin);
+        llp[1] = std::min(1023, ymax);
 
         Vec2f lrp;
-        lrp[0] = (node->getOperation().getBoundingBox().getLowerRightPoint()[0] + transx);
-        lrp[1] = (node->getOperation().getBoundingBox().getLowerRightPoint()[1] + transy);
+        lrp[0] = std::min(1023, xmax);
+        lrp[1] = std::min(1023, ymax);
 
         // debug
         std::cout << "ulp " << ulp[0] << " " << ulp[1] << std::endl;
@@ -363,9 +401,6 @@ void MainWindow::transfoChanged()
         BoundingBox bb = BoundingBox(ulp, urp, llp, lrp);
         node->getOperation().setBoundingBox(bb);
     }
-
-
-	// de même avec un noeud Operation !
 
 	updateTreeRender();
 }
