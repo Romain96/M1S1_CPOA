@@ -224,6 +224,7 @@ void MainWindow::createOperation()
 void MainWindow::applyTransfo()
 {
 //	m_transfo = m_currentNode->getTransfo();
+    m_transfo = m_currentNode->getMatrix();
 	resetTransfoWidgets();
 	updateTreeRender();
 }
@@ -279,6 +280,11 @@ void MainWindow::transfoChanged()
     // traitement pour les primitives graphiques
     if (node->getOperation().getOperationType() == operationTypes::NONE)
     {     
+        // mise à jour de la bounding box (celle de la primitive et aussi celle de l'opération dans ce cas)
+        CsgPrimitive *prim = node->getPrimitive();
+        prim->updateBoundingBox(node->getOperation().getBoundingBox().center(), transx, transy, angle, scale);
+        node->getOperation().setBoundingBox(prim->getBoundingBox());
+
         fromLocaltoOrigin(0,2) = -node->getOperation().getBoundingBox().center()[0];
         fromLocaltoOrigin(1,2) = -node->getOperation().getBoundingBox().center()[1];
 
@@ -300,38 +306,10 @@ void MainWindow::transfoChanged()
         std::cout << transfo(2,0) << " " << transfo(2,1) << " " << transfo(2,2) << std::endl;
 
         node->setMatrix(transfo);
-
-        // mise à jour de la bounding box (celle de la primitive et aussi celle de l'opération dans ce cas)
-        CsgPrimitive *prim = node->getPrimitive();
-        prim->updateBoundingBox(node->getOperation().getBoundingBox().center(), transx, transy, angle, scale);
-        node->getOperation().setBoundingBox(prim->getBoundingBox());
     }
     // traitement pour les opérations
     else
     {
-        // nouvelle transfo vers l'origine
-        fromLocaltoOrigin(0,2) = -node->getOperation().getBoundingBox().center()[0];
-        fromLocaltoOrigin(1,2) = -node->getOperation().getBoundingBox().center()[1];
-        // et transfo inverse
-        fromOriginToLocal(0,2) = node->getOperation().getBoundingBox().center()[0];
-        fromOriginToLocal(1,2) = node->getOperation().getBoundingBox().center()[1];
-
-        // récupération de la matrice de translation
-        trans = fromOriginToLocal * trans.staticTranslation(transx, transy) * fromLocaltoOrigin;
-        // récupération de la matrice de rotation
-        rot = fromOriginToLocal * rot.staticRotation(angle) * fromLocaltoOrigin;
-        // récupération de la matrice d'homothétie
-        homo = fromOriginToLocal * homo.staticShrink(scale, scale) * fromLocaltoOrigin;
-
-        // construction de la nouvelle matrice de transformation
-        transfo = homo * trans * rot;
-
-        std::cout << transfo(0,0) << " " << transfo(0,1) << " " << transfo(0,2) << std::endl;
-        std::cout << transfo(1,0) << " " << transfo(1,1) << " " << transfo(1,2) << std::endl;
-        std::cout << transfo(2,0) << " " << transfo(2,1) << " " << transfo(2,2) << std::endl;
-
-        node->setMatrix(transfo);
-
         Vec2f center;
         center = node->getOperation().getBoundingBox().center();
 
@@ -342,7 +320,7 @@ void MainWindow::transfoChanged()
         Vec2f temp = node->getOperation().getBoundingBox().getUpperRightPoint();
         double diagonalLength = sqrt((temp[0] - center[0])*(temp[0] - center[0]) + (temp[1] - center[1])*(temp[1] - center[1]));
         std::cout << "diagonal length is " << diagonalLength << std::endl;
-        std::cout << "center was " << center[0] << ", " << center[1] << "and urp was " << temp[0] << ", " << temp[1] << std::endl;
+        std::cout << "center was " << center[0] << ", " << center[1] << " and urp was " << temp[0] << ", " << temp[1] << std::endl;
         int xmin = 1024;
         int xmax = 0;
         int ymin = 1024;
@@ -393,6 +371,29 @@ void MainWindow::transfoChanged()
 
         BoundingBox bb = BoundingBox(ulp, urp, llp, lrp);
         node->getOperation().setBoundingBox(bb);
+
+        // nouvelle transfo vers l'origine
+        fromLocaltoOrigin(0,2) = -node->getOperation().getBoundingBox().center()[0];
+        fromLocaltoOrigin(1,2) = -node->getOperation().getBoundingBox().center()[1];
+        // et transfo inverse
+        fromOriginToLocal(0,2) = node->getOperation().getBoundingBox().center()[0];
+        fromOriginToLocal(1,2) = node->getOperation().getBoundingBox().center()[1];
+
+        // récupération de la matrice de translation
+        trans = fromOriginToLocal * trans.staticTranslation(transx, transy) * fromLocaltoOrigin;
+        // récupération de la matrice de rotation
+        rot = fromOriginToLocal * rot.staticRotation(angle) * fromLocaltoOrigin;
+        // récupération de la matrice d'homothétie
+        homo = fromOriginToLocal * homo.staticShrink(scale, scale) * fromLocaltoOrigin;
+
+        // construction de la nouvelle matrice de transformation
+        transfo = homo * trans * rot;
+
+        std::cout << transfo(0,0) << " " << transfo(0,1) << " " << transfo(0,2) << std::endl;
+        std::cout << transfo(1,0) << " " << transfo(1,1) << " " << transfo(1,2) << std::endl;
+        std::cout << transfo(2,0) << " " << transfo(2,1) << " " << transfo(2,2) << std::endl;
+
+        node->setMatrix(transfo);
     }
 
 	updateTreeRender();
@@ -639,8 +640,6 @@ void MainWindow::updateTextGraph()
 
 void MainWindow::currentNodeChanged(int id)
 {
-    //	m_currentNode = m_tree.fromId(id);
-
     // VOTRE CODE ICI
     m_currentNode = m_tree.getNode(id);
 

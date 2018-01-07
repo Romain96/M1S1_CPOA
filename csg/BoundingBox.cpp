@@ -108,7 +108,7 @@ BoundingBox& operator +(BoundingBox& bb1, BoundingBox& bb2)
 
     // le point supérieur gauche est (x plus petit, y plus petit)
     ulp[0] = std::min(bb1.getUpperLeftPoint()[0], bb2.getUpperLeftPoint()[0]);
-    ulp[1] = std::min(bb1.getLowerLeftPoint()[1], bb2.getUpperLeftPoint()[1]);
+    ulp[1] = std::min(bb1.getUpperLeftPoint()[1], bb2.getUpperLeftPoint()[1]);
 
     // le point supérieur droit est  (x plus grand, y plus petit)
     urp[0] = std::max(bb1.getUpperRightPoint()[0], bb2.getUpperRightPoint()[0]);
@@ -150,10 +150,10 @@ BoundingBox& operator ^(BoundingBox& bb1, BoundingBox& bb2)
 
     // le point supérieur gauche est (x plus grand, y plus grand)
     ulp[0] = std::max(bb1.getUpperLeftPoint()[0], bb2.getUpperLeftPoint()[0]);
-    ulp[1] = std::max(bb1.getUpperLeftPoint()[1], bb2.getLowerLeftPoint()[1]);
+    ulp[1] = std::max(bb1.getUpperLeftPoint()[1], bb2.getUpperLeftPoint()[1]);
 
     // le point supérieur droit est  (x plus petit, y plus grand)
-    urp[0] = std::min(bb1.getUpperRightPoint()[0], bb1.getUpperRightPoint()[0]);
+    urp[0] = std::min(bb1.getUpperRightPoint()[0], bb2.getUpperRightPoint()[0]);
     urp[1] = std::max(bb1.getUpperRightPoint()[1], bb2.getUpperRightPoint()[1]);
 
     // le point inférieur gauche est (x plus grand, y plus petit)
@@ -192,7 +192,7 @@ BoundingBox& operator -(BoundingBox& bb1, BoundingBox& bb2)
 
     // le point supérieur gauche est (x plus petit, y plus petit)
     ulp[0] = std::min(bb1.getUpperLeftPoint()[0], bb2.getUpperLeftPoint()[0]);
-    ulp[1] = std::min(bb1.getLowerLeftPoint()[1], bb2.getUpperLeftPoint()[1]);
+    ulp[1] = std::min(bb1.getUpperLeftPoint()[1], bb2.getUpperLeftPoint()[1]);
 
     // le point supérieur droit est  (x plus grand, y plus petit)
     urp[0] = std::max(bb1.getUpperRightPoint()[0], bb2.getUpperRightPoint()[0]);

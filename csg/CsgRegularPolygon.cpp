@@ -117,8 +117,8 @@ void CsgRegularPolygon::updateBoundingBox(Vec2f& center, int tx, int ty, int ang
 
     for (int i = 0; i < _vertexNumber; i++)
     {
-        point[0] = (center[0] + realTx) + (_distanceToOrigin * scale) * cos(currentAngle * M_PI/180.f);
-        point[1] = (center[1] + realTy) + (_distanceToOrigin * scale) * sin(currentAngle * M_PI/180.f);
+        point[0] = std::round((center[0] + realTx) + (_distanceToOrigin * scale) * std::cos(currentAngle * M_PI/180.f));
+        point[1] = std::round((center[1] + realTy) + (_distanceToOrigin * scale) * std::sin(currentAngle * M_PI/180.f));
         std::cout << "new pts : " << point[0] << " " << point[1] << std::endl;
         currentAngle = std::fmod(currentAngle + angleStep, 360.f);
         if (point[0] < xmin)
