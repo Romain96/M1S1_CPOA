@@ -82,20 +82,20 @@ void CsgDisk::updateBoundingBox(Vec2f& center, int tx, int ty, int angle, double
     _previousTranslateY = ty;
 
     Vec2f ulp;
-    ulp[0] = (center[0] + realTx) - (_distanceToOrigin * scale);
-    ulp[1] = (center[1] + realTy) - (_distanceToOrigin * scale);
+    ulp[0] = std::max(0, (int)((center[0] + realTx) - (_distanceToOrigin * scale)));
+    ulp[1] = std::max(0, (int)((center[1] + realTy) - (_distanceToOrigin * scale)));
 
     Vec2f urp;
-    urp[0] = (center[0] + realTx) + (_distanceToOrigin * scale);
-    urp[1] = (center[1] + realTy) - (_distanceToOrigin * scale);
+    urp[0] = std::min(1023, (int)((center[0] + realTx) + (_distanceToOrigin * scale)));
+    urp[1] = std::max(0, (int)((center[1] + realTy) - (_distanceToOrigin * scale)));
 
     Vec2f llp;
-    llp[0] = (center[0] + realTx) - (_distanceToOrigin * scale);
-    llp[1] = (center[1] + realTy) + (_distanceToOrigin * scale);
+    llp[0] = std::max(0, (int)((center[0] + realTx) - (_distanceToOrigin * scale)));
+    llp[1] = std::min(1023, (int)((center[1] + realTy) + (_distanceToOrigin * scale)));
 
     Vec2f lrp;
-    lrp[0] = (center[0] + realTx) + (_distanceToOrigin * scale);
-    lrp[1] = (center[1] + realTy) + (_distanceToOrigin * scale);
+    lrp[0] = std::min(1023, (int)((center[0] + realTx) + (_distanceToOrigin * scale)));
+    lrp[1] = std::min(1023, (int)((center[1] + realTy) + (_distanceToOrigin * scale)));
 
     // debug
     std::cout << "ulp " << ulp[0] << " " << ulp[1] << std::endl;

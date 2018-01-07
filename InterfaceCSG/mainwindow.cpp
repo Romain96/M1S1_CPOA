@@ -279,12 +279,6 @@ void MainWindow::transfoChanged()
     // traitement pour les primitives graphiques
     if (node->getOperation().getOperationType() == operationTypes::NONE)
     {     
-        //fromLocaltoOrigin(0,2) = -512.f;
-        //fromLocaltoOrigin(1,2) = -512.f;
-
-        //fromOriginToLocal(0,2) = 512.f;
-        //fromOriginToLocal(1,2) = 512.f;
-
         fromLocaltoOrigin(0,2) = -node->getOperation().getBoundingBox().center()[0];
         fromLocaltoOrigin(1,2) = -node->getOperation().getBoundingBox().center()[1];
 
@@ -297,18 +291,6 @@ void MainWindow::transfoChanged()
         rot = fromOriginToLocal * rot.staticRotation(angle) * fromLocaltoOrigin;
         // récupération de la matrice d'homothétie
         homo = fromOriginToLocal * homo.staticShrink(scale, scale) * fromLocaltoOrigin;
-
-        std::cout << trans(0,0) << " " << trans(0,1) << " " << trans(0,2) << std::endl;
-        std::cout << trans(1,0) << " " << trans(1,1) << " " << trans(1,2) << std::endl;
-        std::cout << trans(2,0) << " " << trans(2,1) << " " << trans(2,2) << std::endl << std::endl;
-
-        std::cout << rot(0,0) << " " << rot(0,1) << " " << rot(0,2) << std::endl;
-        std::cout << rot(1,0) << " " << rot(1,1) << " " << rot(1,2) << std::endl;
-        std::cout << rot(2,0) << " " << rot(2,1) << " " << rot(2,2) << std::endl << std::endl;
-
-        std::cout << homo(0,0) << " " << homo(0,1) << " " << homo(0,2) << std::endl;
-        std::cout << homo(1,0) << " " << homo(1,1) << " " << homo(1,2) << std::endl;
-        std::cout << homo(2,0) << " " << homo(2,1) << " " << homo(2,2) << std::endl << std::endl;
 
         // construction de la matrice de transformation
         transfo = homo * trans * rot;
@@ -327,7 +309,7 @@ void MainWindow::transfoChanged()
     // traitement pour les opérations
     else
     {
-        // nouvelle transfo
+        // nouvelle transfo vers l'origine
         fromLocaltoOrigin(0,2) = -node->getOperation().getBoundingBox().center()[0];
         fromLocaltoOrigin(1,2) = -node->getOperation().getBoundingBox().center()[1];
         // et transfo inverse
@@ -343,6 +325,11 @@ void MainWindow::transfoChanged()
 
         // construction de la nouvelle matrice de transformation
         transfo = homo * trans * rot;
+
+        std::cout << transfo(0,0) << " " << transfo(0,1) << " " << transfo(0,2) << std::endl;
+        std::cout << transfo(1,0) << " " << transfo(1,1) << " " << transfo(1,2) << std::endl;
+        std::cout << transfo(2,0) << " " << transfo(2,1) << " " << transfo(2,2) << std::endl;
+
         node->setMatrix(transfo);
 
         Vec2f center;
