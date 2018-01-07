@@ -301,8 +301,8 @@ void RenderImg::drawSobel()
 
 void RenderImg::drawBB(const BoundingBox& bb)
 {
-	glBegin(GL_LINE_LOOP);
-	glColor3f(1.0f,0.5f,0.5f);
+    glBegin(GL_LINE_LOOP);
+    glColor3f(1.0f,0.5f,0.5f);
 
     std::cout << "drawing BB" << std::endl;
 
@@ -311,10 +311,11 @@ void RenderImg::drawBB(const BoundingBox& bb)
     Vec2f llp = bb.getLowerLeftPoint();
     Vec2f lrp = bb.getLowerRightPoint();
 
+
     glVertex2f( xImg2GL(ulp[0]), yImg2GL(ulp[1]) );
     glVertex2f( xImg2GL(llp[0]), yImg2GL(llp[1]) );
     glVertex2f( xImg2GL(lrp[0]), yImg2GL(lrp[1]) );
     glVertex2f( xImg2GL(urp[0]), yImg2GL(urp[1]) );
-	glEnd();
+    glEnd();
 }
 

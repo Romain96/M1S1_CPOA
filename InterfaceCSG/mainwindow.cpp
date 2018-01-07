@@ -200,6 +200,12 @@ void MainWindow::createOperation()
     // rechercher le noeud correspondant à right
     CsgNode *rightChild = m_tree.getNode(right);
 
+    if (leftChild == nullptr && rightChild == nullptr)
+    {
+        std::cerr << "cannot join primitives : left child and/or right child is NULL" << std::endl;
+        return;
+    }
+
     // regrouper les deux avec joinPrimitives
     m_tree.joinPrimitives(oper, leftChild, rightChild);
 
@@ -224,7 +230,9 @@ void MainWindow::createOperation()
 void MainWindow::applyTransfo()
 {
 //	m_transfo = m_currentNode->getTransfo();
-    m_transfo = m_currentNode->getMatrix();
+
+    // Déjà appliqué par transfoChanged !
+
 	resetTransfoWidgets();
 	updateTreeRender();
 }
@@ -537,6 +545,10 @@ void MainWindow::saveCSG()
 void MainWindow::clearCSG()
 {
     m_tree.clear();
+    ui->currentNode->setValue(0);
+    ui->currentNode->setMaximum(0);
+    ui->id_filsGauche->setMaximum(0);
+    ui->id_filsDroit->setMaximum(0);
 	updateTextGraph();
 	updateTreeRender();
     // mettre a jour ui->currentNode ui->id_filsGauche ui->id_filsDroit ui->currentNode
@@ -566,7 +578,7 @@ void MainWindow::drawTree()
 		// VOTRE CODE ICI
 
         m_render->setBBDraw(true);
-        m_bb = m_currentNode->getOperation().getBoundingBox();
+        //m_bb = m_currentNode->getOperation().getBoundingBox();
 	}
 	else
 	{

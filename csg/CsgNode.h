@@ -31,6 +31,10 @@ protected:
     // ou seulement une primitive (cas où operation est NONE)
     CsgPrimitive *_primitive;
 
+    // transformations relatives
+    int _previousTranslationX;
+    int _previousTranslationY;
+
 public:
     // constructeur
     CsgNode(CsgOperation operation);
@@ -54,6 +58,7 @@ public:
 
     // méthodes
     bool isInsideOperation(Vec2f& point);
+    void applyTransfo();
 };
 
 #endif // __CSGNODE_H__

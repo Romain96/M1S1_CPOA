@@ -16,7 +16,9 @@ CsgNode::CsgNode(CsgOperation operation) :
     _matrix(),
     _leftChild(nullptr),
     _rightChild(nullptr),
-    _primitive(nullptr)
+    _primitive(nullptr),
+    _previousTranslationX(0),
+    _previousTranslationY(0)
 {
     // génération de l'id du noeud
     _nodeId = _nodeUniqueIdGenerator++;

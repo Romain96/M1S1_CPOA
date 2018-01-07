@@ -173,3 +173,14 @@ void CsgPrimitive::updateBoundingBox(Vec2f& center, int tx, int ty, int angle, d
     // rien : dépend du la primitive elle-même
 }
 
+// Fonction         : applyTransfo
+// Argument(s)		: /
+// Valeur de retour	: /
+// Pré-condition(s)	: /
+// Post-condition(s): /
+// Commentaire(s)	: applique les transformations définitivement
+void CsgPrimitive::applyTransfo()
+{
+    _previousTranslateX = 0;
+    _previousTranslateY = 0;
+}
