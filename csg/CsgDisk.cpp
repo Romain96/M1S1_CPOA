@@ -59,7 +59,8 @@ bool CsgDisk::isInsidePrimitive(Vec2f &point)
 }
 
 // Fonction         : updateBoundingBox
-// Argument(s)		: - tx : translation en x (pixels)
+// Argument(s)		: - center : le centre de la bounding box actuelle
+//                    - tx : translation en x (pixels)
 //                    - ty : translation en y (pixels)
 //                    - angle : angle de rotation (degrès)
 //                    - scale : coefficient d'agrandissement/réduction (entier)
@@ -67,28 +68,34 @@ bool CsgDisk::isInsidePrimitive(Vec2f &point)
 // Pré-condition(s)	: /
 // Post-condition(s): /
 // Commentaire(s)	: met à jour la bounding box de la pimitive après transformation
-void CsgDisk::updateBoundingBox(int tx, int ty, int angle, double scale)
+void CsgDisk::updateBoundingBox(Vec2f& center, int tx, int ty, int angle, double scale)
 {
     // les translations correspondent aux coordonnées de la bounding box translatées
     // la rotation n'a pas de sens pour un disque
     // les homothéties correspondent à un accroisement/une réduction du rayon
     std::cout << "updating BB for disk with tx = " << tx << " ty = " << ty << " angle = " << angle << " scale = " << scale << std::endl;
+    std::cout << "updating from center " << center[0] << ", " << center[1] << std::endl;
+
+    int realTx = tx - _previousTranslateX;
+    int realTy = ty - _previousTranslateY;
+    _previousTranslateX = tx;
+    _previousTranslateY = ty;
 
     Vec2f ulp;
-    ulp[0] = (_center[0] + tx) - (_distanceToOrigin * scale);
-    ulp[1] = (_center[1] + ty) - (_distanceToOrigin * scale);
+    ulp[0] = (center[0] + realTx) - (_distanceToOrigin * scale);
+    ulp[1] = (center[1] + realTy) - (_distanceToOrigin * scale);
 
     Vec2f urp;
-    urp[0] = (_center[0] + tx) + (_distanceToOrigin * scale);
-    urp[1] = (_center[1] + ty) - (_distanceToOrigin * scale);
+    urp[0] = (center[0] + realTx) + (_distanceToOrigin * scale);
+    urp[1] = (center[1] + realTy) - (_distanceToOrigin * scale);
 
     Vec2f llp;
-    llp[0] = (_center[0] + tx) - (_distanceToOrigin * scale);
-    llp[1] = (_center[1] + ty) + (_distanceToOrigin * scale);
+    llp[0] = (center[0] + realTx) - (_distanceToOrigin * scale);
+    llp[1] = (center[1] + realTy) + (_distanceToOrigin * scale);
 
     Vec2f lrp;
-    lrp[0] = (_center[0] + tx) + (_distanceToOrigin * scale);
-    lrp[1] = (_center[1] + ty) + (_distanceToOrigin * scale);
+    lrp[0] = (center[0] + realTx) + (_distanceToOrigin * scale);
+    lrp[1] = (center[1] + realTy) + (_distanceToOrigin * scale);
 
     // debug
     std::cout << "ulp " << ulp[0] << " " << ulp[1] << std::endl;

@@ -28,7 +28,7 @@ public:
 
     // méthodes
     bool isInsidePrimitive(Vec2f &point);
-    void updateBoundingBox(int tx, int ty, int angle, double scale);
+    void updateBoundingBox(Vec2f& center, int tx, int ty, int angle, double scale);
 };
 
 #endif // __CSGREGULARPOLYGON_H__

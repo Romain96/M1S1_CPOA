@@ -86,7 +86,8 @@ bool CsgRegularPolygon::isInsidePrimitive(Vec2f &point)
 }
 
 // Fonction         : updateBoundingBox
-// Argument(s)		: - tx : translation en x (pixels)
+// Argument(s)		: - center : le centre de la bounding box actuelle
+//                    - tx : translation en x (pixels)
 //                    - ty : translation en y (pixels)
 //                    - angle : angle de rotation (degrès)
 //                    - scale : coefficient d'agrandissement/réduction (entier)
@@ -94,7 +95,7 @@ bool CsgRegularPolygon::isInsidePrimitive(Vec2f &point)
 // Pré-condition(s)	: /
 // Post-condition(s): /
 // Commentaire(s)	: met à jour la bounding box de la pimitive après transformation
-void CsgRegularPolygon::updateBoundingBox(int tx, int ty, int angle, double scale)
+void CsgRegularPolygon::updateBoundingBox(Vec2f& center, int tx, int ty, int angle, double scale)
 {
     // les translations correspondent simplement au coordonnées de bounding box translatées
     // les homothéties et rotation demandent de recalculer les points temporairement
@@ -109,10 +110,15 @@ void CsgRegularPolygon::updateBoundingBox(int tx, int ty, int angle, double scal
     int ymin = 1024;
     int ymax = 0;
 
+    int realTx = tx - _previousTranslateX;
+    int realTy = ty - _previousTranslateY;
+    _previousTranslateX = tx;
+    _previousTranslateY = ty;
+
     for (int i = 0; i < _vertexNumber; i++)
     {
-        point[0] = (_center[0] + tx) + (_distanceToOrigin * scale) * cos(currentAngle * M_PI/180.f);
-        point[1] = (_center[1] + ty) + (_distanceToOrigin * scale) * sin(currentAngle * M_PI/180.f);
+        point[0] = (center[0] + realTx) + (_distanceToOrigin * scale) * cos(currentAngle * M_PI/180.f);
+        point[1] = (center[1] + realTy) + (_distanceToOrigin * scale) * sin(currentAngle * M_PI/180.f);
         std::cout << "new pts : " << point[0] << " " << point[1] << std::endl;
         currentAngle = std::fmod(currentAngle + angleStep, 360.f);
         if (point[0] < xmin)
@@ -126,20 +132,20 @@ void CsgRegularPolygon::updateBoundingBox(int tx, int ty, int angle, double scal
     }
     // la nouvelle bounding box a pour coordonnées
     Vec2f ulp;
-    ulp[0] = std::max(0, (int)(_center[0] - (_center[0] - xmin) * scale));
-    ulp[1] = std::max(0, (int)(_center[1] - (_center[1] - ymin) * scale));
+    ulp[0] = std::max(0, (int)(center[0] - (center[0] - xmin) * scale));
+    ulp[1] = std::max(0, (int)(center[1] - (center[1] - ymin) * scale));
 
     Vec2f urp;
-    urp[0] = std::min(1023, (int)(_center[0] + (xmax - _center[0]) * scale));
-    urp[1] = std::max(0, (int)(_center[1] - (_center[1] - ymin) * scale));
+    urp[0] = std::min(1023, (int)(center[0] + (xmax - center[0]) * scale));
+    urp[1] = std::max(0, (int)(center[1] - (center[1] - ymin) * scale));
 
     Vec2f llp;
-    llp[0] = std::max(0, (int)(_center[0] - (_center[0] - xmin) * scale));
-    llp[1] = std::min(1023, (int)(_center[1] + (ymax - _center[1]) * scale));
+    llp[0] = std::max(0, (int)(center[0] - (center[0] - xmin) * scale));
+    llp[1] = std::min(1023, (int)(center[1] + (ymax - center[1]) * scale));
 
     Vec2f lrp;
-    lrp[0] = std::min(1024, (int)(_center[0] + (xmax - _center[0]) * scale));
-    lrp[1] = std::min(1023, (int)(_center[1] + (ymax - _center[1]) * scale));
+    lrp[0] = std::min(1024, (int)(center[0] + (xmax - center[0]) * scale));
+    lrp[1] = std::min(1023, (int)(center[1] + (ymax - center[1]) * scale));
 
     // debug
     std::cout << "ulp " << ulp[0] << " " << ulp[1] << std::endl;

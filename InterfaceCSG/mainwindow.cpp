@@ -279,11 +279,17 @@ void MainWindow::transfoChanged()
     // traitement pour les primitives graphiques
     if (node->getOperation().getOperationType() == operationTypes::NONE)
     {     
-        fromLocaltoOrigin(0,2) = -512.f;
-        fromLocaltoOrigin(1,2) = -512.f;
+        //fromLocaltoOrigin(0,2) = -512.f;
+        //fromLocaltoOrigin(1,2) = -512.f;
 
-        fromOriginToLocal(0,2) = 512.f;
-        fromOriginToLocal(1,2) = 512.f;
+        //fromOriginToLocal(0,2) = 512.f;
+        //fromOriginToLocal(1,2) = 512.f;
+
+        fromLocaltoOrigin(0,2) = -node->getOperation().getBoundingBox().center()[0];
+        fromLocaltoOrigin(1,2) = -node->getOperation().getBoundingBox().center()[1];
+
+        fromOriginToLocal(0,2) = node->getOperation().getBoundingBox().center()[0];
+        fromOriginToLocal(1,2) = node->getOperation().getBoundingBox().center()[1];
 
         // récupération de la matrice de translation
         trans = fromOriginToLocal * trans.staticTranslation(transx, transy) * fromLocaltoOrigin;
@@ -315,7 +321,7 @@ void MainWindow::transfoChanged()
 
         // mise à jour de la bounding box (celle de la primitive et aussi celle de l'opération dans ce cas)
         CsgPrimitive *prim = node->getPrimitive();
-        prim->updateBoundingBox(transx, transy, angle, scale);
+        prim->updateBoundingBox(node->getOperation().getBoundingBox().center(), transx, transy, angle, scale);
         node->getOperation().setBoundingBox(prim->getBoundingBox());
     }
     // traitement pour les opérations

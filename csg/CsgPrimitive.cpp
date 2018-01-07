@@ -33,6 +33,10 @@ CsgPrimitive::CsgPrimitive(Vec2f center, float distanceToOrigin) :
 
     // bounding box dépend du centre et de la distance à l'origine
     _boundingBox = BoundingBox(ulp, urp, llp, lrp);
+
+    // aucune transformation au départ
+    _previousTranslateX = 0;
+    _previousTranslateY = 0;
 }
 
 // Fonction         : getCenter
@@ -155,7 +159,8 @@ bool CsgPrimitive::isInsidePrimitive(Vec2f &point)
 }
 
 // Fonction         : updateBoundingBox
-// Argument(s)		: - tx : translation en x (pixels)
+// Argument(s)		: - center : le centre de la bounding box actuelle
+//                    - tx : translation en x (pixels)
 //                    - ty : translation en y (pixels)
 //                    - angle : angle de rotation (degrès)
 //                    - scale : coefficient d'agrandissement/réduction (entier)
@@ -163,7 +168,7 @@ bool CsgPrimitive::isInsidePrimitive(Vec2f &point)
 // Pré-condition(s)	: /
 // Post-condition(s): /
 // Commentaire(s)	: met à jour la bounding box de la pimitive après transformation
-void CsgPrimitive::updateBoundingBox(int tx, int ty, int angle, double scale)
+void CsgPrimitive::updateBoundingBox(Vec2f& center, int tx, int ty, int angle, double scale)
 {
     // rien : dépend du la primitive elle-même
 }

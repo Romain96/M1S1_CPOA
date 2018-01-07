@@ -111,7 +111,7 @@ void RenderImg::paintGL()
 	glVertex2f(-1,-1);
 	glTexCoord2f(1,1);
 	glVertex2f( 1,-1);
-	glTexCoord2f(1,0);
+    glTexCoord2f(1,0);
 	glVertex2f( 1,1);
 	glEnd();
 
@@ -303,6 +303,8 @@ void RenderImg::drawBB(const BoundingBox& bb)
 {
 	glBegin(GL_LINE_LOOP);
 	glColor3f(1.0f,0.5f,0.5f);
+
+    std::cout << "drawing BB" << std::endl;
 
     Vec2f ulp = bb.getUpperLeftPoint();
     Vec2f urp = bb.getUpperRightPoint();

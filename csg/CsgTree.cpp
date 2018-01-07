@@ -126,9 +126,17 @@ void CsgTree::joinPrimitives(CsgOperation *operation, CsgNode *leftChild, CsgNod
     BoundingBox bb;
     switch (operation->getOperationType())
     {
-        case operationTypes::UNION:
+        case operationTypes::UNION:    
+        {
             bb = leftChild->getOperation().getBoundingBox() + rightChild->getOperation().getBoundingBox();
+            Vec2f ulp1 = leftChild->getOperation().getBoundingBox().getUpperLeftPoint();
+            Vec2f ulp2 = rightChild->getOperation().getBoundingBox().getUpperLeftPoint();
+            Vec2f lrp1 = leftChild->getOperation().getBoundingBox().getLowerRightPoint();
+            Vec2f lrp2 = rightChild->getOperation().getBoundingBox().getLowerRightPoint();
+            std::cout << "BB1 from " << ulp1[0] << ", " << ulp1[1] << "to " << lrp1[0] << ", " << lrp1[1] << std::endl;
+            std::cout << "BB2 from " << ulp2[0] << ", " << ulp2[1] << "to " << lrp2[0] << ", " << lrp2[1] << std::endl;
             break;
+        }
         case operationTypes::INTERSECTION:
             bb = leftChild->getOperation().getBoundingBox() ^ rightChild->getOperation().getBoundingBox();
             break;

@@ -12,6 +12,8 @@ protected:
     Vec2f _center;
     float _distanceToOrigin;
     BoundingBox _boundingBox;
+    int _previousTranslateX;
+    int _previousTranslateY;
 
 public:
     // constructeur
@@ -29,7 +31,7 @@ public:
 
     // méthodes
     virtual bool isInsidePrimitive(Vec2f& point);
-    virtual void updateBoundingBox(int tx, int ty, int angle, double scale);
+    virtual void updateBoundingBox(Vec2f& center, int tx, int ty, int angle, double scale);
 };
 
 #endif // __CSGPRIMITIVE_H__
