@@ -13,7 +13,7 @@ Projet réalisé dans le cadre de l'UE "Création et Programmation Objets Avanc�
 * Semestre : S1
 * UE : CPOA
 
-## Description des classes [en construction]
+## Description des classes
 
 | **Classe** | **Héritage** | **Description** |
 |--------|-------------|-------------|
@@ -33,7 +33,7 @@ Projet réalisé dans le cadre de l'UE "Création et Programmation Objets Avanc�
 | Particle | - | Représente les particules |
 | ParticleQueue | - | Représente la file (de priorité) de particules |
 
-## Milestones [en construction]
+## Milestones
 
 | **Milestone** | **Date début** | **Date fin** |
 |---------------|----------------|--------------|
