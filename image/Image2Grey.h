@@ -53,7 +53,7 @@ public:
 	static Image2Grey *thresholding(Image2Grey& img, unsigned char n);
 
 	// gradient de sobel
-	static Image2D<Vec2f> *gradient_sobel(Image2Grey& img);
+    static Image2D<Vec2f> *gradient_sobel(Image2Grey& img);
 
 	// charge l'image depuis le fichier
 	void load(std::string filename);

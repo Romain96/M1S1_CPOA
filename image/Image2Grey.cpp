@@ -183,8 +183,8 @@ Image2D<Vec2f> *Image2Grey::gradient_sobel(Image2Grey &img)
 	int horizontal_conv = 0;
 
 	// allocation de l'image
-	Image2D<Vec2f> *new_img = new Image2D<Vec2f>(img.getWidth(), img.getHeight());
-	Vec2f gradient;
+    Image2D<Vec2f> *new_img = new Image2D<Vec2f>(img.getWidth(), img.getHeight());
+    Vec2f gradient;
 
 	// remplissage des bords
 
@@ -200,14 +200,14 @@ Image2D<Vec2f> *Image2Grey::gradient_sobel(Image2Grey &img)
 			{
 				for (int l = j - 2; l < j + 3; l++)
 				{
-					vertical_conv += img(k,l);
-					horizontal_conv += img(k,l);
+                    vertical_conv += img(k,l)/256;
+                    horizontal_conv += img(k,l)/256;
 				}
             }
 			// remplissage du vec2f
-			gradient[0] = (float)vertical_conv;
-			gradient[1] = (float)horizontal_conv;
-			(*new_img)(i,j) = gradient;
+            gradient[0] = (float)vertical_conv;
+            gradient[1] = (float)horizontal_conv;
+            (*new_img)(i,j) = gradient;
 		}
 	}
 

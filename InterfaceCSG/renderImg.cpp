@@ -2,7 +2,7 @@
 #include <QMouseEvent>
 #include <iostream>
 
-//#include "imgGradient.h"
+#include "gradient_sobel.h"
 #include "BoundingBox.h"
 #include "Particle.h"
 #include "ParticleQueue.h"
@@ -18,17 +18,15 @@ RenderImg::RenderImg(BoundingBox& bb, QWidget *parent ):
     m_heightTex(1024),
 	m_ptrTex(NULL),
     m_img(1024, 1024),
+    m_grad(1024, 1024),
 	m_drawSobel(false),
     m_BBdraw(false),
     m_BB(bb),
     m_particles()
-  // QQ INIT A AJOUTER ?
-
 {
     m_timer = new QTimer(this);
     m_timer->setInterval(20);
     connect(m_timer, SIGNAL(timeout()), this, SLOT(animate()));
-    // VOTRE CODE ICI
 
     // à faire absolument sinon m_ptrTex = NULL
     updateDataTexture();
@@ -37,7 +35,7 @@ RenderImg::RenderImg(BoundingBox& bb, QWidget *parent ):
 
 void RenderImg::loadTexture(const std::string& filename)
 {
-	// VOTRE CODE ICI
+    // chargement du fichier (gestion des erreurs dans la fonction)
     m_img.load(filename);
 
     m_ptrTex = m_img.getDataPtr();
@@ -328,9 +326,9 @@ void RenderImg::toggleSobel()
 	m_drawSobel = !m_drawSobel;
 	if (m_drawSobel)
 	{
-//		m_img = m_img.average(2);
-//		m_grad = GradientSobel::gradient33(m_img);
-//		m_img.threshold(128);
+        m_img = *(Image2Grey::smoothing(m_img, 2));
+        m_grad = *(Image2Grey::gradient_sobel(m_img));
+        m_img = *(Image2Grey::thresholding(m_img, 128));
 		updateDataTexture();
 	}
 	update();
@@ -357,6 +355,19 @@ void RenderImg::drawSobel()
 //				glColor3f(1.0f,0.0f,0.0f);
 //				glVertex2f(x+v[0],y-v[1]);
 //			}
+            // valeur du gradient
+            Vec2f v = m_grad(i, j);
+
+            if (1)
+            {
+                float x = -1.0 + (2.0f*i)/(m_widthTex-1);
+                float y = 1.0 - (2.0*j)/(m_heightTex-1);// minus because of GL is bottonm to up and image up to bottom
+                v *= 4.0f/m_widthTex;
+                glColor3f(1.0f, 1.0f, 1.0f);
+                glVertex2f(x, y);
+                glColor3f(1.0f, 0.0f, 0.0f);
+                glVertex2f(x+v[0], y-v[1]);
+            }
 		}
 	}
 	glEnd();

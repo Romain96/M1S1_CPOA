@@ -108,6 +108,7 @@ protected:
 //   - l'image a niveau de gris
 //	 - l'image gradiant'
     Image2Grey m_img;
+    Image2D<Vec2f> m_grad;
 
 //	 la fontaine de particule
 //	Fountain fountain;
