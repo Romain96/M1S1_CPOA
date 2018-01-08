@@ -1,6 +1,7 @@
-#include "Particle.h"
 #include "Vector.h"
 #include "Utils.h"
+#include "Particle.h"
+
 
 // Fonction         : Particle
 // Argument(s)		: /

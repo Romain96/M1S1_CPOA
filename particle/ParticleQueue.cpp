@@ -1,9 +1,11 @@
+#include <iostream>
+#include <queue>
+
 #include "ParticleQueue.h"
 #include "Particle.h"
 #include "Image2Grey.h"
-#include <iostream>
-#include <queue>
 #include "Image2Grey.h"
+#include "gradient_sobel.h"
 
 // Fonction         : ParticleQueue
 // Argument(s)      : /
@@ -78,13 +80,14 @@ void ParticleQueue::addParticle(int x, int y)
 
 // Fonction         : iterateForTimeStep
 // Argument(s)      : - img : l'image contenant la forme CSG dessinée
+//                    - grad : l'image contenant le gradient
 //                    - timeStep : intervalle de temps en millisecondes
 // Valeur de retour : /
 // Pré-condition(s) : timeStep >= 0
 // Post-condition(s): /
 // Commentaire(s)   : effectue les itérations nécessaires au calcul des nouvelles positions des particules
 //                    en faisant avancer le temps de timeStep millisecondes
-void ParticleQueue::iterateForTimeStep(Image2Grey& img, int timeStep)
+void ParticleQueue::iterateForTimeStep(Image2Grey& img, Image2D<Vec2f>& grad, int timeStep)
 {
     // vecteur g (accélération de la gravité 9.81 m/s^2 vers le centre de la Terre)
     Vec2f g;
@@ -102,6 +105,10 @@ void ParticleQueue::iterateForTimeStep(Image2Grey& img, int timeStep)
     // nouveau vecteur position de la particule
     Vec2f newPosition;
     bool to_remove = false;
+    // vecteur normal (lorsqu'il y a collision)
+    Vec2f normal;
+    // vecteur tangeant (lorsqu'il y a collision)
+    Vec2f tangeant;
 
     // traitement tant que la particule la plus en retard est en retard sur la date à atteindre
     while (!_queue.empty() && (p = _queue.top()).getDate() < (_date + timeStep))
@@ -136,8 +143,23 @@ void ParticleQueue::iterateForTimeStep(Image2Grey& img, int timeStep)
                 else if (img((int)std::round(newPosition[0]), (int)std::round(newPosition[1])) > 0)
                 {
                     std::cout << "collision !" << std::endl;
-                    // pour l'instant on se contente de supprimer ces particules
-                    to_remove = true;
+
+                    // le vecteur normal est donné par la direction du gradient
+                    normal[0] = grad(newPosition[0], newPosition[1])[0];
+                    normal[1] = grad(newPosition[0], newPosition[1])[1];
+
+                    // le vecteur tangeant est orthogonal au vecteur normal
+                    tangeant[0] = normal[1];
+                    tangeant[1] = -normal[0];
+
+                    // le nouveau vecteur vitesse est altéré par 0.9 * vt - 0.5* vn
+                    newSpeed = 0.5f * tangeant - 0.5f * normal;
+
+                    // calcul de la nouvelle position
+                    newPosition = p.getPosition() + newSpeed + g * 0.005f;
+
+                    p.setPosition(newPosition);
+                    p.setSpeed(newSpeed);
                 }
                 else
                 {

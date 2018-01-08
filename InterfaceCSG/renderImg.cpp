@@ -270,7 +270,7 @@ void RenderImg::animate()
         std::cout << "Particules are all out of screen" << std::endl;
         return;
     }
-    m_particles.iterateForTimeStep(m_img, 100);
+    m_particles.iterateForTimeStep(m_img, m_grad, 100);
 
     paintGL();
 
