@@ -17,7 +17,7 @@ RenderImg::RenderImg(BoundingBox& bb, QWidget *parent ):
     m_widthTex(1024),
     m_heightTex(1024),
 	m_ptrTex(NULL),
-    m_img(1024,1024),
+    m_img(1024, 1024),
 	m_drawSobel(false),
     m_BBdraw(false),
     m_BB(bb),
@@ -28,8 +28,10 @@ RenderImg::RenderImg(BoundingBox& bb, QWidget *parent ):
     m_timer = new QTimer(this);
     m_timer->setInterval(20);
     connect(m_timer, SIGNAL(timeout()), this, SLOT(animate()));
-	// VOTRE CODE ICI
+    // VOTRE CODE ICI
 
+    // à faire absolument sinon m_ptrTex = NULL
+    updateDataTexture();
 }
 
 
