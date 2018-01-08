@@ -647,8 +647,8 @@ void MainWindow::updateTextGraph()
 {
 	// update Graph in TextWindow
 	m_graphTextEdit->clear();
-    //std::string str = m_tree.asciiArtGraph();
-    //m_graphTextEdit->appendPlainText(str.c_str());
+    std::string str = m_tree.getAsciiGraph();
+    m_graphTextEdit->appendPlainText(str.c_str());
 }
 
 

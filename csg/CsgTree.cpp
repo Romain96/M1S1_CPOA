@@ -3,9 +3,13 @@
 #include <algorithm>
 #include <iterator>
 #include <utility>
+#include <string>
 #include "CsgNode.h"
 #include "CsgTree.h"
 #include "CsgOperation.h"
+#include "CsgDisk.h"
+#include "CsgPrimitive.h"
+#include "CsgRegularPolygon.h"
 
 // initialisation du compteur de noeud et d'arbre
 int CsgTree::_nodeCounter = 0;
@@ -109,7 +113,7 @@ void CsgTree::addPrimitive(CsgPrimitive *primitive)
 }
 
 //-----------------------------------------------------------------------------
-// METHODES
+// SECTION DES METHODES
 //-----------------------------------------------------------------------------
 
 // Fonction         : joinPrimitive
@@ -243,4 +247,117 @@ void CsgTree::__drawNode(Image2Grey &img, CsgNode *node)
             }
         }
     }
+}
+
+// Fonction         : getAsciiGraph
+// Argument(s)		: /
+// Valeur de retour	: une chaine de caractères
+// Pré-condition(s)	: /
+// Post-condition(s): /
+// Commentaire(s)	: retourne une version du graphe sous forme de chaine de caractères
+//                    ex :
+//                    Tree 0 :
+//                    Node 0 : UNION -> Node 1, Node 2
+//                    Node 1 : PRIMITIVE -> CsgDisk
+//                    Node 2 : PRIMITIVE -> CsgRegularPolygon [4]
+std::string CsgTree::getAsciiGraph()
+{
+    std::string graph = "";
+
+    // parcours de chaque arbre à l'aide d'un itérateur
+    std::map<int, CsgNode *, csgNodeComparator>::iterator it = _roots.begin();
+
+    while(it != _roots.end())
+    {
+        // noeud racine
+        int key = it->first;
+        CsgNode *node = it->second;
+
+        // traitement de l'arbre
+        std::cout << "writting tree of id " << key << std::endl;
+        graph += __getAsciiNode(node);
+
+        it++;
+    }
+
+    return graph;
+}
+
+// Fonction         : getAsciiNode
+// Argument(s)		: - node : pointeur sur une CsgNode
+// Valeur de retour	: une chaine de caractères
+// Pré-condition(s)	: /
+// Post-condition(s): /
+// Commentaire(s)	: retourne le noeud node sous forme de chaine de caractères
+std::string CsgTree::__getAsciiNode(CsgNode *node)
+{
+    std::string nodeAscii = "";
+    std::string leftAscii = "";
+    std::string rightAscii = "";
+
+    // la suite dépend de l'opération
+    switch (node->getOperation().getOperationType())
+    {
+    case operationTypes::NONE:
+        // CsgDisk
+        if (CsgDisk *disk = dynamic_cast<CsgDisk *>(node->getPrimitive()))
+        {
+            nodeAscii += "Node " + std::to_string(node->getId()) + " -> PRIMITIVE (CsgDisk with base center = (" +
+                    std::to_string(disk->getCenter()[0]) + "," + std::to_string(disk->getCenter()[1]) +
+                    ") and base radius = " + std::to_string(disk->getDistanceToOrigin()) +")\n";
+        }
+        // CsgRegularPolygon
+        else if (CsgRegularPolygon *regPoly = dynamic_cast<CsgRegularPolygon *>(node->getPrimitive()))
+        {
+            nodeAscii += "Node " + std::to_string(node->getId()) + " -> PRIMITIVE (CsgRegularPolygon of " +
+                    std::to_string(regPoly->getVertexNumber()) + " vertex, base center = (" +
+                    std::to_string(regPoly->getCenter()[0]) + ", " + std::to_string(regPoly->getCenter()[1]) +
+                    ") and base radius = " + std::to_string(regPoly->getDistanceToOrigin()) + ")\n";
+        }
+        // ???
+        else
+        {
+            std::cerr << "CsgTree::__getAsciiNode error primitive is neither CsgDisk nor CsgRegularPolygon !";
+        }
+
+        return nodeAscii;
+        break;
+    case operationTypes::UNION:
+        nodeAscii += "Node " + std::to_string(node->getId()) + " -> UNION with Node " +
+                std::to_string(node->getLeftChild()->getId()) + " and Node " +
+                std::to_string(node->getRightChild()->getId()) + "\n";
+
+        // appel récursif sur les deux fils
+        leftAscii = __getAsciiNode(node->getLeftChild());
+        rightAscii = __getAsciiNode(node->getRightChild());
+        return nodeAscii + leftAscii + rightAscii;
+        break;
+    case operationTypes::INTERSECTION:
+        nodeAscii += "Node " + std::to_string(node->getId()) + " -> INTERSECTION with Node " +
+                std::to_string(node->getLeftChild()->getId()) + " and Node " +
+                std::to_string(node->getRightChild()->getId()) + "\n";
+
+        // appel récursif sur les deux fils
+        leftAscii = __getAsciiNode(node->getLeftChild());
+        rightAscii = __getAsciiNode(node->getRightChild());
+        return nodeAscii + leftAscii + rightAscii;
+        break;
+    case operationTypes::DIFFERENCE:
+        break;
+        nodeAscii += "Node " + std::to_string(node->getId()) + " -> DIFFERENCE with Node " +
+                std::to_string(node->getLeftChild()->getId()) + " and Node " +
+                std::to_string(node->getRightChild()->getId()) + "\n";
+
+        // appel récursif sur les deux fils
+        leftAscii = __getAsciiNode(node->getLeftChild());
+        rightAscii = __getAsciiNode(node->getRightChild());
+        return nodeAscii + leftAscii + rightAscii;
+        break;
+    default:
+        std::cerr << "CsgTree::__getNodeAscii error operation is unknown !" << std::endl;
+        return nodeAscii;
+        break;
+    }
+
+    return nodeAscii;
 }

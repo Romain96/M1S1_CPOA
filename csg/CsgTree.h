@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <map>
+#include <string>
 #include "CsgNode.h"
 #include "Image2Grey.h"
 
@@ -53,8 +54,18 @@ public:
     // dessin de l'arbre sur l'image
     void drawInImage(Image2Grey& img);
 
-    // dessine un noeud (méthode récursive)
+    // dessine un noeud (utilisé sur la racine de chaque arbre)
     void __drawNode(Image2Grey& img, CsgNode *node);
+
+    // transforme le graphe en une chaine de caractères afin d'être affichée dans la zone graph
+    std::string getAsciiGraph();
+    std::string __getAsciiNode(CsgNode *node);
+
+    // sauvegarde le graphe dans un fichier
+    //void saveCsg(std::string filename);
+
+    // charge le graphe depuis un fichier
+    //void loadCsg(std::string filename);
 };
 
 #endif // __CSGTREE_H__
