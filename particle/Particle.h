@@ -13,14 +13,14 @@ protected:
     // - sa position courante
     Vec2f _position;
 
-    // - sa position future (validée si non collision)
-    Vec2f _expectedPosition;
-
     // - son vecteur de vitesse
     Vec2f _speed;
 
     // ainsi que sa date en temp absolu
     int _date;
+
+    // et un comteur de rebonds
+    int _jump;
 
 public:
     // constructeurs
@@ -29,18 +29,15 @@ public:
 
     // getters
     Vec2f& getPosition();
-    Vec2f& getExpectedPosition();
     Vec2f& getSpeed();
     int getDate();
+    int getJump();
 
     // setters
     void setPosition(Vec2f& pos);
-    void setExpectedPosition(Vec2f& pos);
     void setSpeed(Vec2f& speed);
     void setDate(int date);
-
-    // méthodes
-    void validateExpectedCoordinates();
+    void setJump(int jump);
 };
 
 #endif // __PARTICLE_H__

@@ -16,7 +16,6 @@ Particle::Particle()
     position[0] = 0.f;
     position[1] = 0.f;
     _position = position;
-    _expectedPosition = position;
 
     // vecteur vitesse de départ est nul
     Vec2f speed;
@@ -39,13 +38,15 @@ Particle::Particle(float x, float y)
     position[0] = x;
     position[1] = y;
     _position = position;
-    _expectedPosition = position;
 
     // vecteur vitesse de départ est nul
     Vec2f speed;
     speed[0] = 0.f;
     speed[1] = 0.f;
     _speed = speed;
+
+    _date = 0;
+    _jump = 0;
 }
 
 //-----------------------------------------------------------------------------
@@ -61,17 +62,6 @@ Particle::Particle(float x, float y)
 Vec2f& Particle::getPosition()
 {
     return _position;
-}
-
-// Fonction         : getExpectedPosition
-// Argument(s)		: /
-// Valeur de retour	: un Vec2f
-// Pré-condition(s)	: /
-// Post-condition(s): /
-// Commentaire(s)	: retourne la position future de la particule
-Vec2f& Particle::getExpectedPosition()
-{
-    return _expectedPosition;
 }
 
 // Fonction         : getSpeed
@@ -96,6 +86,17 @@ int Particle::getDate()
     return _date;
 }
 
+// Fonction         : getJump
+// Argument(s)		: /
+// Valeur de retour	: un entier
+// Pré-condition(s)	: /
+// Post-condition(s): /
+// Commentaire(s)	: retourne le nombre de rebonds de la particule
+int Particle::getJump()
+{
+    return _jump;
+}
+
 //-----------------------------------------------------------------------------
 // SECTION DES SETTERS
 //-----------------------------------------------------------------------------
@@ -109,17 +110,6 @@ int Particle::getDate()
 void Particle::setPosition(Vec2f& pos)
 {
     _position = pos;
-}
-
-// Fonction         : setExpectedPosition
-// Argument(s)		: - pos : nouvelle position future
-// Valeur de retour	: /
-// Pré-condition(s)	: /
-// Post-condition(s): /
-// Commentaire(s)	: modifie la position future de la particule
-void Particle::setExpectedPosition(Vec2f& pos)
-{
-    _expectedPosition = pos;
 }
 
 // Fonction         : setSpeed
@@ -144,26 +134,13 @@ void Particle::setDate(int date)
     _date = date;
 }
 
-//-----------------------------------------------------------------------------
-// SECTION DES METHODES
-//-----------------------------------------------------------------------------
-
-// Fonction         : validateExpectedCoordinates
-// Argument(s)		: /
+// Fonction         : setJump
+// Argument(s)		: - jump : le nombre de rebonds (sauts)
 // Valeur de retour	: /
 // Pré-condition(s)	: /
 // Post-condition(s): /
-// Commentaire(s)	: valide les coordonnées futures de la particule
-//                    (devrait être utilisé seulement après détection de collision)
-void Particle::validateExpectedCoordinates()
+// Commentaire(s)	: modifie le nombre de rebonds de la particule
+void Particle::setJump(int jump)
 {
-    // les coordonnées futures deviennent les coordonnées courantes
-    _position = _expectedPosition;
+    _jump = jump;
 }
-
-// Fonction         : /
-// Argument(s)		: /
-// Valeur de retour	: /
-// Pré-condition(s)	: /
-// Post-condition(s): /
-// Commentaire(s)	: /

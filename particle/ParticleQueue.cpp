@@ -78,6 +78,9 @@ void ParticleQueue::addParticle(int x, int y)
     _queue.push(p);
 }
 
+// nombre de rebonds maximal d'une particule avant d'être supprimée
+#define PARTICLE_MAX_JUMP 10
+
 // Fonction         : iterateForTimeStep
 // Argument(s)      : - img : l'image contenant la forme CSG dessinée
 //                    - grad : l'image contenant le gradient
@@ -160,6 +163,10 @@ void ParticleQueue::iterateForTimeStep(Image2Grey& img, Image2D<Vec2f>& grad, in
 
                     p.setPosition(newPosition);
                     p.setSpeed(newSpeed);
+                    p.setJump(p.getJump() + 1);
+
+                    if (p.getJump() >= PARTICLE_MAX_JUMP)
+                        to_remove = true;
                 }
                 else
                 {
