@@ -234,6 +234,39 @@ void CsgTree::unjoin(int id)
 void CsgTree::cloneSubTree(int id)
 {
     std::cout << "cloning sub tree starting with node " << id << " as root" << std::endl;
+
+    CsgNode *node = _nodes[id];
+    if (node == nullptr)
+        return;
+
+    int root = __cloneCopyNode(node);
+    std::cout << "after cloning last id is " << root << std::endl;
+}
+
+// Fonction         : cloneCopyNode
+// Argument(s)		: - node : pointeur sur le noeud à copier
+// Valeur de retour	: /
+// Pré-condition(s)	: /
+// Post-condition(s): /
+// Commentaire(s)	: crée un nouveau noeud (puis appel récursif éventuels)
+int CsgTree::__cloneCopyNode(CsgNode *node)
+{
+    // ajout d'une primitive
+    if (node->getOperation().getOperationType() == operationTypes::NONE)
+    {
+        CsgPrimitive *prim = node->getPrimitive();
+        this->addPrimitive(prim);
+        return this->getLastNodeId();
+    }
+    // ajout d'une opération
+    else
+    {
+        int newLeft = __cloneCopyNode(node->getLeftChild());
+        int newRight = __cloneCopyNode(node->getRightChild());
+        CsgOperation *op = new CsgOperation(node->getOperation().getOperationType());
+        this->joinPrimitives(op, getNode(newLeft), getNode(newRight));
+        return getLastNodeId();
+    }
 }
 
 // Fonction         : drawInImage

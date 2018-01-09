@@ -59,6 +59,7 @@ public:
 
     // clone un sous-graphe dont la racine est le noeud courant
     void cloneSubTree(int id);
+    int __cloneCopyNode(CsgNode *node);
 
     // dessin de l'arbre sur l'image
     void drawInImage(Image2Grey& img);

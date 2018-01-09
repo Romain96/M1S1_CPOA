@@ -570,6 +570,8 @@ void MainWindow::clone()
 {
 	// VOTRE CODE ICI
 
+    m_tree.cloneSubTree(ui->currentNode->value());
+
 	updateTextGraph();
 	updateTreeRender();
 
