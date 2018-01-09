@@ -250,3 +250,14 @@ bool CsgNode::isInsideOperation(Vec2f &point)
         break;
     }
 }
+
+// Fonction         : ModifyNodeGeneratorValue
+// Argument(s)		: - i : valeur de modification
+// Valeur de retour	: /
+// Pré-condition(s)	: /
+// Post-condition(s): /
+// Commentaire(s)	: modifie le compteur servant à générer les id de noeuds
+void CsgNode::ModifyNodeGeneratorValue(int i)
+{
+    _nodeUniqueIdGenerator += i;
+}

@@ -505,6 +505,10 @@ void MainWindow::loadCSG()
 	// VOTRE CODE ICI
     m_tree.loadCsg(strFN);
 
+    ui->currentNode->setMaximum(m_tree.getLastNodeId());
+    ui->id_filsDroit->setMaximum(m_tree.getLastNodeId());
+    ui->id_filsGauche->setMaximum(m_tree.getLastNodeId());
+
     updateTextGraph();
     updateTreeRender();
 
@@ -539,7 +543,6 @@ void MainWindow::saveCSG()
 	{
 		std::string strFN = fileName.toStdString();
 
-	// VOTRE CODE ICI
         // sauvegarde du graphe CSG
         m_tree.saveCsg(strFN);
 
@@ -578,6 +581,7 @@ void MainWindow::clone()
 void MainWindow::drawTree()
 {
 	m_render->clean();
+    // affichage de(s) arbre(s)
     m_tree.drawInImage( m_render->getImg() );
 
 	if (ui->checkBox_drawCurrent->isChecked()/* && m_currentNode!=NULL*/)
@@ -670,7 +674,9 @@ void MainWindow::currentNodeChanged(int id)
 
 void MainWindow::swapLRRoot()
 {
-    // VOTRE CODE ICI
+    // appel à CsgTree::swapChildren
+    //m_tree.swapChildren(ui->currentNode->value());
+
 	updateTextGraph();
 	updateTreeRender();
 }
@@ -682,6 +688,7 @@ void MainWindow::unjoinRoot()
     // VOTRE CODE ICI
 
     //	m_currentNode = NULL;
+    m_tree.unjoin(ui->currentNode->value());
 	updateTextGraph();
 	updateTreeRender();
 }

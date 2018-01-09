@@ -58,7 +58,7 @@ public:
 
     // méthodes
     bool isInsideOperation(Vec2f& point);
-    void applyTransfo();
+    void ModifyNodeGeneratorValue(int i);
 };
 
 #endif // __CSGNODE_H__

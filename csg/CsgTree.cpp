@@ -169,6 +169,68 @@ void CsgTree::joinPrimitives(CsgOperation *operation, CsgNode *leftChild, CsgNod
     std::cout << "operation & operation regrouped into new node" << std::endl;
 }
 
+// Fonction         : swapChildren
+// Argument(s)		: - node : pointeur sur le noeud à traiter
+// Valeur de retour	: /
+// Pré-condition(s)	: /
+// Post-condition(s): /
+// Commentaire(s)	: échange les fils gauche et droit du noeud
+//                    Si le noeud est une primitive, ne change rien
+void CsgTree::swapChildren(int id)
+{
+    if (_nodes[id] == nullptr)
+    {
+        std::cerr << "CsgTree:swapChildren error node ptr is NULL" << std::endl;
+        return;
+    }
+
+    // si le noeud est une primitive, il n'a pas de fils donc aucun échange n'a lieu
+    if (_nodes[id]->getOperation().getOperationType() == operationTypes::NONE)
+        return;
+
+    CsgNode *node = new CsgNode(_nodes[id]->getOperation());
+    node->setMatrix(_nodes[id]->getMatrix());
+    node->setId(id);
+    node->setLeftChild(_nodes[id]->getLeftChild());
+    node->setRightChild(_nodes[id]->getRightChild());
+    std::cout << "test : " << node->getLeftChild()->getId() << " & " << node->getRightChild()->getId() << std::endl;
+    _nodes.erase(id);
+    _nodes.insert(std::pair<int, CsgNode*>(id, node));
+    _roots.erase(id);
+    _roots.insert(std::pair<int, CsgNode*>(id, node));
+    node->ModifyNodeGeneratorValue(-1);
+}
+
+// Fonction         : unjoin
+// Argument(s)		: - id : identificateur du noeud à supprimer
+// Valeur de retour	: /
+// Pré-condition(s)	: /
+// Post-condition(s): /
+// Commentaire(s)	: supprime le noeud et place ses fils en tant que racines
+//                    Si le noeud est une primitive, ne change rien
+void CsgTree::unjoin(int id)
+{
+    CsgNode *node = _nodes[id];
+    if (node == nullptr)
+        return;
+
+    if (node->getOperation().getOperationType() == operationTypes::NONE)
+        return;
+
+    _roots.insert(std::pair<int, CsgNode*>(node->getLeftChild()->getId(), node->getLeftChild()));
+    _roots.insert(std::pair<int, CsgNode*>(node->getRightChild()->getId(), node->getRightChild()));
+    _roots.erase(node->getId());
+    _nodes.erase(node->getId());
+
+    std::map<int, CsgNode*, csgNodeComparator>::iterator it = _nodes.begin();
+    while(it != _nodes.end())
+    {
+        CsgNode *n = it->second;
+        std::cout << "node " << n->getId() << std::endl;
+        it++;
+    }
+}
+
 // Fonction         : drawInImage
 // Argument(s)		: - img : pointeur sur une Image2Grey
 // Valeur de retour	: /

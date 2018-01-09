@@ -51,6 +51,14 @@ public:
     // regroupement de primitives en noeud
     void joinPrimitives(CsgOperation *operation, CsgNode *leftChild, CsgNode *rightChild);
 
+    // inverse le fils gauche et droit (dans le cas d'un noeud qui n'est pas une primitive)
+    void swapChildren(int id);
+
+    // supprime le noeud et créer deux arbres avec les fils gauche et droit
+    void unjoin(int id);
+
+    // clone un sous-graphe dont la racine est le noeud courant
+
     // dessin de l'arbre sur l'image
     void drawInImage(Image2Grey& img);
 
