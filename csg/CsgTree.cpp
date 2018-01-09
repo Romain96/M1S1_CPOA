@@ -135,12 +135,6 @@ void CsgTree::joinPrimitives(CsgOperation *operation, CsgNode *leftChild, CsgNod
         case operationTypes::UNION:    
         {
             bb = leftChild->getOperation().getBoundingBox() + rightChild->getOperation().getBoundingBox();
-            Vec2f ulp1 = leftChild->getOperation().getBoundingBox().getUpperLeftPoint();
-            Vec2f ulp2 = rightChild->getOperation().getBoundingBox().getUpperLeftPoint();
-            Vec2f lrp1 = leftChild->getOperation().getBoundingBox().getLowerRightPoint();
-            Vec2f lrp2 = rightChild->getOperation().getBoundingBox().getLowerRightPoint();
-            std::cout << "BB1 from " << ulp1[0] << ", " << ulp1[1] << "to " << lrp1[0] << ", " << lrp1[1] << std::endl;
-            std::cout << "BB2 from " << ulp2[0] << ", " << ulp2[1] << "to " << lrp2[0] << ", " << lrp2[1] << std::endl;
             break;
         }
         case operationTypes::INTERSECTION:
@@ -481,6 +475,10 @@ void CsgTree::loadCsg(std::string filename)
     Matrix33d transfo;
     bool readingMatrixLine = false;
     int matrixLineRead = 0;
+    CsgPrimitive *newPrimitive = nullptr;
+    CsgNode *newNode = nullptr;
+    CsgOperation newOperation(operationTypes::NONE);
+    Vec2f center; center[0] = 512, center[1] = 512;
 
     // ouverture du fichier
     input.open(filename);
@@ -495,6 +493,9 @@ void CsgTree::loadCsg(std::string filename)
         std::cerr << "file has incorrect header " << header << std::endl;
         return;
     }
+
+    // vider les données de l'arbre en appelant clear
+    this->clear();
 
     // lecture des données
     while (std::getline(input, line))
@@ -514,7 +515,6 @@ void CsgTree::loadCsg(std::string filename)
             {
                 nodeId = std::stoi(tokens[0]);
                 operationOrPrimitiveName = tokens[1];
-                std::cout << "primitive is " << operationOrPrimitiveName << " and its id is " << nodeId << std::endl;
                 // la prochaine ligne est la première ligne de la matrice associée au disque
                 readingMatrixLine = true;
                 matrixLineRead = 0;
@@ -525,7 +525,6 @@ void CsgTree::loadCsg(std::string filename)
                 nodeId = std::stoi(tokens[0]);
                 operationOrPrimitiveName = tokens[1];
                 vertex = std::stoi(tokens[2]);
-                std::cout << "primitive is " << operationOrPrimitiveName << " of " << vertex << " vertex and its id is " << nodeId << std::endl;
                 // la prochaine ligne est la première ligne de la matrice associée au polygone
                 readingMatrixLine = true;
                 matrixLineRead = 0;
@@ -537,7 +536,6 @@ void CsgTree::loadCsg(std::string filename)
                 operationOrPrimitiveName = tokens[1];
                 leftNodeId = std::stoi(tokens[2]);
                 rightNodeId = std::stoi(tokens[3]);
-                std::cout << "node is " << operationOrPrimitiveName << " with node " << leftNodeId << " and node " << rightNodeId << " and its id is " << nodeId << std::endl;
                 // la prochaine ligne est la première ligne de la matrice associée au noeud
                 readingMatrixLine = true;
                 matrixLineRead = 0;
@@ -580,6 +578,106 @@ void CsgTree::loadCsg(std::string filename)
                 // matrice lue en entier la prochaine ligne est un node
                 readingMatrixLine = false;
                 matrixLineRead = 0;
+
+                // lecture complète d'un noeud donc création du noeud
+                // création n'une nouvelle primitive de type CsgDisk
+                if (operationOrPrimitiveName.compare("CsgDisk") == 0)
+                {
+                    newPrimitive = new CsgDisk(center, 100);
+                    newOperation.setOperationType(operationTypes::NONE);
+                    newNode = new CsgNode(newOperation);
+                    newNode->setPrimitive(newPrimitive);
+                    newNode->getOperation().setBoundingBox(newPrimitive->getBoundingBox());
+                    newNode->setId(nodeId);
+                    newNode->setMatrix(transfo);
+
+                    // ce noeud représente un nouvel arbre
+                    _roots.insert(std::pair<int, CsgNode*>(nodeId, newNode));
+                    _treeCounter++;
+
+                    // et il est référencé dans la liste des noeuds
+                    _nodes.insert(std::pair<int, CsgNode*>(nodeId, newNode));
+                    _nodeCounter++;
+                }
+                // cration d'un nouvelle primitive de type CsgRegularPolygon
+                else if (operationOrPrimitiveName.compare("CsgRegularPolygon") == 0)
+                {
+                    newPrimitive = new CsgRegularPolygon(vertex, center, 100);
+                    newOperation.setOperationType(operationTypes::NONE);
+                    newNode = new CsgNode(newOperation);
+                    newNode->setPrimitive(newPrimitive);
+                    newNode->getOperation().setBoundingBox(newPrimitive->getBoundingBox());
+                    newNode->setId(nodeId);
+                    newNode->setMatrix(transfo);
+
+                    // ce noeud représente un nouvel arbre
+                    _roots.insert(std::pair<int, CsgNode*>(nodeId, newNode));
+                    _treeCounter++;
+
+                    // et il est référencé dans la liste des noeuds
+                    _nodes.insert(std::pair<int, CsgNode*>(nodeId, newNode));
+                    _nodeCounter++;
+                }
+                // création d'une nouvelle opération de type union
+                else if (operationOrPrimitiveName.compare("UNION") == 0)
+                {
+                    newOperation.setOperationType(operationTypes::UNION);
+                    newNode = new CsgNode(newOperation);
+                    newNode->setId(nodeId);
+                    newNode->setMatrix(transfo);
+                    newNode->setLeftChild(_nodes[leftNodeId]);
+                    newNode->setRightChild(_nodes[rightNodeId]);
+                    newNode->getOperation().setBoundingBox(_nodes[leftNodeId]->getOperation().getBoundingBox() +
+                                                           _nodes[rightNodeId]->getOperation().getBoundingBox());
+                    _nodes.insert(std::pair<int, CsgNode*>(nodeId, newNode));
+                    _roots.insert(std::pair<int, CsgNode*>(nodeId, newNode));
+                    _roots.erase(leftNodeId);
+                    _roots.erase(rightNodeId);
+                    _treeCounter++;
+                    _nodeCounter++;
+
+                }
+                // création d'une nouvelle opération de type intersection
+                else if (operationOrPrimitiveName.compare("INTERSECTION") == 0)
+                {
+                    newOperation.setOperationType(operationTypes::INTERSECTION);
+                    newNode = new CsgNode(newOperation);
+                    newNode->setId(nodeId);
+                    newNode->setMatrix(transfo);
+                    newNode->setLeftChild(_nodes[leftNodeId]);
+                    newNode->setRightChild(_nodes[rightNodeId]);
+                    newNode->getOperation().setBoundingBox(_nodes[leftNodeId]->getOperation().getBoundingBox() ^
+                                                           _nodes[rightNodeId]->getOperation().getBoundingBox());
+                    _nodes.insert(std::pair<int, CsgNode*>(nodeId, newNode));
+                    _roots.insert(std::pair<int, CsgNode*>(nodeId, newNode));
+                    _roots.erase(leftNodeId);
+                    _roots.erase(rightNodeId);
+                    _treeCounter++;
+                    _nodeCounter++;
+                }
+                // création d'une nouvelle operation de type différence
+                else if (operationOrPrimitiveName.compare("DIFFERENCE") == 0)
+                {
+                    newOperation.setOperationType(operationTypes::DIFFERENCE);
+                    newNode = new CsgNode(newOperation);
+                    newNode->setId(nodeId);
+                    newNode->setMatrix(transfo);
+                    newNode->setLeftChild(_nodes[leftNodeId]);
+                    newNode->setRightChild(_nodes[rightNodeId]);
+                    newNode->getOperation().setBoundingBox(_nodes[leftNodeId]->getOperation().getBoundingBox() -
+                                                           _nodes[rightNodeId]->getOperation().getBoundingBox());
+                    _nodes.insert(std::pair<int, CsgNode*>(nodeId, newNode));
+                    _roots.insert(std::pair<int, CsgNode*>(nodeId, newNode));
+                    _roots.erase(leftNodeId);
+                    _roots.erase(rightNodeId);
+                    _treeCounter++;
+                    _nodeCounter++;
+                }
+                else
+                {
+                    std::cerr << "CsgTree::loadCsg error operation is unknown" << std::endl;
+                    return;
+                }
             }
             // erreur
             else
@@ -590,9 +688,6 @@ void CsgTree::loadCsg(std::string filename)
             }
         }
     }
-
-    // remise à zéro des id et suppression des noeuds existants
-    this->clear();
 
     // fermeture du fichier
     input.close();

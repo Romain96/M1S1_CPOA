@@ -506,6 +506,7 @@ void MainWindow::loadCSG()
     m_tree.loadCsg(strFN);
 
     updateTextGraph();
+    updateTreeRender();
 
 // mettre a jour ui->currentNode ui->id_filsGauche ui->id_filsDroit ui->currentNode
 	}
