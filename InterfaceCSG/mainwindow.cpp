@@ -503,8 +503,9 @@ void MainWindow::loadCSG()
 		}
 
 	// VOTRE CODE ICI
+    m_tree.loadCsg(strFN);
 
-		 updateTextGraph();
+    updateTextGraph();
 
 // mettre a jour ui->currentNode ui->id_filsGauche ui->id_filsDroit ui->currentNode
 	}
@@ -520,7 +521,6 @@ void MainWindow::appendCSG()
 		std::string strFN = fileName.toStdString();
 
 	// VOTRE CODE ICI
-
 
     updateTextGraph();
     updateTreeRender();

@@ -467,4 +467,42 @@ void CsgTree::saveCsg(std::string filename)
 // Pré-condition(s)	: /
 // Post-condition(s): /
 // Commentaire(s)	: lit et initialise le graphe CSG avec la structure de graphe lue dans le fichier filename
-//void CsgTree::loadCsg(std::string filename);
+void CsgTree::loadCsg(std::string filename)
+{
+    std::cout <<  "loading CSG graph from file " << filename << std::endl;
+
+    std::ifstream input;
+    std::string line;
+    int nodeId, leftNodeId, rightNodeId;
+    int vertex;
+    std::string operationOrPrimitiveName;
+    std::string header;
+    Matrix33d transfo;
+    bool matrixRead1 = false;
+    bool matrixRead2 = false;
+    bool matrixRead3 = false;
+
+    // ouverture du fichier
+    input.open(filename);
+
+    // vérification de l'en-tête du fichier (CSG_FILE)
+    std::getline(input, line);
+    std::istringstream iss(line);
+    if (iss >> header && header.compare("CSG_FILE") == 0)
+        std::cout << "file has correct header " << header << std::endl;
+    else
+    {
+        std::cerr << "file has incorrect header " << header << std::endl;
+        return;
+    }
+
+    // TODO LIRE LA SUITE ...
+
+    // remise à zéro des id et suppression des noeuds existants
+    this->clear();
+
+    // fermeture du fichier
+    input.close();
+
+    std::cout << "CSG graph read" << std::endl;
+}

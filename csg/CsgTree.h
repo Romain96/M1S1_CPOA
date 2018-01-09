@@ -65,7 +65,7 @@ public:
     void saveCsg(std::string filename);
 
     // charge le graphe depuis un fichier
-    //void loadCsg(std::string filename);
+    void loadCsg(std::string filename);
 };
 
 #endif // __CSGTREE_H__
