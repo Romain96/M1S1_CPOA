@@ -547,6 +547,9 @@ void MainWindow::clearCSG()
 {
     m_tree.clear();
     m_currentNode = nullptr;
+    m_render->updateDataTexture();
+    m_prim = NULL;
+    m_oper = NULL;
     ui->currentNode->setValue(0);
     ui->currentNode->setMaximum(0);
     ui->id_filsGauche->setMaximum(0);

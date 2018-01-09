@@ -274,7 +274,7 @@ std::string CsgTree::getAsciiGraph()
         CsgNode *node = it->second;
 
         // traitement de l'arbre
-        std::cout << "writting tree of id " << key << std::endl;
+        std::cout << "writting tree of id into ascii string" << key << std::endl;
         graph += __getAsciiNode(node);
 
         it++;
@@ -302,17 +302,17 @@ std::string CsgTree::__getAsciiNode(CsgNode *node)
         // CsgDisk
         if (CsgDisk *disk = dynamic_cast<CsgDisk *>(node->getPrimitive()))
         {
-            nodeAscii += "Node " + std::to_string(node->getId()) + " -> PRIMITIVE (CsgDisk with base center = (" +
+            nodeAscii += "Node " + std::to_string(node->getId()) + " -> CsgDisk [center=(" +
                     std::to_string(disk->getCenter()[0]) + "," + std::to_string(disk->getCenter()[1]) +
-                    ") and base radius = " + std::to_string(disk->getDistanceToOrigin()) +")\n";
+                    "), radius=" + std::to_string(disk->getDistanceToOrigin()) +"]\n";
         }
         // CsgRegularPolygon
         else if (CsgRegularPolygon *regPoly = dynamic_cast<CsgRegularPolygon *>(node->getPrimitive()))
         {
-            nodeAscii += "Node " + std::to_string(node->getId()) + " -> PRIMITIVE (CsgRegularPolygon of " +
-                    std::to_string(regPoly->getVertexNumber()) + " vertex, base center = (" +
-                    std::to_string(regPoly->getCenter()[0]) + ", " + std::to_string(regPoly->getCenter()[1]) +
-                    ") and base radius = " + std::to_string(regPoly->getDistanceToOrigin()) + ")\n";
+            nodeAscii += "Node " + std::to_string(node->getId()) + " -> CsgRegularPolygon [vertex=" +
+                    std::to_string(regPoly->getVertexNumber()) + ", center=(" +
+                    std::to_string(regPoly->getCenter()[0]) + "," + std::to_string(regPoly->getCenter()[1]) +
+                    "), radius=" + std::to_string(regPoly->getDistanceToOrigin()) + "]\n";
         }
         // ???
         else
@@ -343,7 +343,6 @@ std::string CsgTree::__getAsciiNode(CsgNode *node)
         return nodeAscii + leftAscii + rightAscii;
         break;
     case operationTypes::DIFFERENCE:
-        break;
         nodeAscii += "Node " + std::to_string(node->getId()) + " -> DIFFERENCE with Node " +
                 std::to_string(node->getLeftChild()->getId()) + " and Node " +
                 std::to_string(node->getRightChild()->getId()) + "\n";
@@ -358,6 +357,6 @@ std::string CsgTree::__getAsciiNode(CsgNode *node)
         return nodeAscii;
         break;
     }
-
+    std::cerr << "CsgTree::__getNodeAscii error non return statement inside switch" << std::endl;
     return nodeAscii;
 }
