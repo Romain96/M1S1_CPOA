@@ -58,6 +58,7 @@ public:
     void unjoin(int id);
 
     // clone un sous-graphe dont la racine est le noeud courant
+    void cloneSubTree(int id);
 
     // dessin de l'arbre sur l'image
     void drawInImage(Image2Grey& img);

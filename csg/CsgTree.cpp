@@ -191,12 +191,12 @@ void CsgTree::swapChildren(int id)
     CsgNode *node = new CsgNode(_nodes[id]->getOperation());
     node->setMatrix(_nodes[id]->getMatrix());
     node->setId(id);
-    node->setLeftChild(_nodes[id]->getLeftChild());
-    node->setRightChild(_nodes[id]->getRightChild());
+    node->setLeftChild(_nodes[id]->getRightChild());
+    node->setRightChild(_nodes[id]->getLeftChild());
     std::cout << "test : " << node->getLeftChild()->getId() << " & " << node->getRightChild()->getId() << std::endl;
     _nodes.erase(id);
-    _nodes.insert(std::pair<int, CsgNode*>(id, node));
     _roots.erase(id);
+    _nodes.insert(std::pair<int, CsgNode*>(id, node));
     _roots.insert(std::pair<int, CsgNode*>(id, node));
     node->ModifyNodeGeneratorValue(-1);
 }
@@ -210,6 +210,8 @@ void CsgTree::swapChildren(int id)
 //                    Si le noeud est une primitive, ne change rien
 void CsgTree::unjoin(int id)
 {
+    std::cout << "unjoining children of node " << id << std::endl;
+
     CsgNode *node = _nodes[id];
     if (node == nullptr)
         return;
@@ -221,14 +223,17 @@ void CsgTree::unjoin(int id)
     _roots.insert(std::pair<int, CsgNode*>(node->getRightChild()->getId(), node->getRightChild()));
     _roots.erase(node->getId());
     _nodes.erase(node->getId());
+}
 
-    std::map<int, CsgNode*, csgNodeComparator>::iterator it = _nodes.begin();
-    while(it != _nodes.end())
-    {
-        CsgNode *n = it->second;
-        std::cout << "node " << n->getId() << std::endl;
-        it++;
-    }
+// Fonction         : cloneSubTree
+// Argument(s)		: - id : identificateur du noeud servant de racine au clonage
+// Valeur de retour	: /
+// Pré-condition(s)	: /
+// Post-condition(s): /
+// Commentaire(s)	: clone le sous-arbre dont id est l'identifiant de la racine
+void CsgTree::cloneSubTree(int id)
+{
+    std::cout << "cloning sub tree starting with node " << id << " as root" << std::endl;
 }
 
 // Fonction         : drawInImage

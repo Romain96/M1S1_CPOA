@@ -24,20 +24,6 @@ CsgNode::CsgNode(CsgOperation operation) :
     _nodeId = _nodeUniqueIdGenerator++;
 }
 
-// Fonction         : ~CsgNode
-// Argument(s)		: /
-// Valeur de retour	: /
-// Pré-condition(s)	: /
-// Post-condition(s): /
-// Commentaire(s)	: destructeur
-CsgNode::~CsgNode()
-{
-    if (_leftChild != nullptr)
-        delete _leftChild;
-    if (_rightChild != nullptr)
-        delete _rightChild;
-}
-
 //-----------------------------------------------------------------------------
 // SECTION DES GETTERS
 //-----------------------------------------------------------------------------

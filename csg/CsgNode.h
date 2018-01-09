@@ -38,7 +38,6 @@ protected:
 public:
     // constructeur
     CsgNode(CsgOperation operation);
-    ~CsgNode();
 
     // getters
     int getId();

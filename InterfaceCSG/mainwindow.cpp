@@ -675,7 +675,7 @@ void MainWindow::currentNodeChanged(int id)
 void MainWindow::swapLRRoot()
 {
     // appel à CsgTree::swapChildren
-    //m_tree.swapChildren(ui->currentNode->value());
+    m_tree.swapChildren(ui->currentNode->value());
 
 	updateTextGraph();
 	updateTreeRender();
