@@ -4,6 +4,7 @@
 #include <iterator>
 #include <utility>
 #include <string>
+#include <sstream>
 #include "CsgNode.h"
 #include "CsgTree.h"
 #include "CsgOperation.h"
@@ -360,3 +361,110 @@ std::string CsgTree::__getAsciiNode(CsgNode *node)
     std::cerr << "CsgTree::__getNodeAscii error non return statement inside switch" << std::endl;
     return nodeAscii;
 }
+
+// Fonction         : saveCsg
+// Argument(s)		: - filename : nom du fichier dans lequel sauvegarder le graphe CSG
+// Valeur de retour	: /
+// Pré-condition(s)	: /
+// Post-condition(s): /
+// Commentaire(s)	: écrit la structure du graphe CSG dans le fichier filemane
+void CsgTree::saveCsg(std::string filename)
+{
+    std::cout << "saving CSG graph in file " << filename << std::endl;
+
+    Matrix33d transfo;
+    // ouverture du fichier
+    std::ofstream output;
+    output.open(filename);
+
+    // commence par la chaine spéciale CSG_FILE
+    output << "CSG_FILE\n";
+
+    // parcours des noeuds
+    std::map<int, CsgNode *, csgNodeComparator>::iterator it = _nodes.begin();
+    while (it != _nodes.end())
+    {
+        int key = it->first;
+        CsgNode *node = it->second;
+
+        // contient les infos de chaque noeud
+        std::cout << "saving node of id " << key << std::endl;
+
+        // écriture de l'id du noeud
+        output << node->getId() << " ";
+
+        switch (node->getOperation().getOperationType())
+        {
+        // soit une primitive
+        // [id node] [CsgDisk|CsgRegularPolygon] [/|nbVertex]
+        // matrice de transfo personnelle du noeud
+        case operationTypes::NONE:
+            if (CsgDisk *disk = dynamic_cast<CsgDisk *>(node->getPrimitive()))
+            {
+                output << "CsgDisk\n";
+                transfo = node->getMatrix();
+                output << transfo(0,0) << " " << transfo(0,1) << " " << transfo(0,2) << "\n" <<
+                          transfo(1,0) << " " << transfo(1,1) << " " << transfo(1,2) << "\n" <<
+                          transfo(2,0) << " " << transfo(2,1) << " " << transfo(2,2) << "\n";
+            }
+            else if (CsgRegularPolygon *regPoly = dynamic_cast<CsgRegularPolygon *>(node->getPrimitive()))
+            {
+                // le nombre de sommets doit être précisé
+                output << "CsgRegularPolygon " << regPoly->getVertexNumber() << "\n";
+                transfo = node->getMatrix();
+                output << transfo(0,0) << " " << transfo(0,1) << " " << transfo(0,2) << "\n" <<
+                          transfo(1,0) << " " << transfo(1,1) << " " << transfo(1,2) << "\n" <<
+                          transfo(2,0) << " " << transfo(2,1) << " " << transfo(2,2) << "\n";
+            }
+            else
+            {
+                std::cerr << "CsgTree::savsCsg error primitive is neither CsgDisk nor CsgRegularPolygon !" << std::endl;
+            }
+            break;
+        // soit un noeud opération
+        // [id node] [UNION|INTERSECTION|DIFFERENCE] [id node left] [id node right]
+        // matrice de transfo personnelle du noeud
+        case operationTypes::UNION:
+            output << "UNION " << node->getLeftChild()->getId() << " " << node->getRightChild()->getId() << "\n";
+            transfo = node->getMatrix();
+            output << transfo(0,0) << " " << transfo(0,1) << " " << transfo(0,2) << "\n" <<
+                      transfo(1,0) << " " << transfo(1,1) << " " << transfo(1,2) << "\n" <<
+                      transfo(2,0) << " " << transfo(2,1) << " " << transfo(2,2) << "\n";
+            break;
+        case operationTypes::INTERSECTION:
+            output << "INTERSECTION " << node->getLeftChild()->getId() << " " << node->getRightChild()->getId() << "\n";
+            transfo = node->getMatrix();
+            output << transfo(0,0) << " " << transfo(0,1) << " " << transfo(0,2) << "\n" <<
+                      transfo(1,0) << " " << transfo(1,1) << " " << transfo(1,2) << "\n" <<
+                      transfo(2,0) << " " << transfo(2,1) << " " << transfo(2,2) << "\n";
+            break;
+        case operationTypes::DIFFERENCE:
+            output << "DIFFERENCE " << node->getLeftChild()->getId() << " " << node->getRightChild()->getId() << "\n";
+            transfo = node->getMatrix();
+            output << transfo(0,0) << " " << transfo(0,1) << " " << transfo(0,2) << "\n" <<
+                      transfo(1,0) << " " << transfo(1,1) << " " << transfo(1,2) << "\n" <<
+                      transfo(2,0) << " " << transfo(2,1) << " " << transfo(2,2) << "\n";
+            break;
+        default:
+            std::cerr << "CsgTree::saveCsg error operation of node is unknown" << std::endl;
+            break;
+        }
+        // pour plus de lisibilité : une ligne vide entre deux noeuds
+        output << "\n";
+
+        it++;
+    }
+
+    // fermeture du fichier
+    output.close();
+
+    std::cout << "save completed" << std::endl;
+}
+
+// Fonction         : loadCsg
+// Argument(s)		: - filename : nom du fichier dans lequel lire la structure du graphe
+// Valeur de retour	: /
+// Pré-condition(s)	: /
+// Post-condition(s): /
+// Commentaire(s)	: lit et initialise le graphe CSG avec la structure de graphe lue dans le fichier filename
+//void CsgTree::loadCsg(std::string filename);

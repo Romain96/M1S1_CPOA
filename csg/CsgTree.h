@@ -62,7 +62,7 @@ public:
     std::string __getAsciiNode(CsgNode *node);
 
     // sauvegarde le graphe dans un fichier
-    //void saveCsg(std::string filename);
+    void saveCsg(std::string filename);
 
     // charge le graphe depuis un fichier
     //void loadCsg(std::string filename);

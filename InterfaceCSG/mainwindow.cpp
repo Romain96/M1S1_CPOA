@@ -522,10 +522,10 @@ void MainWindow::appendCSG()
 	// VOTRE CODE ICI
 
 
-		 updateTextGraph();
-		updateTreeRender();
+    updateTextGraph();
+    updateTreeRender();
 
-// mettre a jour ui->currentNode ui->id_filsGauche ui->id_filsDroit ui->currentNode
+    // mettre a jour ui->currentNode ui->id_filsGauche ui->id_filsDroit ui->currentNode
 
 	}
 }
@@ -539,6 +539,8 @@ void MainWindow::saveCSG()
 		std::string strFN = fileName.toStdString();
 
 	// VOTRE CODE ICI
+        // sauvegarde du graphe CSG
+        m_tree.saveCsg(strFN);
 
 	}
 }
