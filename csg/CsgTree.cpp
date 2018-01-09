@@ -5,6 +5,7 @@
 #include <utility>
 #include <string>
 #include <sstream>
+#include <vector>
 #include "CsgNode.h"
 #include "CsgTree.h"
 #include "CsgOperation.h"
@@ -478,9 +479,8 @@ void CsgTree::loadCsg(std::string filename)
     std::string operationOrPrimitiveName;
     std::string header;
     Matrix33d transfo;
-    bool matrixRead1 = false;
-    bool matrixRead2 = false;
-    bool matrixRead3 = false;
+    bool readingMatrixLine = false;
+    int matrixLineRead = 0;
 
     // ouverture du fichier
     input.open(filename);
@@ -496,7 +496,100 @@ void CsgTree::loadCsg(std::string filename)
         return;
     }
 
-    // TODO LIRE LA SUITE ...
+    // lecture des données
+    while (std::getline(input, line))
+    {
+        // séparation en tokens
+        std::stringstream ss(line);
+        std::istream_iterator<std::string> begin(ss);
+        std::istream_iterator<std::string> end;
+        std::vector<std::string> tokens(begin, end);
+
+        // traitement de la ligne
+        // lecture d'un noeud (opération/primitive)
+        if (!readingMatrixLine)
+        {
+            // primitive de type CsgDisk
+            if (tokens.size() == 2)
+            {
+                nodeId = std::stoi(tokens[0]);
+                operationOrPrimitiveName = tokens[1];
+                std::cout << "primitive is " << operationOrPrimitiveName << " and its id is " << nodeId << std::endl;
+                // la prochaine ligne est la première ligne de la matrice associée au disque
+                readingMatrixLine = true;
+                matrixLineRead = 0;
+            }
+            // primitive de type CsgRegularPolygon
+            else if (tokens.size() == 3)
+            {
+                nodeId = std::stoi(tokens[0]);
+                operationOrPrimitiveName = tokens[1];
+                vertex = std::stoi(tokens[2]);
+                std::cout << "primitive is " << operationOrPrimitiveName << " of " << vertex << " vertex and its id is " << nodeId << std::endl;
+                // la prochaine ligne est la première ligne de la matrice associée au polygone
+                readingMatrixLine = true;
+                matrixLineRead = 0;
+            }
+            // noeud opération de type UNION, INTERSECTION, DIFFERENCE
+            else if (tokens.size() == 4)
+            {
+                nodeId = std::stoi(tokens[0]);
+                operationOrPrimitiveName = tokens[1];
+                leftNodeId = std::stoi(tokens[2]);
+                rightNodeId = std::stoi(tokens[3]);
+                std::cout << "node is " << operationOrPrimitiveName << " with node " << leftNodeId << " and node " << rightNodeId << " and its id is " << nodeId << std::endl;
+                // la prochaine ligne est la première ligne de la matrice associée au noeud
+                readingMatrixLine = true;
+                matrixLineRead = 0;
+            }
+            // ligne vide entre les nodes est ignorée
+            else if (tokens.size() == 0)
+            {
+                // ignore
+            }
+            // erreur
+            else
+            {
+                std::cerr << "CsgTree::loadCsg error line is ill-formed" << std::endl;
+                std::cerr << line << std::endl;
+                return;
+            }
+        }
+        // lecture d'une des trois lignes de la matrice associée au noeud
+        else
+        {
+            if (matrixLineRead == 0 && tokens.size() == 3)
+            {
+                transfo(0,0) = std::stod(tokens[0]);
+                transfo(0,1) = std::stod(tokens[1]);
+                transfo(0,2) = std::stod(tokens[2]);
+                matrixLineRead++;
+            }
+            else if (matrixLineRead == 1 && tokens.size() == 3)
+            {
+                transfo(1,0) = std::stod(tokens[0]);
+                transfo(1,1) = std::stod(tokens[1]);
+                transfo(1,2) = std::stod(tokens[2]);
+                matrixLineRead++;
+            }
+            else if (matrixLineRead == 2 && tokens.size() == 3)
+            {
+                transfo(2,0) = std::stod(tokens[0]);
+                transfo(2,1) = std::stod(tokens[1]);
+                transfo(2,2) = std::stod(tokens[2]);
+                // matrice lue en entier la prochaine ligne est un node
+                readingMatrixLine = false;
+                matrixLineRead = 0;
+            }
+            // erreur
+            else
+            {
+                std::cerr << "CsgTree::loadCsg error reading matrix line out of range [0;2]" << std::endl;
+                std::cerr << "matrix line number is " << matrixLineRead << std::endl;
+                return;
+            }
+        }
+    }
 
     // remise à zéro des id et suppression des noeuds existants
     this->clear();
